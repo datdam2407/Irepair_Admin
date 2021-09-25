@@ -1,25 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 // react-bootstrap components
 import {
   Badge,
   Button,
-  ButtonGroup,
-  Card,
   Dropdown,
-  Form,
-  InputGroup,
   Navbar,
   Nav,
-  Pagination,
   Container,
-  Row,
-  Col,
-  Collapse,
 } from "react-bootstrap";
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 import routes from "routes.js";
 
 function AdminNavbar() {
+  const [modal, setModalLogOut] = useState(false);
+  const toggleLogOut = () => setModalLogOut(!modal);
   const [collapseOpen, setCollapseOpen] = React.useState(false);
   const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
@@ -55,12 +55,12 @@ function AdminNavbar() {
               </Button>
             </div>
             <Navbar.Brand
-            href="#home"
-            onClick={(e) => e.preventDefault()}
-            className="mr-2"
-          >
-            {getBrandText()}
-          </Navbar.Brand>
+              href="#home"
+              onClick={(e) => e.preventDefault()}
+              className="mr-2"
+            >
+              {getBrandText()}
+            </Navbar.Brand>
           </div>
           <button
             className="navbar-toggler navbar-toggler-right border-0"
@@ -192,12 +192,14 @@ function AdminNavbar() {
                     Settings
                   </Dropdown.Item>
                   <div className="divider"></div>
-               
+
                   <Dropdown.Item
                     className="text-danger"
                     href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
+                    onClick={() => {
+                      // Logout(e);
+                      setModalLogOut(true);
+                    }}                  >
                     <i className="nc-icon nc-button-power"></i>
                     Log out
                   </Dropdown.Item>
@@ -207,6 +209,34 @@ function AdminNavbar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      <Modal isOpen={modal} toggle={toggleLogOut}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+        // close={closeBtn(toggleLogOut)}
+        // toggle={toggleLogOut}
+        >
+          Are you sure?
+        </ModalHeader>
+        <ModalBody>
+          <h5>Do you want to log out?</h5>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              setModalLogOut(false);
+              window.location.href = "/";
+              localStorage.clear();
+              sessionStorage.clear();
+            }}
+          >
+            Log out
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleLogOut}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 }
