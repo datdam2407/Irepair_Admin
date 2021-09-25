@@ -135,7 +135,7 @@ function RegisterPage() {
                           </Button>
                           <Button
                           onClick={() => {
-                            window.location.href = "http://localhost:3000/admin/dashboard";
+                            window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/dashboard";
                           }}
                           >
                             Cancel 
