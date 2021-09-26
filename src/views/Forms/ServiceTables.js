@@ -18,14 +18,19 @@ import {
   Col,
   OverlayTrigger,
   Tooltip,
+  ModalTitle,
 } from "react-bootstrap";
 
+
 function ServiceTables() {
+//delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
   const [modalDelete, setServiceModalDelete] = useState(false);
-
   const toggleDelete = () => setServiceModalDelete(!modalDelete);
-
+//edit modal  
+  const [ServiceEdit, setServiceEdit] = useState(null);
+  const [modalEdit, setServiceModalEdit] = useState(false);
+  const toggleEdit = () => setServiceModalEdit(!modalEdit);
   function handleServiceDetele() {
     del("api/service/" + ServiceDelete.serviceId, localStorage.getItem("token"))
       .then((res) => {
@@ -68,9 +73,10 @@ function ServiceTables() {
                   <thead>
                     <tr>
                       <th className="text-center">#</th>
-                      <th>Name</th>
-                      <th>Job Position</th>
-                      <th className="text-right">Salary</th>
+                      <th>Image</th>
+                      <th>Service Name</th>
+                      <th>Category</th>
+                      <th className="text-right">Price</th>
                       <th className="text-right">Actions</th>
                     </tr>
                   </thead>
@@ -78,6 +84,7 @@ function ServiceTables() {
                     <tr>
                       <td className="text-center">1</td>
                       <td>Andrew Mike</td>
+                      <td>Develop</td>
                       <td>Develop</td>
                       <td className="text-right">€ 99,225</td>
                       <td className="td-actions text-right">
@@ -112,8 +119,8 @@ function ServiceTables() {
                             className="btn-link btn-xs"
                             href="#pablo"
                             onClick={() => {
-                              setServiceDelete();
-                              setServiceModalDelete(true);
+                              setServiceEdit();
+                              setServiceModalEdit(true);
                             }}
                             variant="success"
                           >
@@ -143,6 +150,7 @@ function ServiceTables() {
                     </tr>
                     <tr>
                       <td className="text-center">2</td>
+                      <td>John Doe</td>
                       <td>John Doe</td>
                       <td>Design</td>
                       <td className="text-right">€ 89,241</td>
@@ -178,8 +186,8 @@ function ServiceTables() {
                             className="btn-link btn-xs"
                             href="#pablo"
                             onClick={() => {
-                              setServiceDelete();
-                              setServiceModalDelete(true);
+                              setServiceEdit();
+                              setServiceModalEdit(true);
                             }}
                             variant="success"
                           >
@@ -210,6 +218,7 @@ function ServiceTables() {
                     <tr>
                       <td className="text-center">3</td>
                       <td>Alex Mike</td>
+                      <td>Design</td>
                       <td>Design</td>
                       <td className="text-right">€ 92,144</td>
                       <td className="td-actions text-right">
@@ -243,7 +252,10 @@ function ServiceTables() {
                           <Button
                             className="btn-link btn-xs"
                             href="#pablo"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={() => {
+                              setServiceEdit();
+                              setServiceModalEdit(true);
+                            }}
                             variant="success"
                           >
                             <i className="fas fa-edit"></i>
@@ -269,6 +281,7 @@ function ServiceTables() {
                     </tr>
                     <tr>
                       <td className="text-center">4</td>
+                      <td>Mike Monday</td>
                       <td>Mike Monday</td>
                       <td>Marketing</td>
                       <td className="text-right">€ 49,990</td>
@@ -303,7 +316,10 @@ function ServiceTables() {
                           <Button
                             className="btn-link btn-xs"
                             href="#pablo"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={() => {
+                              setServiceEdit();
+                              setServiceModalEdit(true);
+                            }}
                             variant="success"
                           >
                             <i className="fas fa-edit"></i>
@@ -330,6 +346,7 @@ function ServiceTables() {
                     <tr>
                       <td className="text-center">5</td>
                       <td>Paul Dickens</td>
+                      <td>Communication</td>
                       <td>Communication</td>
                       <td className="text-right">€ 69,201</td>
                       <td className="td-actions text-right">
@@ -363,7 +380,10 @@ function ServiceTables() {
                           <Button
                             className="btn-link btn-xs"
                             href="#pablo"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={() => {
+                              setServiceEdit();
+                              setServiceModalEdit(true);
+                            }}
                             variant="success"
                           >
                             <i className="fas fa-edit"></i>
@@ -405,9 +425,9 @@ function ServiceTables() {
                   <thead>
                     <tr>
                       <th className="text-center">#</th>
-                      <th>Name</th>
-                      <th>Job Position</th>
-                      <th className="text-right">Salary</th>
+                      <th>Service Name</th>
+                      <th>Category</th>
+                      <th className="text-right">Price</th>
                       <th className="text-right">Active</th>
                     </tr>
                   </thead>
@@ -868,6 +888,58 @@ function ServiceTables() {
             Delete
           </Button>{" "}
           <Button color="secondary" onClick={toggleDelete}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+      <Modal isOpen={modalEdit} toggle={toggleEdit} centered> 
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleEdit)}
+          toggle={toggleEdit}
+        >
+          <ModalTitle>Do you want to edit ?</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <Form>         
+            <Form.Group className="mb-2">
+              <Form.Label>Service name</Form.Label>
+              <Form.Control type="text" placeholder="Service name" />
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Category</Form.Label>
+              <Form.Control type="text" placeholder="Category" />
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Price</Form.Label>
+              <Form.Control type="number" placeholder="Price" step="10000" />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Image</Form.Label>
+              <Form.Control type="file" />
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Description"
+                as="textarea"
+                rows={3}
+              />
+            </Form.Group>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger"  onClick={() => { // handleServiceDetele();
+                                                  setServiceModalEdit(false);  }}        
+          >
+            Edit
+          </Button>
+          <Button color="secondary" onClick={toggleEdit}>
             Cancel
           </Button>
         </ModalFooter>
