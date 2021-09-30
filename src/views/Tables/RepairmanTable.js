@@ -194,8 +194,6 @@ function RepairmanTable() {
         </Row>
       </Container>
       
-      
-
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
