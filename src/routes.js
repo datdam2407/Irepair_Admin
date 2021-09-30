@@ -10,6 +10,7 @@ import RegularForms from "views/Forms/RegularForms.js";
 import ServiceTables from "views/Forms/ServiceTables.js";
 import ValidationForms from "views/Forms/ValidationForms.js";
 import CreateNewService from "views/Forms/CreateNewService.js";
+import CreateNewMajor from "views/Forms/CreateNewMajor.js";
 import CreateNewRepairMan from "views/Tables/CreateNewRepairMan.js";
 import RepairmanTable from "views/Tables/RepairmanTable.js";
 import GoogleMaps from "views/Maps/GoogleMaps.js";
@@ -120,6 +121,13 @@ var routes = [
       //   component: ValidationForms,
       // },
       {
+        path: "/create/major",
+        layout: "/admin",
+        name: "Create Major",
+        mini: "Cm",
+        component: CreateNewMajor,
+      },
+      {
         path: "/create/service",
         layout: "/admin",
         name: "Create Service",
@@ -137,7 +145,7 @@ var routes = [
     views: [
       {
         path: "/create/repairman",
-        layout: "",
+        layout: "/admin",
         name: "Create Repairman",
         mini: "CR",
         component: CreateNewRepairMan,
@@ -145,7 +153,7 @@ var routes = [
     
       {
         path: "/repairman",
-        layout: "",
+        layout: "/admin",
         name: "Repairman Table",
         mini: "ST",
         component: RepairmanTable,
