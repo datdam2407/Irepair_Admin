@@ -1,5 +1,6 @@
 import axios from "axios";
-const endpoint = "http://3.1.222.201";
+require('dotenv').config()
+const endpoint = process.env.REACT_APP_API_URL;
 export async function get(url) {
   return await axios.get(endpoint + url, {
     headers: { "Content-type": "application/json" },
