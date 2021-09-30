@@ -14,7 +14,6 @@ import {
 import {
   Modal,
   ModalHeader,
-  Media,
   ModalBody,
   ModalFooter,
   Pagination,
@@ -40,7 +39,6 @@ function ManageCompany() {
   const [useListCompanyShow, setUseListCompanyShow] = useState([]);
   const [useListCompanyShowPage, setUseListCompanyShowPage] = useState([]);
   const [companyList, setCompanyList] = useState([]);
-  const [companyListID, setCompanyListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
   
@@ -64,33 +62,24 @@ function ManageCompany() {
       console.log(err);
     });
   }
-  function getCompanyListID(){
-    get("/Company/" + CompanyEdit).then((res)=>{
-      var temp = res.data;
-      setCompanyListID(temp);
-    }).catch((err)=>{
-      console.log(err);
-    });
-  }
 
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListCompanyShowPage(useListCompanyShow.slice(number * 5 - 5, number * 5));
-    setTotalNumberPage(Math.ceil(useListCompanyShow.length / 5));
-  }
-  // custom state
-  function displayStateName(type) {
-    const stateValue = {
-      1: "Active",
-      0: "Not Alaviable",
-    };
-    return stateValue[type] ? stateValue[type] : "";
+    setUseListShowPage(useListShow.slice(number * 5 - 5, number * 5));
+    setTotalNumberPage(Math.ceil(useListShow.length / 5));
   }
 
-  function handleCompanyDetele() {
-    // console.log("abc" , CompanyDelete);
-    post("/Company/" + CompanyDelete ,
+      
+  //   getWithToken("api/states", localStorage.getItem("token")).then((res) => {
+  //     if (res && res.status === 200) {
+  //       setListFilterState(res.data);
+  //     }
+  //   });
+  // }, []);
+
+  function handleCompanyDetele(e) {
+    post("/company/" + CompanyDelete.id,
       {
         is_Online: 0,
         is_Delete: 1,
@@ -98,14 +87,12 @@ function ManageCompany() {
     )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
-          // window.location = "/admin/Company";
+          window.location = "/admin/manageuser";
         }
       })
       .catch((err) => {
-        // setErrorMessage(err.response.data.message);
-        // setModalConfirm(true);
-        console.log(err)
+        setErrorMessage(err.response.data.message);
+        setModalConfirm(true);
       });
   }
   const closeBtn = (x) => (
@@ -145,9 +132,6 @@ function ManageCompany() {
                     return(
                       <tr key={index}>
                         <td>
-                          {e.Id}
-                        </td>
-                        <td>
                           {e.Company_Name}
                         </td>
                         <td>
@@ -162,28 +146,6 @@ function ManageCompany() {
                         <td>
                           {e.Hotline}
                         </td>
-                        <td>
-                          {displayStateName(e.Is_Online)}
-                        </td>
-                        <td>
-                        <Media
-                          src={editIcon}
-                          onClick={() => {
-                            setCompanyEdit(e.Id);
-                            getCompanyListID();
-                            setCompanyModalEdit(true);
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <Media
-                          src={deleteIcon}
-                          onClick={() => {
-                            setCompanyDelete(e.Id);
-                            setCompanyModalDelete(true);
-                          }}
-                        />
-                      </td>
                       </tr>  
                    );
                   })}
@@ -400,11 +362,9 @@ function ManageCompany() {
         </ModalBody>
         <ModalFooter>
           <Button color="danger" onClick={() => { // handleCompanyDetele();
-            
             setCompanyModalEdit(false);
           }}
           >
-            
             Edit
           </Button>
           <Button color="secondary" onClick={toggleEdit}>

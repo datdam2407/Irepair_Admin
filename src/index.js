@@ -10,6 +10,7 @@ import UserProfile from "./components/Sidebar/UserProfile";
 import Login from "components/Login/Login";
 import AuthLayout from "layouts/Auth.js";
 import AdminLayout from "layouts/Admin.js";
+import ManageCompany from "components/Login/ManageCompany";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -17,6 +18,7 @@ ReactDOM.render(
       <Route path="/auth" render={(props) => <AuthLayout {...props} />} />
       <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
       <Route exact path="/login" component={Login}/>
+      {/* <Route exact path="/Companyy" component={ManageCompany}/> */}
       {/* <Route path="/admin/profile" component={UserProfile} /> */}
       <Redirect from="/" to="/login" />
       <Redirect from="/admin/dashboard" to="/admin/dashboard" />

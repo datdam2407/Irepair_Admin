@@ -33,6 +33,14 @@ var routes = [
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,
   },
+  {
+    path: "/dashboard",
+    layout: "/admin",
+    name: "Dashboard",
+    icon: "nc-icon nc-chart-pie-35",
+    component: Dashboard,
+  },
+  
   // {
   //   path: "/Sidebar",
   //   layout: "/admin",
@@ -42,13 +50,12 @@ var routes = [
   // },
   {
     collapse: true,
-    path: "/company",
     name: "Company",
     state: "openComponents",
     icon: "nc-icon nc-bank",
     views: [
       {
-        path: "/company",
+        path: "/Company",
         layout: "/admin",
         name: "Manage Company",
         mini: "GS",
@@ -61,7 +68,6 @@ var routes = [
         mini: "CC",
         component: CreateNewCompany,
       },
-   
       {
         path: "/notifications",
         layout: "/admin",
@@ -131,7 +137,7 @@ var routes = [
     views: [
       {
         path: "/create/repairman",
-        layout: "/admin",
+        layout: "",
         name: "Create Repairman",
         mini: "CR",
         component: CreateNewRepairMan,
@@ -139,7 +145,7 @@ var routes = [
     
       {
         path: "/repairman",
-        layout: "/admin",
+        layout: "",
         name: "Repairman Table",
         mini: "ST",
         component: RepairmanTable,

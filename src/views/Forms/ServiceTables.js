@@ -23,14 +23,18 @@ import {
 
 
 function ServiceTables() {
-//delete modal  
+  //delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
   const [modalDelete, setServiceModalDelete] = useState(false);
   const toggleDelete = () => setServiceModalDelete(!modalDelete);
-//edit modal  
+  //edit modal  
   const [ServiceEdit, setServiceEdit] = useState(null);
   const [modalEdit, setServiceModalEdit] = useState(false);
   const toggleEdit = () => setServiceModalEdit(!modalEdit);
+  //view modal
+  const [modalStatus, setModalStatus] = useState(false);
+  const toggleDetails = () => setModalStatus(!modalStatus);
+  const [selectUser, setSelectUser] = useState();
   function handleServiceDetele() {
     del("api/service/" + ServiceDelete.serviceId, localStorage.getItem("token"))
       .then((res) => {
@@ -88,7 +92,7 @@ function ServiceTables() {
                       <td>Develop</td>
                       <td className="text-right">€ 99,225</td>
                       <td className="td-actions text-right">
-                      <OverlayTrigger
+                        <OverlayTrigger
                           href="#pablo"
                           onClick={(e) => e.preventDefault()}
                           overlay={
@@ -137,10 +141,10 @@ function ServiceTables() {
                           <Button
                             className="btn-link btn-xs"
                             href="#pablo"
-                              onClick={() => {
-                            setServiceDelete();
-                            setServiceModalDelete(true);
-                          }}
+                            onClick={() => {
+                              setServiceDelete();
+                              setServiceModalDelete(true);
+                            }}
                             variant="danger"
                           >
                             <i className="fas fa-times"></i>
@@ -166,8 +170,10 @@ function ServiceTables() {
                         >
                           <Button
                             className="btn-link btn-xs"
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={() => {
+                              setModalStatus(true);
+                              setSelectUser();
+                            }}
                             variant="info"
                           >
                             <i className="fas fa-user"></i>
@@ -204,10 +210,10 @@ function ServiceTables() {
                           <Button
                             className="btn-link btn-xs"
                             href="#pablo"
-                              onClick={() => {
-                            setServiceDelete();
-                            setServiceModalDelete(true);
-                          }}
+                            onClick={() => {
+                              setServiceDelete();
+                              setServiceModalDelete(true);
+                            }}
                             variant="danger"
                           >
                             <i className="fas fa-times"></i>
@@ -588,7 +594,7 @@ function ServiceTables() {
                             <i className="fas fa-times"></i>
                           </Button>
                         </OverlayTrigger>
-                       
+
                       </td>
                     </tr>
                     <tr>
@@ -892,7 +898,7 @@ function ServiceTables() {
           </Button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalEdit} toggle={toggleEdit} centered> 
+      <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
           close={closeBtn(toggleEdit)}
@@ -901,7 +907,7 @@ function ServiceTables() {
           <ModalTitle>Do you want to edit ?</ModalTitle>
         </ModalHeader>
         <ModalBody>
-          <Form>         
+          <Form>
             <Form.Group className="mb-2">
               <Form.Label>Service name</Form.Label>
               <Form.Control type="text" placeholder="Service name" />
@@ -934,8 +940,9 @@ function ServiceTables() {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger"  onClick={() => { // handleServiceDetele();
-                                                  setServiceModalEdit(false);  }}        
+          <Button color="danger" onClick={() => { // handleServiceDetele();
+            setServiceModalEdit(false);
+          }}
           >
             Edit
           </Button>
@@ -943,6 +950,55 @@ function ServiceTables() {
             Cancel
           </Button>
         </ModalFooter>
+      </Modal>
+      <Modal isOpen={modalStatus} toggle={toggleDetails}>
+        <ModalHeader
+          toggle={toggleDetails}
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleDetails)}
+        >
+          Detailed Repairman Information
+        </ModalHeader>
+        <ModalBody>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Name</Col>
+            <Col md={8}>
+              {selectUser !== undefined ? [selectUser[0]] : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Position</Col>
+            <Col md={8}>
+              {selectUser !== undefined ? [selectUser[1]] : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Company</Col>
+            <Col md={8}>
+              {selectUser !== undefined ? [selectUser[2]] : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Age</Col>
+            <Col md={8}>
+              {selectUser !== undefined ? [selectUser[3]] : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>State</Col>
+            <Col md={8}>{selectUser !== undefined ? selectUser.state : ""}</Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Note</Col>
+            <Col md={8}>{selectUser !== undefined ? selectUser.note : ""}</Col>
+          </Row>
+        </ModalBody>
       </Modal>
     </>
   );

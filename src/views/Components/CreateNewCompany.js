@@ -12,107 +12,99 @@ import {
 import { Link } from "react-router-dom";
 // import { postWithToken } from "../ReadAPI";
 // import moment from "moment";
+import {post} from "../../service/ReadAPI";
+
 
 export default function CreateNewCompany() {
   const [button, setButton] = useState(true);
   const [male, setMale] = useState(true);
   const [female, setFemale] = useState(false);
   const [dobError, setDobError] = useState("");
-  const [fnerror, setFnError] = useState("");
-  const [lnerror, setLnError] = useState("");
+  const [company_Name, setcompany_Name] = useState("");
+  const [address, setaddress] = useState("");
   const [joinDateError, setJoinDateError] = useState("");
   const [currentDate, setCurrentDate] = useState();
 
   function handleSubmit(e) {
     e.preventDefault();
-    var dateString = moment(e.target.date.value).format("MM/DD/YYYY");
-    var joinDate = moment(e.target.joineddate.value).format("MM/DD/YYYY");
-    console.log(e.target.joineddate.value);
     setButton(true);
-    postWithToken(
-      "/api/users",
+    post(
+      "/Company",
       {
-        firstName: e.target.firstname.value,
-        lastName: e.target.lastname.value,
-        dayOfBirth: dateString,
-        gender: male === true ? "MALE" : "FEMALE",
-        joinDate: joinDate,
-        role: e.target.role.value,
-        accountId: localStorage.getItem("id"),
+        company_Name: e.target.company_Name.value,
+        address: e.target.address.value,
+        description: e.target.description.value,
+        email: e.target.email.value,
+        hotline: e.target.hotline.value,
+        is_Online: 1,
+        is_Delete: 0,
+        picture: e.target.picture.value,
       },
-      localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/manageuser";
+          window.location = "/admin/Company";
         }
       })
       .catch((err) => {
-        if (err.response.status === 400) {
-          if (
-            e.target.firstname.value === "" &&
-            e.target.lastname.value === ""
-          ) {
-            setFnError("firstName must not be blank");
-            setLnError("lastName must not be blank");
-          } else if (e.target.firstname.value === "") {
-            setFnError("firstName must not be blank");
-          } else if (e.target.firstname.value === "")
-            setLnError("lastName must not be blank");
+        console.log(err)
+        // if (err.response.status === 400) {
+        //   if (
+        //     e.target.firstname.value === "" &&
+        //     e.target.lastname.value === ""
+        //   ) {
+        //     setcompany_Name("firstName must not be blank");
+        //     setaddress("lastName must not be blank");
+        //   } else if (e.target.firstname.value === "") {
+        //     setcompany_Name("firstName must not be blank");
+        //   } else if (e.target.firstname.value === "")
+        //     setaddress("lastName must not be blank");
 
-          if (
-            err.response.data.message === "Wrong date! (MM/dd/yyyy)" &&
-            e.target.date.value === ""
-          )
-            setDobError("Wrong date! (MM/dd/yyyy)");
+        //   if (
+        //     err.response.data.message === "Wrong date! (MM/dd/yyyy)" &&
+        //     e.target.date.value === ""
+        //   )
+        //     setDobError("Wrong date! (MM/dd/yyyy)");
 
-          if (
-            err.response.data.message === "Wrong date! (MM/dd/yyyy)" &&
-            e.target.joineddate.value === ""
-          )
-            setJoinDateError("Wrong date! (MM/dd/yyyy)");
+        //   if (
+        //     err.response.data.message === "Wrong date! (MM/dd/yyyy)" &&
+        //     e.target.joineddate.value === ""
+        //   )
+        //     setJoinDateError("Wrong date! (MM/dd/yyyy)");
 
-          if (
-            err.response.data.message ===
-            "User is under 18. Please select a different date"
-          )
-            setDobError("User is under 18. Please select a different date");
+        //   if (
+        //     err.response.data.message ===
+        //     "User is under 18. Please select a different date"
+        //   )
+        //     setDobError("User is under 18. Please select a different date");
 
-          if (
-            err.response.data.message ===
-            "Joined date is Saturday or Sunday. Please select a different date"
-          )
-            setJoinDateError(
-              "Joined date is Saturday or Sunday. Please select a different date"
-            );
+        //   if (
+        //     err.response.data.message ===
+        //     "Joined date is Saturday or Sunday. Please select a different date"
+        //   )
+        //     setJoinDateError(
+        //       "Joined date is Saturday or Sunday. Please select a different date"
+        //     );
 
-          if (
-            err.response.data.message ===
-            "Joined date is not later than Date of Birth. Please select a different date"
-          )
-            setJoinDateError(
-              "Joined date is not later than Date of Birth. Please select a different date"
-            );
-        }
+        //   if (
+        //     err.response.data.message ===
+        //     "Joined date is not later than Date of Birth. Please select a different date"
+        //   )
+        //     setJoinDateError(
+        //       "Joined date is not later than Date of Birth. Please select a different date"
+        //     );
+        // }
       });
   }
 
-  useEffect(() => {
-    var curr = new Date();
-    curr.setDate(curr.getDate());
-    var date = curr.toISOString().substr(0, 10);
-    setCurrentDate(date);
-  }, []);
+  // useEffect(() => {
+  //   var curr = new Date();
+  //   curr.setDate(curr.getDate());
+  //   var date = curr.toISOString().substr(0, 10);
+  //   setCurrentDate(date);
+  // }, []);
 
-  function onChangeMale(e) {
-    setMale(e.target.checked);
-    setFemale(!e.target.checked);
-  }
 
-  function onChangeFemale(e) {
-    setFemale(e.target.checked);
-    setMale(!e.target.checked);
-  }
 
   return (
     <div className="container-createuser-form">
@@ -133,12 +125,12 @@ export default function CreateNewCompany() {
                 <Col md={8}>
                   <Input
                     type="text"
-                    name="firstname"
-                    id="firstname"
+                    name="company_Name"
+                    id="company_Name"
                     placeholder=""
-                    onChange={fnerror}
+                    onChange={company_Name}
                   />
-                  <h6>{fnerror}</h6>
+                  <h6>{company_Name}</h6>
                 </Col>
               </Row>
             </FormGroup>
@@ -146,18 +138,18 @@ export default function CreateNewCompany() {
             <FormGroup>
               <Row>
                 <Col>
-                  <Label>SALARY</Label>
+                  <Label>Address</Label>
                 </Col>
 
                 <Col md={8}>
                   <Input
                     type="text"
-                    name="lastname"
+                    name="address"
                     id="lastname"
                     placeholder=""
-                    onChange={lnerror}
+                    onChange={address}
                   />
-                  <h6>{lnerror}</h6>
+                  <h6>{address}</h6>
                 </Col>
               </Row>
             </FormGroup>
@@ -165,36 +157,64 @@ export default function CreateNewCompany() {
             <FormGroup>
               <Row>
                 <Col>
-                  <Label>COUNTRY</Label>
+                  <Label>Description</Label>
                 </Col>
 
                 <Col md={8}>
                   <Input
                     type="text"
-                    name="lastname"
+                    name="description"
                     id="lastname"
                     placeholder=""
-                    onChange={lnerror}
+                    onChange={address}
                   />
-                  <h6>{lnerror}</h6>
+                  <h6>{address}</h6>
                 </Col>
               </Row>
             </FormGroup>
-
-            
-
             <FormGroup>
               <Row>
                 <Col>
-                  <Label>Join Date</Label>
+                  <Label>email</Label>
                 </Col>
 
                 <Col md={8}>
                   <Input
-                    type="date"
-                    name="joineddate"
+                    type="text"
+                    name="email"
                     id="joineddate"
-                    defaultValue={currentDate}
+                  />
+                  <h6>{joinDateError}</h6>
+                </Col>
+              </Row>
+            </FormGroup>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Label>Hotline</Label>
+                </Col>
+
+                <Col md={8}>
+                  <Input
+                    type="text"
+                    name="hotline"
+                    id="joineddate"
+                  />
+                  <h6>{joinDateError}</h6>
+                </Col>
+              </Row>
+            </FormGroup>
+            <FormGroup>
+              <Row>
+                <Col>
+                  <Label>Picture</Label>
+                </Col>
+
+                <Col md={8}>
+                  <Input
+                    type="text"
+                    name="picture"
+                    id="joineddate"
                   />
                   <h6>{joinDateError}</h6>
                 </Col>
@@ -203,7 +223,7 @@ export default function CreateNewCompany() {
 
             <div className="btn-container">
               <Button color="danger">Save</Button>
-              <Link to="/admin/company">
+              <Link to="/admin/Company">
                 <button className="btn-cancel">Cancel</button>
               </Link>
             </div>
