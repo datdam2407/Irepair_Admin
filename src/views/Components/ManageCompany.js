@@ -35,6 +35,9 @@ function ManageCompany() {
   const [CompanyEdit, setCompanyEdit] = useState(null);
   const [modalEdit, setCompanyModalEdit] = useState(false);
   const toggleEdit = () => setCompanyModalEdit(!modalEdit)
+
+  const [modalCreate, setCompanyModalCreate] = useState(false);
+  const toggleCreate = () => setCompanyModalCreate(!modalCreate)
   
 
   const [useListCompanyShow, setUseListCompanyShow] = useState([]);
@@ -125,9 +128,19 @@ function ManageCompany() {
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
                 <Card.Title as="h4">Manage Company</Card.Title>
-                <Link to="/admin/create/company">
-                  Create new Company
-                </Link>
+                {/* <Link to="/admin/create/company">
+                  
+                  
+                </Link> */}
+                <Button
+                       
+                          onClick={() => {
+                            // setCompanyEdit(e.Id);
+                            // getCompanyListID();
+                            setCompanyModalCreate(true);
+                          }}>
+                        Create new Company
+                      </Button>
               </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
                 <Table className="table-hover table-striped">
@@ -356,6 +369,64 @@ function ManageCompany() {
           </Col>
         </Row>
       </Container>
+
+      <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleCreate)}
+          toggle={toggleCreate}
+        >
+          <ModalTitle>Do you want to create new company</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <Form>
+            <Form.Group className="mb-2">
+              <Form.Label>Name</Form.Label>
+              <Form.Control type="text" placeholder="Name" />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Address</Form.Label>
+              <Form.Control type="text" placeholder="Address" />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Description"
+                as="textarea"
+                rows={3}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="text" placeholder="Email" />
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>HOTLINE</Form.Label>
+              <Form.Control type="text" placeholder="HOTLINE" />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Picture</Form.Label>
+              <Form.Control type="file" />
+            </Form.Group>
+           
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={() => { // handleCompanyDetele();
+            
+            setCompanyModalCreate(false);
+          }}
+          >
+            Create
+          </Button>
+          <Button color="secondary" onClick={toggleCreate}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
       
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
@@ -404,7 +475,6 @@ function ManageCompany() {
             setCompanyModalEdit(false);
           }}
           >
-            
             Edit
           </Button>
           <Button color="secondary" onClick={toggleEdit}>

@@ -34,13 +34,6 @@ var routes = [
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard,
   },
-  {
-    path: "/dashboard",
-    layout: "/admin",
-    name: "Dashboard",
-    icon: "nc-icon nc-chart-pie-35",
-    component: Dashboard,
-  },
   
   // {
   //   path: "/Sidebar",
@@ -69,13 +62,13 @@ var routes = [
         mini: "CC",
         component: CreateNewCompany,
       },
-      {
-        path: "/notifications",
-        layout: "/admin",
-        name: "Notifications",
-        mini: "N",
-        component: Notifications,
-      },
+      // {
+      //   path: "/notifications",
+      //   layout: "/admin",
+      //   name: "Notifications",
+      //   mini: "N",
+      //   component: Notifications,
+      // },
       // {
       //   path: "/icons",
       //   layout: "/admin",
@@ -190,20 +183,20 @@ var routes = [
   //     },
   //   ],
   // },
-  // {
-  //   path: "/charts",
-  //   layout: "/admin",
-  //   name: "Charts",
-  //   icon: "nc-icon nc-chart-bar-32",
-  //   component: Charts,
-  // },
   {
-    path: "/calendar",
+    path: "/charts",
     layout: "/admin",
-    name: "Calendar",
-    icon: "nc-icon nc-single-copy-04",
-    component: Calendar,
+    name: "Charts",
+    icon: "nc-icon nc-chart-bar-32",
+    component: Charts,
   },
+  // {
+  //   path: "/calendar",
+  //   layout: "/admin",
+  //   name: "Calendar",
+  //   icon: "nc-icon nc-single-copy-04",
+  //   component: Calendar,
+  // },
   {
     collapse: true,
     path: "/pages",

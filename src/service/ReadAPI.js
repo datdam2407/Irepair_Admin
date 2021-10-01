@@ -1,6 +1,27 @@
 import axios from "axios";
 require('dotenv').config()
 const endpoint = process.env.REACT_APP_API_URL;
+
+
+// const https = require('https');
+// const agent = new https.Agent({
+//     rejectUnauthorized: false,
+// });
+// const client = axios.create({ //all axios can be used, shown in axios documentation
+//     baseURL: process.env.REACT_APP_API_URL,
+//     responseType: 'json',
+//     withCredentials: true,
+//     httpsAgent: agent
+// });
+// At instance level
+// const instance = axios.create({
+//   httpsAgent: new https.Agent({  
+//     rejectUnauthorized: false
+//   })
+// });
+// instance.get('https://3.1.222.201');
+
+
 export async function get(url) {
   return await axios.get(endpoint + url, {
     headers: { "Content-type": "application/json" },
