@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { TextField } from '@material-ui/core';
 
 export default function FormDialog({open,handleClose,data,onChange,handleFormSubmit}) {
- const {Id,name,description,imageUrl}=data
+ const {Id,name,description,imageUrl,price,fieldId,CompanyId,}=data
 
   return (
     <div>
@@ -19,11 +19,14 @@ export default function FormDialog({open,handleClose,data,onChange,handleFormSub
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{Id?"Do you want to update user":"Do you want to create new major"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{Id?"Do you want to update user":"Do you want to create new service"}</DialogTitle>
         <DialogContent>
          <form>
              <TextField id="name" value={name} onChange={e=>onChange(e)} placeholder="Enter name" label="Name" variant="outlined" margin="dense" fullWidth />
              <TextField id="description" value={description} onChange={e=>onChange(e)} placeholder="Enter description" label="Description" variant="outlined" margin="dense" fullWidth />
+             <TextField id="price" value={price} onChange={e=>onChange(e)} placeholder="Enter Price" label="Price" variant="outlined" margin="dense" fullWidth />
+             <TextField id="fieldId" value={fieldId} onChange={e=>onChange(e)} placeholder="Enter FieldId" label="Field" variant="outlined" margin="dense" fullWidth />
+             <TextField id="CompanyId" value={CompanyId} onChange={e=>onChange(e)} placeholder="Enter CompanyId" label="Comany" variant="outlined" margin="dense" fullWidth />
              <TextField id="imageUrl" value={imageUrl} onChange={e=>onChange(e)} placeholder="Enter ImageUrl" label="Image" variant="outlined" margin="dense" fullWidth />
          </form>
         </DialogContent>
