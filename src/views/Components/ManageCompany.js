@@ -170,7 +170,7 @@ export default function ManageCompany() {
   }
   function handleCompanyDetele() {
     // console.log("abc" , CompanyDelete);
-    del(`/api/v1.0/company${CompanyDelete}`).then((res) => {
+    del(`/api/v1.0/company/${CompanyDelete}`).then((res) => {
       if (res.status === 200 || res.status === 202) {
         var temp;
         // temp = useList.filter((x) => x.Id !== CompanyDelete);

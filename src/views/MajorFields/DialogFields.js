@@ -19,7 +19,7 @@ export default function FormDialog({open,handleClose,data,onChange,handleFormSub
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{Id?"Do you want to update user":"Do you want to create new user"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{Id?"Do you want to update user":"Do you want to create new majorfield"}</DialogTitle>
         <DialogContent>
          <form>
              <TextField id="name" value={name} onChange={e=>onChange(e)} placeholder="Enter name" label="Name" variant="outlined" margin="dense" fullWidth />
