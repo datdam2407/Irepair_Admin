@@ -23,6 +23,7 @@ import {
   Tooltip,
   ModalTitle,
 } from "react-bootstrap";
+import "../../assets/css/customSize.css"
 import { del, put , get } from "../../service/ReadAPI";
 
 import { AgGridReact } from 'ag-grid-react';
@@ -273,7 +274,7 @@ async function handleEditSubmit(e) {
       <Container fluid>
         <Row>
           <Col md="12">
-            <Card className="table-big-boy">
+            <Card className="table">
               <Card.Header>
                 <Card.Title as="h4">Major</Card.Title>
                 {/* <Button
@@ -286,16 +287,16 @@ async function handleEditSubmit(e) {
                   Create new Major
                 </Button> */}
                  <Grid align="right">
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>Add user</Button>
+        <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
       </Grid>
               </Card.Header>
-              <Card.Body className="table-full-width">
-                <Table className="table-bigboy">
+              <Card.Body className="table">
+                <Table className="table">
                   <thead>
                     <tr>
-                      <th className="text-center">Topic</th>
-                      <th>Name</th>
-                      <th className="th-description">Description</th>
+                      <th className="text-left-topic">Topic</th>
+                      <th className="th-name-major" >Name</th>
+                      <th className="description">Description</th>
                       <th>Status</th>
                       <th className="text-center">Views</th>
                       <th></th>
@@ -306,7 +307,7 @@ async function handleEditSubmit(e) {
                       return (
                         <tr key={index}>
                           <td>
-                            {e.ImageUrl}
+                            <img className="td-img-size" src = {e.ImageUrl} />
                           </td>
                           <td>
                             {e.Name}
@@ -639,7 +640,7 @@ async function handleEditSubmit(e) {
             <Col></Col>
             <Col md={3}>Picture</Col>
             <Col md={8}>
-              {selectMajor !== undefined ? selectMajor.ImageUrl : ""}
+              {selectMajor !== undefined ? <img className="text-left-topic" src = {selectMajor.ImageUrl}/> : ""}
             </Col>
           </Row>
           <Row>
