@@ -1,0 +1,9 @@
+label {
+    display: inline-block;
+    margin-bottom: .5rem;
+    font-weight: 800;
+}
+h3{
+    font-weight: 800;
+    color: rgb(153, 31, 31);
+}
