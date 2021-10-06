@@ -1,155 +1,287 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-// react-bootstrap components
-import {
-  Button,
-  Card,
-  Form,
-  Container,
-  Row,
-  Col,
-  ModalTitle,
-  Table,
-} from "react-bootstrap";
 import {
   Modal,
   ModalHeader,
-  Media,
   ModalBody,
   ModalFooter,
   Pagination,
   PaginationItem,
   PaginationLink,
 } from "reactstrap";
-import deleteIcon from "assets/img/remove.png";
-import editIcon from "assets/img/edit.png";
-import { Link } from "react-router-dom";
-import { del, post, get } from "../../service/ReadAPI";
+// react-bootstrap components
+import {
+  Button,
+  Card,
+  Form,
+  Table,
+  Container,
+  Row,
+  Col,
+  OverlayTrigger,
+  Tooltip,
+  ModalTitle,
+} from "react-bootstrap";
+import "../../assets/css/customSize.css"
+import { del, put , get } from "../../service/ReadAPI";
+
+import { AgGridReact } from 'ag-grid-react';
+// import 'ag-grid-community/dist/styles/ag-grid.css';
+// import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import { Grid } from '@material-ui/core'
+import FormDialog from './DialogFields';
+function MajorFields() {
+  //delete modal  
+  const [ServiceDelete, setServiceDelete] = useState(null);
+  const [modalDelete, setServiceModalDelete] = useState(false);
+  const toggleDelete = () => setServiceModalDelete(!modalDelete);
+  //edit modal  
+  const [ServiceEdit, setServiceEdit] = useState(null);
+  // const [modalEdit, setServiceModalEdit] = useState(false);
+  // const toggleEdit = () => setServiceModalEdit(!modalEdit);
+
+  //modal create
+  const [modalCreate, setMajorModalCreate] = useState(false);
+  const toggleCreate = () => setMajorModalCreate(!modalCreate)
+
+  //Edit Major
+  const [MajorEdit, setMajorEdit] = useState(null);
+  const [modalEdit, setMajorModalEdit] = useState(false);
+  const toggleEdit = () => setMajorModalEdit(!modalEdit)
+  //Delete Major
+  const [MajorDelete, setMajorFieldDelete] = useState(null);
+  const [modalMajorFieldDelete, setMajorModalFieldDelete] = useState(false);
+  const toggleMajorDelete = () => setMajorModalFieldDelete(!modalMajorFieldDelete)
+
+  //view modal
+  const [modalStatus, setModalStatus] = useState(false);
+  const toggleDetails = () => setModalStatus(!modalStatus);
+  const [selectMajor, setSelectMajor] = useState();
 
 
-export default function ManageCompany() {
-  const [CompanyDelete, setCompanyDelete] = useState(null);
-  const [modalDelete, setCompanyModalDelete] = useState(false);
-  const toggleDelete = () => setCompanyModalDelete(!modalDelete);
-  //edit
-  const [CompanyEdit, setCompanyEdit] = useState(null);
-  const [modalEdit, setCompanyModalEdit] = useState(false);
-  const toggleEdit = () => setCompanyModalEdit(!modalEdit)
-
-  const [modalCreate, setCompanyModalCreate] = useState(false);
-  const toggleCreate = () => setCompanyModalCreate(!modalCreate)
-
-  const [button, setButton] = useState(true);
-  const [male, setMale] = useState(true);
-  const [female, setFemale] = useState(false);
-  const [dobError, setDobError] = useState("");
-  const [company_Name, setcompany_Name] = useState("");
-  const [address, setaddress] = useState("");
-  const [joinDateError, setJoinDateError] = useState("");
-  const [currentDate, setCurrentDate] = useState();
-
-
-  const [useListCompanyShow, setUseListCompanyShow] = useState([]);
-  const [useListCompanyShowPage, setUseListCompanyShowPage] = useState([]);
-  const [companyList, setCompanyList] = useState([]);
-  const [companyListID, setCompanyListID] = useState([]);
+  //Major List
+  const [useListMajorShow, setUseListMajorShow] = useState([]);
+  const [useListMajorShowPage, setUseListMajorShowPage] = useState([]);
+  const [MajorList, setMajorList] = useState([]);
+  const [MajorListID, setMajorListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
+  const [count, setCount] = useState(1);
 
+  // field edit
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [picture, setImage] = useState("");
+  const [majorID, setMajorfieldID] = useState("");
+  const [major, setMajor] = useState("");
+
+
+  const initialValue = { name: "", description: "", imageUrl: "", status: "1" }
+
+  const [gridApi, setGridApi] = useState(null)
+  const [tableData, setTableData] = useState(null)
+  const [open, setOpen] = React.useState(false);
+  const [formData, setFormData] = useState(initialValue)
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setFormData(initialValue)
+  };
+  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/major-field"
+  const columnDefs = [
+    { headerName: "ID", field: "Id", },
+    { headerName: "Name", field: "name", },
+    { headerName: "Description", field: "description", },
+    { headerName: "Major", field: "majorId", },
+    { headerName: "imageUrl", field: "imageUrl" },
+    {
+      headerName: "Actions", field: "Id", cellRendererFramework: (params) => <div>
+        <Button variant="outlined" color="primary" onClick={() => handleUpdate(params.data)}>Update</Button>
+        <Button variant="outlined" color="secondary" onClick={() => handleDelete(params.value)}>Delete</Button>
+      </div>
+    }
+  ]
+  const onChange = (e) => {
+    const { value, id } = e.target
+    // console.log(value,id)
+    setFormData({ ...formData, [id]: value })
+  }
+  const onGridReady = (params) => {
+    setGridApi(params)
+  }
+
+console.log(name)
+console.log(description)
+// update
+async function handleEditSubmit(e) {
+ await put(
+    `/api/v1.0/major-field`,
+    {
+      id : majorID,
+      name: name,
+      description: description,
+      majorId : major,
+      imageUrl: picture,
+      status: 1,
+    },
+  )
+    .then((res) => {
+      if (res.status === 200) {
+        window.location = "/admin/fields";
+      
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+// function getMajorFieldsList() {
+//   get("/api/v1.0/major").then((res) => {
+//     var temp = res.data;
+//     // setName(temp.name);
+//     // setDescription(temp.description);
+//     // setImage(temp.picture);
+//     // setIsDeleted(temp.is_Delete);
+//     setMajorList(temp);
+//     setUseListMajorShow(temp);
+//     setUseListMajorShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
+//     setTotalNumberPage(Math.ceil(temp.length / 5));
+//     setCount(count);
+//   }).catch((err) => {
+//     console.log(err);
+//   });
+// }
+
+  // setting update row data to form data and opening pop up window
+  const handleUpdate = (oldData) => {
+    setFormData(oldData)
+    console.log(oldData)
+    handleClickOpen()
+  }
+  const handleFormSubmit = () => {
+    if (formData.id) {
+      //updating a user 
+      const confirm = window.confirm("Are you sure, you want to update this row ?")
+      confirm && fetch(url + `/${formData.id}`, {
+        method: "put", body: JSON.stringify(formData), headers: {
+          'content-type': "application/json"
+        }
+      }).then(resp => resp.json())
+        .then(resp => {
+          handleClose()
+          getMajorFieldsList()
+
+        })
+    } else {
+      // adding new user
+      fetch(url, {
+        method: "post", body: JSON.stringify(formData), headers: {
+          'content-type': "application/json"
+        }
+      }).then(resp => resp.json())
+        .then(resp => {
+          handleClose()
+          getMajorFieldsList()
+        })
+    }
+  }
+
+  const defaultColDef = {
+    sortable: true,
+    flex: 1, filter: true,
+    floatingFilter: true
+  }
+  function displayMajorName(type) {
+    const nameMajor = {
+      "a037b04c-51b3-4650-b369-0ea7ee869821" : "Điện Tử",
+      "27429af0-6de4-4fed-9e25-3a6835ae7c3b" : "Xe máy",
+      "a7fd5dbf-585b-40f4-acbc-495592de7116" : "Điện lạnh",
+      "a2bdd6ec-d60c-476e-b53c-7d92900c3bb3" : "Xe ô tô",
+      "ae54f939-d711-41bc-ab4b-7fa65af9c17b" : "Khóa",
+      "6b80588f-eeb2-4f68-94e0-e245b79be801" : "Ống nước",
+      "45d74304-09cf-4dc7-859d-e464a4a7e053" : "Đồ gia dụng",
+    };
+    return nameMajor[type] ? nameMajor[type] : "";
+  }
+
+
+
+  // Load major by ID
+  // useEffect(() => {
+  //   getMajorByID();
+  //   get(`/Major/get-by-id?id=${MajorEdit}`).then((res)=>{
+  //     setName(res.data.name);
+  //     setDescription(res.data.description);
+  //     setImage(res.data.picture);
+  //     setIsDeleted(res.data.is_Delete);
+  //   });
+  // }, []);
+  function getMajorFieldsByID(Id){
+    get(`/api/v1.0/major-field/${Id}`).then((res)=>{
+      setMajorfieldID(Id);
+      setName(res.data.value.name);
+      setDescription(res.data.value.description);
+      setMajor(res.data.value.majorId);
+      setImage(res.data.value.imageUrl);
+      setStatus(res.data.value.status);
+    }).catch((err)=>{
+      console.log(err);
+    });
+  }
+
+  // /api/v1.0/major/{id}
+  //delete fc
+  function deleteMajorFieldsByID() {
+    del(`/api/v1.0/major-field/${MajorDelete}`
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/fields";
+
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
+  }
+  //Load major
   useEffect(() => {
-    getCompanyList();
-    get("/api/v1.0/company/get-all").then(
+    getMajorFieldsList()
+    get("/api/v1.0/major-field").then(
       (res) => {
         if (res && res.status === 200) {
-          setCompanyList(res.data);
+          setMajorList(res.data);
           // res.data;
           console.log(res.data);
         }
       });
   }, []);
-  function getCompanyList() {
-    get("/api/v1.0/company/get-all").then((res) => {
+  function getMajorFieldsList() {
+    get("/api/v1.0/major-field").then((res) => {
       var temp = res.data;
-      setCompanyList(temp);
-      setUseListCompanyShow(temp);
-      setUseListCompanyShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
-      setTotalNumberPage(Math.ceil(temp.length / 5));
+      // setName(temp.name);
+      // setDescription(temp.description);
+      // setImage(temp.picture);
+      // setIsDeleted(temp.is_Delete);
+      setMajorList(temp);
+      setUseListMajorShow(temp);
+      setUseListMajorShowPage(temp.slice(numberPage * 6 - 6, numberPage * 6));
+      setTotalNumberPage(Math.ceil(temp.length / 6));
+      setCount(count);
     }).catch((err) => {
       console.log(err);
     });
   }
-
-  function getCompanyListID() {
-    get("/api/v1.0/company/get-by-id" + CompanyEdit).then((res) => {
-      var temp = res.data;
-      setCompanyListID(temp);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
-
-
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListCompanyShowPage(useListCompanyShow.slice(number * 5 - 5, number * 5));
-    setTotalNumberPage(Math.ceil(useListCompanyShow.length / 5));
+    setUseListMajorShowPage(useListMajorShow.slice(number * 6 - 6, number * 6));
+    setTotalNumberPage(Math.ceil(useListMajorShow.length / 6));
   }
-  // create form 
-  function handleSubmit(e) {
-    e.preventDefault();
-    setButton(true);
-    post(
-      "/api/v1.0/company/create",
-      {
-        company_Name: e.target.company_Name.value,
-        address: e.target.address.value,
-        description: e.target.description.value,
-        email: e.target.email.value,
-        hotline: e.target.hotline.value,
-        is_Online: 1,
-        is_Delete: 0,
-        picture: e.target.picture.value,
-      },
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/Company";
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-  }
-  // custom state
-  function displayStateName(type) {
-    const stateValue = {
-      1: "Active",
-      0: "Not Alaviable",
-    };
-    return stateValue[type] ? stateValue[type] : "";
-  }
-
-  function handleCompanyDetele() {
-    // console.log("abc" , CompanyDelete);
-    post("/Company/" + CompanyDelete,
-      {
-        is_Online: 0,
-        is_Delete: 1,
-      },
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data)
-          // window.location = "/admin/Company";
-        }
-      })
-      .catch((err) => {
-        // setErrorMessage(err.response.data.message);
-        // setModalConfirm(true);
-        console.log(err)
-      });
-  }
+  
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
@@ -159,83 +291,144 @@ export default function ManageCompany() {
       X
     </button>
   );
+  // Custom state 
+  function displayStateName(type) {
+    const stateValue = {
+      1: "Approved",
+      0: "New",
+      2: "Blocked",
+      3: "Deleted"
+    };
+    return stateValue[type] ? stateValue[type] : "";
+  }
+
   return (
     <>
       <Container fluid>
         <Row>
           <Col md="12">
-            <Card className="strpied-tabled-with-hover">
+            <Card className="table">
               <Card.Header>
-                <Card.Title as="h4">Manage Company</Card.Title>
-                {/* <Link to="/admin/create/company">
-                  
-                  
-                </Link> */}
-                <Button
-
+                <Card.Title as="h4">Major Field</Card.Title>
+                {/* <Button
                   onClick={() => {
-                    // setCompanyEdit(e.Id);
-                    // getCompanyListID();
+                    // setMajorEdit(e.Id);
+                    // getMajorFieldsListID();
                     // handleSubmit(e);
-                    setCompanyModalCreate(true);
+                    setMajorModalCreate(true);
                   }}>
-                  Create new Company
-                </Button>
+                  Create new Major
+                </Button> */}
+                 <Grid align="right">
+        <Button variant="contained" color="primary" onClick={handleClickOpen}>Add MajorField</Button>
+      </Grid>
               </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover table-striped">
+              <Card.Body className="table">
+                <Table className="table">
                   <thead>
                     <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Name</th>
-                      <th className="border-0">Image</th>
-                      <th className="border-0">Country</th>
-                      <th className="border-0">Hotline</th>
+                      <th className="text-left-topic">Topic</th>
+                      <th className="th-name-major" >Major</th>
+                      <th className="th-name-major" >Name</th>
+                      <th className="description">Description</th>
+                      <th>Status</th>
+                      <th className="text-center">Views</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {useListCompanyShowPage.map((e, index) => {
+                    {useListMajorShowPage.map((e, index) => {
                       return (
                         <tr key={index}>
                           <td>
-                            {e.Id}
+                            <img className="td-img-size" src = {e.ImageUrl} />
                           </td>
                           <td>
-                            {e.Company_Name}
+                            {displayMajorName(e.MajorId)}
                           </td>
                           <td>
-                            {e.Picture}
-                          </td>
-                          <td>
-                            {e.Address}
+                            {e.Name}
                           </td>
                           <td>
                             {e.Description}
                           </td>
                           <td>
-                            {e.Hotline}
+                            {displayStateName(e.Status)}
                           </td>
-                          <td>
-                            {displayStateName(e.Is_Online)}
-                          </td>
-                          <td>
-                            <Media
-                              src={editIcon}
-                              onClick={() => {
-                                setCompanyEdit(e.Id);
-                                getCompanyListID();
-                                setCompanyModalEdit(true);
-                              }}
-                            />
-                          </td>
-                          <td>
-                            <Media
-                              src={deleteIcon}
-                              onClick={() => {
-                                setCompanyDelete(e.Id);
-                                setCompanyModalDelete(true);
-                              }}
-                            />
+                          <td className="td-actions">
+                            <OverlayTrigger
+                              onClick={(e) => e.preventDefault()}
+                              overlay={
+                                <Tooltip id="tooltip-960683717">
+                                  View Post..
+                                </Tooltip>
+                              }
+                              placement="right"
+                            >
+                              <Button
+                                onClick={() => {
+                                  setModalStatus(true);
+                                  setSelectMajor(e);
+                                }}
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="info"
+                              >
+                                <i className="far fa-image"></i>
+                              </Button>
+                            </OverlayTrigger>
+
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="tooltip-436082023">
+                                  Edit Post..
+                                </Tooltip>
+                              }
+                              placement="right"
+                            >
+                              <Button
+                              // onClick={() => handleUpdate(e.data)}
+                              // onGridReady={onGridReady}
+
+                                onClick={() => {
+                                  // setMajorEdit(e.Id);
+                                  getMajorFieldsByID(e.Id);
+                                  setMajorModalEdit(true);
+                                }}
+
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="success"
+                              >
+                                <i className="fas fa-edit"></i>
+                              </Button>
+                            </OverlayTrigger>
+
+
+                            <OverlayTrigger
+                              onClick={(e) => e.preventDefault()}
+
+                              overlay={
+                                <Tooltip id="tooltip-334669391">
+                                  Remove Post..
+                                </Tooltip>
+                              }
+                              placement="right\"
+                            >
+                              <Button
+                                onClick={() => {
+                                  setMajorFieldDelete(e.Id);
+                                  setMajorModalFieldDelete(true);
+                                }}
+
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="danger"
+                              >
+                                <i className="fas fa-times"></i>
+                              </Button>
+                            </OverlayTrigger>
+
                           </td>
                         </tr>
                       );
@@ -332,113 +525,31 @@ export default function ManageCompany() {
               </Card.Body>
             </Card>
           </Col>
-          <Col md="12">
-            <Card className="card-plain table-plain-bg">
-              <Card.Header>
-                <Card.Title as="h4">Hot Service </Card.Title>
-                <p className="card-category">
-                  This is a text
-                </p>
-              </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover">
-                  <thead>
-                    <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Image</th>
-                      <th className="border-0">Service Name</th>
-                      <th className="border-0">Category</th>
-                      <th className="border-0">Description</th>
-                      <th className="border-0">Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>$36,738</td>
-                      <td>Niger</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>$23,789</td>
-                      <td>$23,789</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>$56,142</td>
-                      <td>$56,142</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>$38,735</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                      <td>Overland Park</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>$63,542</td>
-                      <td>Malawi</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                    </tr>
 
-                    <tr>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>$78,615</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                      <td>Gloucester</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Card.Body>
-            </Card>
-          </Col>
         </Row>
       </Container>
 
-      <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
+      {/* <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
           close={closeBtn(toggleCreate)}
           toggle={toggleCreate}
         >
-          <ModalTitle>Do you want to create new company</ModalTitle>
+          <ModalTitle>Do you want to create new Major</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Form onSubmit={(e) => {
             handleSubmit(e);
-            setCompanyModalCreate(false);
+            setMajorModalCreate(false);
           }}
           >
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
               <Form.Control type="text"
-                name="company_Name"
-                id="company_Name"
-                // onChange={company_Name}
+                name="Name"
+                id="Major_Name"
+                // onChange={Major_Name}
                 placeholder="Name" />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Address</Form.Label>
-              <Form.Control type="text"
-                type="text"
-                name="address"
-                // onChange={address}
-                placeholder="Address" />
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Description</Form.Label>
@@ -450,17 +561,7 @@ export default function ManageCompany() {
                 rows={3}
               />
             </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="text"
-                name="email"
-                id="joineddate"
-                placeholder="Email" />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>HOTLINE</Form.Label>
-              <Form.Control type="text" placeholder="HOTLINE" />
-            </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
               <Form.Control type="file" />
@@ -473,10 +574,31 @@ export default function ManageCompany() {
               Cancel
             </Button>
           </Form>
-
         </ModalBody>
-        <ModalFooter>
+      </Modal> */}
 
+      <Modal isOpen={modalMajorFieldDelete} toggle={toggleMajorDelete}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleMajorDelete)}
+          toggle={toggleMajorDelete}
+        >
+          Are you sure?
+        </ModalHeader>
+        <ModalBody>Do you want to delete this major</ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              deleteMajorFieldsByID();
+              setMajorModalFieldDelete(false);
+            }}
+          >
+            Delete
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleMajorDelete}>
+            Cancel
+          </Button>
         </ModalFooter>
       </Modal>
 
@@ -486,59 +608,45 @@ export default function ManageCompany() {
           close={closeBtn(toggleEdit)}
           toggle={toggleEdit}
         >
-          <ModalTitle>Do you want to edit Company</ModalTitle>
+          <ModalTitle>Do you want to edit major field ?</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Form>
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text"
-                name="company_Name"
-                id="company_Name"
-                placeholder="Name"
-                onChange={company_Name}
+              <Form.Control type="text" placeholder="Major name" value={name} 
+              onChange = {e =>setName(e.target.value)}
               />
             </Form.Group>
-
             <Form.Group className="mb-2">
-              <Form.Label>Country</Form.Label>
-              <Form.Control type="text"
-                type="text"
-                name="Country"
-                id="Country"
-                placeholder="Country"
-                onChange={address}
+              <Form.Label>Major</Form.Label>
+              <Form.Control type="text" placeholder="Major" value={major} 
+              onChange = {e =>setMajor(e.target.value)}
               />
             </Form.Group>
-
-            <Form.Group className="mb-2">
-              <Form.Label>City</Form.Label>
-              <Form.Control type="text" placeholder="Price" step="10000" />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Image</Form.Label>
-              <Form.Control type="file" />
-            </Form.Group>
-
             <Form.Group className="mb-2">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Description"
-                name="description"
-                id="lastname"
-                onChange={address}
                 as="textarea"
+                value={description}
+                onChange = {e => setDescription(e.target.value)}
                 rows={3}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Picture</Form.Label>
+              <Form.Control type="text" value={picture}
+              onChange = {e => setImage(e.target.value)}
               />
             </Form.Group>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={() => { // handleCompanyDetele();
-
-            setCompanyModalEdit(false);
+          <Button color="danger" onClick={() => { // handleServiceDetele();
+            handleEditSubmit();
+            setMajorModalEdit(false);
           }}
           >
             Edit
@@ -548,32 +656,56 @@ export default function ManageCompany() {
           </Button>
         </ModalFooter>
       </Modal>
-
-      <Modal isOpen={modalDelete} toggle={toggleDelete}>
+      <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
+          toggle={toggleDetails}
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleDelete)}
-          toggle={toggleDelete}
+          close={closeBtn(toggleDetails)}
         >
-          Are you sure?
+          Detailed Field Information
         </ModalHeader>
-        <ModalBody>Do you want to delete this company</ModalBody>
-        <ModalFooter>
-          <Button
-            color="danger"
-            onClick={() => {
-              handleCompanyDetele();
-              setCompanyModalDelete(false);
-            }}
-          >
-            Delete
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleDelete}>
-            Cancel
-          </Button>
-        </ModalFooter>
+        <ModalBody>
+          <Row>
+            <Col></Col>
+            <Col md={3}> Major</Col>
+            <Col md={8}>
+              {selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}> Name</Col>
+            <Col md={8}>
+              {selectMajor !== undefined ? selectMajor.Name : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Description</Col>
+            <Col md={8}>
+              {selectMajor !== undefined ? selectMajor.Description : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Picture</Col>
+            <Col md={8}>
+              {selectMajor !== undefined ? <img className="text-left-topic" src = {selectMajor.ImageUrl}/> : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>State</Col>
+            <Col md={8}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
+          </Row>
+        </ModalBody>
       </Modal>
+    
+      <FormDialog open={open} handleClose={handleClose}
+        data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
+    
     </>
   );
 }
 
+export default MajorFields;

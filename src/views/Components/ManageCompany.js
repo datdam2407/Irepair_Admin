@@ -102,8 +102,6 @@ export default function ManageCompany() {
       console.log(err);
     });
   }
-
-
   // update form 
   async function handleEditSubmit(e) {
     await put(
@@ -136,37 +134,14 @@ export default function ManageCompany() {
     setUseListCompanyShowPage(useListCompanyShow.slice(number * 5 - 5, number * 5));
     setTotalNumberPage(Math.ceil(useListCompanyShow.length / 5));
   }
-  // create form 
-  // function handleSubmit(e) {
-  //   e.preventDefault();
-  //   setButton(true);
-  //   post(
-  //     "/api/v1.0/company/create",
-  //     {
-  //       company_Name: e.target.company_Name.value,
-  //       address: e.target.address.value,
-  //       description: e.target.description.value,
-  //       email: e.target.email.value,
-  //       hotline: e.target.hotline.value,
-  //       is_Online: 1,
-  //       is_Delete: 0,
-  //       picture: e.target.picture.value,
-  //     },
-  //   )
-  //     .then((res) => {
-  //       if (res.status === 200) {
-  //         window.location = "/admin/Company";
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //     });
-  // }
+  
   // custom state
   function displayStateName(type) {
     const stateValue = {
-      0: "Active",
-      1: "Not Alaviable",
+      0: "New",
+      1: "Approved",
+      2: "Blocked",
+      3: "Deleted",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -195,7 +170,7 @@ export default function ManageCompany() {
   }
   function handleCompanyDetele() {
     // console.log("abc" , CompanyDelete);
-    del(`/api/v1.0/company/delete-by-id?id=${CompanyDelete}`).then((res) => {
+    del(`/api/v1.0/company${CompanyDelete}`).then((res) => {
       if (res.status === 200 || res.status === 202) {
         var temp;
         // temp = useList.filter((x) => x.Id !== CompanyDelete);

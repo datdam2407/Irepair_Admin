@@ -9,11 +9,10 @@ import Typography from "views/Components/Typography.js";
 import RegularForms from "views/Forms/RegularForms.js";
 import MajorTables from "views/Forms/MajorTables.js";
 import ValidationForms from "views/Forms/ValidationForms.js";
-import CreateNewService from "views/Forms/CreateNewService.js";
-import CreateNewMajor from "views/Forms/CreateNewMajor.js";
-import CreateNewRepairMan from "views/Tables/CreateNewRepairMan.js";
+
 import RepairmanTable from "views/Tables/RepairmanTable.js";
 import MajorFields from "views/MajorFields/MajorFields.js"
+import ManageService from "views/ServiceTable/ManageService.js"
 import CreateNewMajorFields from "views/MajorFields/CreateNewMajorFields.js"
 import GoogleMaps from "views/Maps/GoogleMaps.js";
 import FullScreenMap from "views/Maps/FullScreenMap.js";
@@ -57,13 +56,13 @@ var routes = [
         mini: "GS",
         component: ManageCompany,
       },
-      {
-        path: "/create/company",
-        layout: "/admin",
-        name: "Create Company",
-        mini: "CC",
-        component: CreateNewCompany,
-      },
+      // {
+      //   path: "/create/company",
+      //   layout: "/admin",
+      //   name: "Create Company",
+      //   mini: "CC",
+      //   component: CreateNewCompany,
+      // },
       // {
       //   path: "/notifications",
       //   layout: "/admin",
@@ -104,7 +103,7 @@ var routes = [
       {
         path: "/major",
         layout: "/admin",
-        name: "Major Table",
+        name: "Manage Major",
         mini: "Mt",
         component: MajorTables,
       },
@@ -125,30 +124,7 @@ var routes = [
      
     ],
   },
-  {
-    collapse: true,
-    path: "/repairman",
-    name: "RepairMan",
-    state: "openTables",
-    icon: "nc-icon nc-settings-tool-66",
-    views: [
-      {
-        path: "/create/repairman",
-        layout: "/admin",
-        name: "Create Repairman",
-        mini: "CR",
-        component: CreateNewRepairMan,
-      },
-    
-      {
-        path: "/repairman",
-        layout: "/admin",
-        name: "Repairman Table",
-        mini: "ST",
-        component: RepairmanTable,
-      },
-    ],
-  },
+  
   {
     collapse: true,
     path: "/majorfield",
@@ -156,18 +132,17 @@ var routes = [
     state: "openTablesFields",
     icon: "nc-icon nc-layers-3",
     views: [
-      {
-        path: "/create/fields",
-        layout: "/admin",
-        name: "Major Fields",
-        mini: "CMr",
-        component: CreateNewMajorFields,
-      },
-    
+      // {
+      //   path: "/create/fields",
+      //   layout: "/admin",
+      //   name: "Major Fields",
+      //   mini: "CMr",
+      //   component: CreateNewMajorFields,
+      // },
       {
         path: "/fields",
         layout: "/admin",
-        name: "MajorFieds Table",
+        name: "Manage MajorFields",
         mini: "MT",
         component: MajorFields,
       },
@@ -180,20 +155,20 @@ var routes = [
     state: "openTablesService",
     icon: "nc-icon nc-single-copy-04",
     views: [
-      {
-        path: "/create/service",
-        layout: "/admin",
-        name: "Create Service",
-        mini: "Cs",
-        component: CreateNewService,
-      },
+      // {
+      //   path: "/create/service",
+      //   layout: "/admin",
+      //   name: "Create Service",
+      //   mini: "Cs",
+      //   component: CreateNewService,
+      // },
     
       {
-        path: "/fields",
+        path: "/service",
         layout: "/admin",
         name: "Service Table",
         mini: "MT",
-        component: MajorFields,
+        component: ManageService,
       },
     ],
   },
@@ -227,6 +202,30 @@ var routes = [
   //     },
   //   ],
   // },
+  {
+    collapse: true,
+    path: "/repairman",
+    name: "RepairMan",
+    state: "openTables",
+    icon: "nc-icon nc-settings-tool-66",
+    views: [
+      // {
+      //   path: "/create/repairman",
+      //   layout: "/admin",
+      //   name: "Create Repairman",
+      //   mini: "CR",
+      //   component: CreateNewRepairMan,
+      // },
+    
+      {
+        path: "/repairman",
+        layout: "/admin",
+        name: "Repairman Table",
+        mini: "ST",
+        component: RepairmanTable,
+      },
+    ],
+  },
   {
     path: "/customer",
     layout: "/admin",
