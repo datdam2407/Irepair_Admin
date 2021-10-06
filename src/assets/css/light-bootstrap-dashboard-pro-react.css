@@ -1032,7 +1032,8 @@ input:focus {
     position: absolute;
     right: 10px !important; }
   .fixed-plugin .dropdown .dropdown-menu .adjustments-line label {
-    margin-bottom: .6rem !important; }
+    margin-bottom: .6rem !important;
+   }
 
 .fixed-plugin li > a,
 .fixed-plugin .badge {
@@ -2409,7 +2410,8 @@ input:focus {
 
 .card .table tbody td:first-child,
 .card .table thead th:first-child {
-  padding-left: 15px; }
+  padding-left: 15px;
+ }
 
 .card .table tbody td:last-child,
 .card .table thead th:last-child {

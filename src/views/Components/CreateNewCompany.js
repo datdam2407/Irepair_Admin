@@ -1,18 +1,28 @@
 import { React, useState, useEffect } from "react";
 import {
-  Col,
-  Row,
-  Button,
-  Form,
   FormGroup,
-  Label,
+  label,
   Input,
-  Container,
+  Button,
+  Row,
+  Col,
+
 } from "reactstrap";
 import { Link } from "react-router-dom";
 // import { postWithToken } from "../ReadAPI";
 // import moment from "moment";
 import {post} from "../../service/ReadAPI";
+
+import {
+  Badge,
+  Card,
+  Form,
+  Media,
+  Navbar,
+  Nav,
+  Container,
+ 
+} from "react-bootstrap";
 
 
 export default function CreateNewCompany() {
@@ -24,12 +34,11 @@ export default function CreateNewCompany() {
   const [address, setaddress] = useState("");
   const [joinDateError, setJoinDateError] = useState("");
   const [currentDate, setCurrentDate] = useState();
-
   function handleSubmit(e) {
     e.preventDefault();
     setButton(true);
     post(
-      "/Company",
+      "/api/v1.0/company/create",
       {
         company_Name: e.target.company_Name.value,
         address: e.target.address.value,
@@ -96,7 +105,7 @@ export default function CreateNewCompany() {
         // }
       });
   }
-
+  
   // useEffect(() => {
   //   var curr = new Date();
   //   curr.setDate(curr.getDate());
@@ -105,10 +114,15 @@ export default function CreateNewCompany() {
   // }, []);
 
 
-
   return (
-    <div className="container-createuser-form">
-      <Container>
+    <>
+      <div
+        className="full-page register-page section-image"
+        // data-color="orange"
+        data-image={require("assets/img/cp5.jpg").default}
+      >
+        <div className="content align-items-center">
+        <Container>
         <h3 class="logo-title">Create New Company</h3>
         <Col md={9}>
           <Form
@@ -118,11 +132,11 @@ export default function CreateNewCompany() {
           >
             <FormGroup>
               <Row>
-                <Col>
-                  <Label>Name</Label>
+                <Col md={4}>
+                  <label>Name</label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="text"
                     name="company_Name"
@@ -137,11 +151,11 @@ export default function CreateNewCompany() {
 
             <FormGroup>
               <Row>
-                <Col>
-                  <Label>Address</Label>
+                <Col md={4}>
+                  <label>Address</label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="text"
                     name="address"
@@ -156,11 +170,11 @@ export default function CreateNewCompany() {
 
             <FormGroup>
               <Row>
-                <Col>
-                  <Label>Description</Label>
+                <Col md={4}>
+                  <label>Description</label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="text"
                     name="description"
@@ -174,11 +188,11 @@ export default function CreateNewCompany() {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col>
-                  <Label>email</Label>
+                <Col md={4}>
+                  <label>email</label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="text"
                     name="email"
@@ -190,11 +204,11 @@ export default function CreateNewCompany() {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col>
-                  <Label>Hotline</Label>
+                <Col md={4}>
+                  <label>Hotline</label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="text"
                     name="hotline"
@@ -206,11 +220,11 @@ export default function CreateNewCompany() {
             </FormGroup>
             <FormGroup>
               <Row>
-                <Col>
-                  <Label>Picture</Label>
+                <Col md={4}>
+                  <label>Picture</label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="text"
                     name="picture"
@@ -222,14 +236,29 @@ export default function CreateNewCompany() {
             </FormGroup>
 
             <div className="btn-container">
+              <Row>
+              <Col md={4}></Col>
+                <Col md={5}>
               <Button color="danger">Save</Button>
+              </Col>
               <Link to="/admin/Company">
-                <button className="btn-cancel">Cancel</button>
+                <Button className="danger">Cancel</Button>
               </Link>
+              </Row>
             </div>
           </Form>
         </Col>
       </Container>
-    </div>
+        </div>
+        <div
+          className="full-page-background"
+          style={{
+            backgroundImage:
+              "url(" + require("assets/img/cp5.jpg").default + ")",
+          }}
+        ></div>
+      </div>
+    </>
   );
 }
+

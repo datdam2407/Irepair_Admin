@@ -1,21 +1,30 @@
+
+
 import { React, useState, useEffect } from "react";
 import {
-  Col,
-  Row,
-  Button,
-  Form,
   FormGroup,
   Label,
   Input,
-  Container,
+  Button,
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import {post} from "../../service/ReadAPI";
+import "./CreateNew.css"
 
-// import { postWithToken } from "../ReadAPI";
-// import moment from "moment";
+import {
+  Badge,
+  
+  Card,
+  Form,
+  Media,
+  Navbar,
+  Nav,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
 
-export default function CreateNewService() {
+function CreateNewService() {
   const [button, setButton] = useState(true);
   const [male, setMale] = useState(true);
   const [female, setFemale] = useState(false);
@@ -47,10 +56,15 @@ export default function CreateNewService() {
       });
   }
 
-  
   return (
-    <div className="container-createuser-form">
-      <Container>
+    <>
+      <div
+        className="full-page register-page section-image"
+        // data-color="orange"
+        data-image={require("assets/img/bg5.jpg").default}
+      >
+        <div className="content align-items-center">
+        <Container>
         <h3 class="logo-title">Create New Major</h3>
         <Col md={9}>
           <Form
@@ -60,11 +74,11 @@ export default function CreateNewService() {
           >
             <FormGroup>
               <Row>
-                <Col>
+                <Col md={4}>
                   <Label>MAJOR NAME</Label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="text"
                     name="majorname"
@@ -79,11 +93,11 @@ export default function CreateNewService() {
 
             <FormGroup>
               <Row>
-                <Col>
+                <Col md={4}>
                   <Label>Description</Label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="text"
                     name="Description"
@@ -98,11 +112,11 @@ export default function CreateNewService() {
 
             <FormGroup>
               <Row>
-                <Col>
+                <Col md={4}>
                   <Label>picture</Label>
                 </Col>
 
-                <Col md={8}>
+                <Col md={6}>
                   <Input
                     type="file"
                     name="picture"
@@ -114,16 +128,31 @@ export default function CreateNewService() {
                 </Col>
               </Row>
             </FormGroup>
-
             <div className="btn-container">
+              <Row>
+              <Col md={4}></Col>
+                <Col md={5}>
               <Button color="danger">Save</Button>
-              <Link to="/admin/service">
-                <button className="btn-cancel">Cancel</button>
+              </Col>
+              <Link to="/admin/Company">
+                <Button className="danger">Cancel</Button>
               </Link>
+              </Row>
             </div>
           </Form>
         </Col>
       </Container>
-    </div>
+        </div>
+        <div
+          className="full-page-background"
+          style={{
+            backgroundImage:
+              "url(" + require("assets/img/bg5.jpg").default + ")",
+          }}
+        ></div>
+      </div>
+    </>
   );
 }
+
+export default CreateNewService;

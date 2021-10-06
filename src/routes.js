@@ -7,22 +7,24 @@ import Notifications from "views/Components/Notifications.js";
 import Icons from "views/Components/Icons.js";
 import Typography from "views/Components/Typography.js";
 import RegularForms from "views/Forms/RegularForms.js";
-import ServiceTables from "views/Forms/ServiceTables.js";
+import MajorTables from "views/Forms/MajorTables.js";
 import ValidationForms from "views/Forms/ValidationForms.js";
 import CreateNewService from "views/Forms/CreateNewService.js";
 import CreateNewMajor from "views/Forms/CreateNewMajor.js";
 import CreateNewRepairMan from "views/Tables/CreateNewRepairMan.js";
 import RepairmanTable from "views/Tables/RepairmanTable.js";
+import MajorFields from "views/MajorFields/MajorFields.js"
+import CreateNewMajorFields from "views/MajorFields/CreateNewMajorFields.js"
 import GoogleMaps from "views/Maps/GoogleMaps.js";
 import FullScreenMap from "views/Maps/FullScreenMap.js";
 import VectorMap from "views/Maps/VectorMap.js";
-import Charts from "views/Charts.js";
+import Customer from "views/Customer.js";
 import Calendar from "views/Calendar.js";
 import UserPage from "views/Pages/UserPage.js";
 // import Sidebar from "views/Sidebar.js";
 import RegisterPage from "views/Pages/RegisterPage.js";
 // import LockScreenPage from "views/Pages/LockScreenPage.js";
-
+import img1 from "../src/assets/img/company.png"
 var routes = [
   
 
@@ -46,7 +48,7 @@ var routes = [
     collapse: true,
     name: "Company",
     state: "openComponents",
-    icon: "nc-icon nc-bank",
+    icon: "nc-icon nc-istanbul",
     views: [
       {
         path: "/Company",
@@ -87,8 +89,8 @@ var routes = [
   },
   {
     collapse: true,
-    path: "/service",
-    name: "Service",
+    path: "/major",
+    name: "Major",
     state: "openForms",
     icon: "nc-icon nc-notes",
     views: [
@@ -100,11 +102,11 @@ var routes = [
       //   component: RegularForms,
       // },
       {
-        path: "/service",
+        path: "/major",
         layout: "/admin",
-        name: "Service Table",
-        mini: "St",
-        component: ServiceTables,
+        name: "Major Table",
+        mini: "Mt",
+        component: MajorTables,
       },
       // {
       //   path: "/validation-forms",
@@ -113,20 +115,14 @@ var routes = [
       //   mini: "VF",
       //   component: ValidationForms,
       // },
-      {
-        path: "/create/major",
-        layout: "/admin",
-        name: "Create Major",
-        mini: "Cm",
-        component: CreateNewMajor,
-      },
-      {
-        path: "/create/service",
-        layout: "/admin",
-        name: "Create Service",
-        mini: "Cs",
-        component: CreateNewService,
-      },
+      // {
+      //   path: "/create/major",
+      //   layout: "/admin",
+      //   name: "Create Major",
+      //   mini: "Cm",
+      //   component: CreateNewMajor,
+      // },
+     
     ],
   },
   {
@@ -150,6 +146,54 @@ var routes = [
         name: "Repairman Table",
         mini: "ST",
         component: RepairmanTable,
+      },
+    ],
+  },
+  {
+    collapse: true,
+    path: "/majorfield",
+    name: "Major Field",
+    state: "openTablesFields",
+    icon: "nc-icon nc-layers-3",
+    views: [
+      {
+        path: "/create/fields",
+        layout: "/admin",
+        name: "Major Fields",
+        mini: "CMr",
+        component: CreateNewMajorFields,
+      },
+    
+      {
+        path: "/fields",
+        layout: "/admin",
+        name: "MajorFieds Table",
+        mini: "MT",
+        component: MajorFields,
+      },
+    ],
+  },
+  {
+    collapse: true,
+    path: "/service",
+    name: "Service",
+    state: "openTablesService",
+    icon: "nc-icon nc-single-copy-04",
+    views: [
+      {
+        path: "/create/service",
+        layout: "/admin",
+        name: "Create Service",
+        mini: "Cs",
+        component: CreateNewService,
+      },
+    
+      {
+        path: "/fields",
+        layout: "/admin",
+        name: "Service Table",
+        mini: "MT",
+        component: MajorFields,
       },
     ],
   },
@@ -184,11 +228,11 @@ var routes = [
   //   ],
   // },
   {
-    path: "/charts",
+    path: "/customer",
     layout: "/admin",
-    name: "Charts",
-    icon: "nc-icon nc-chart-bar-32",
-    component: Charts,
+    name: "Manage Customer",
+    icon: "nc-icon nc-badge",
+    component: Customer,
   },
   // {
   //   path: "/calendar",

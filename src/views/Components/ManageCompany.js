@@ -24,21 +24,29 @@ import {
 import deleteIcon from "assets/img/remove.png";
 import editIcon from "assets/img/edit.png";
 import { Link } from "react-router-dom";
-import { del, post ,get } from "../../service/ReadAPI";
+import { del, post, get, put } from "../../service/ReadAPI";
+import "../../assets/css/customSize.css";
 
-
-function ManageCompany() {
+export default function ManageCompany() {
   const [CompanyDelete, setCompanyDelete] = useState(null);
   const [modalDelete, setCompanyModalDelete] = useState(false);
   const toggleDelete = () => setCompanyModalDelete(!modalDelete);
-//edit
-  const [CompanyEdit, setCompanyEdit] = useState(null);
+  //edit
+  // const [CompanyEdit, setCompanyEdit] = useState(null);
   const [modalEdit, setCompanyModalEdit] = useState(false);
   const toggleEdit = () => setCompanyModalEdit(!modalEdit)
 
   const [modalCreate, setCompanyModalCreate] = useState(false);
   const toggleCreate = () => setCompanyModalCreate(!modalCreate)
-  
+
+  const [button, setButton] = useState(true);
+  const [male, setMale] = useState(true);
+  const [female, setFemale] = useState(false);
+  const [dobError, setDobError] = useState("");
+  const [joinDateError, setJoinDateError] = useState("");
+  const [currentDate, setCurrentDate] = useState();
+
+  const [useList, setUseList] = useState([]);
 
   const [useListCompanyShow, setUseListCompanyShow] = useState([]);
   const [useListCompanyShowPage, setUseListCompanyShowPage] = useState([]);
@@ -46,65 +54,158 @@ function ManageCompany() {
   const [companyListID, setCompanyListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
-  
+
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [picture, setImage] = useState("");
+  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [hotline, setHotline] = useState("");
+  const [statusCP, setCPStatus] = useState("");
+  const [isOnl, setIsOnline] = useState("");
+  const [companyID, setCompanyID] = useState("");
+
+  async function getCompanyByID(Id) {
+    get(`/api/v1.0/company/${Id}`).then((res) => {
+      setCompanyID(Id);
+      setName(res.data.companyName);
+      setAddress(res.data.address);
+      setDescription(res.data.description);
+      setEmail(res.data.email);
+      setHotline(res.data.hotline);
+      setImage(res.data.imageUrl);
+      setCPStatus(res.data.status);
+      // setIsDeleted(res.data.is_Delete);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
   useEffect(() => {
     getCompanyList();
-    get("/Company").then(
+    get("/api/v1.0/company").then(
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
           // res.data;
           console.log(res.data);
-        }});}, []);
-  function getCompanyList(){
-    get("/Company").then((res)=>{
+        }
+      });
+  }, []);
+  function getCompanyList() {
+    get("/api/v1.0/company").then((res) => {
       var temp = res.data;
       setCompanyList(temp);
       setUseListCompanyShow(temp);
       setUseListCompanyShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
       setTotalNumberPage(Math.ceil(temp.length / 5));
-    }).catch((err)=>{
-      console.log(err);
-    });
-  }
-  function getCompanyListID(){
-    get("/Company/" + CompanyEdit).then((res)=>{
-      var temp = res.data;
-      setCompanyListID(temp);
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log(err);
     });
   }
 
+
+  // update form 
+  async function handleEditSubmit(e) {
+    await put(
+      `/api/v1.0/company`,
+      {
+        Id: companyID,
+        CompanyName: name,
+        Address: address,
+        Description: description,
+        Email: email,
+        Status: 3,
+        Hotline: hotline,
+        ImageUrl: picture,
+        Uid: 1,
+      },
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/company";
+
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
     setUseListCompanyShowPage(useListCompanyShow.slice(number * 5 - 5, number * 5));
     setTotalNumberPage(Math.ceil(useListCompanyShow.length / 5));
   }
+  // create form 
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   setButton(true);
+  //   post(
+  //     "/api/v1.0/company/create",
+  //     {
+  //       company_Name: e.target.company_Name.value,
+  //       address: e.target.address.value,
+  //       description: e.target.description.value,
+  //       email: e.target.email.value,
+  //       hotline: e.target.hotline.value,
+  //       is_Online: 1,
+  //       is_Delete: 0,
+  //       picture: e.target.picture.value,
+  //     },
+  //   )
+  //     .then((res) => {
+  //       if (res.status === 200) {
+  //         window.location = "/admin/Company";
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     });
+  // }
   // custom state
   function displayStateName(type) {
     const stateValue = {
-      1: "Active",
-      0: "Not Alaviable",
+      0: "Active",
+      1: "Not Alaviable",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
-
-  function handleCompanyDetele() {
-    // console.log("abc" , CompanyDelete);
-    post("/Company/" + CompanyDelete ,
+  function handleSubmit(e) {
+    post(
+      "/api/v1.0/company",
       {
-        is_Online: 0,
-        is_Delete: 1,
+        id : null,
+        companyName: name,
+        address: address,
+        description: description,
+        email: email,
+        hotline: hotline,
+        imageUrl: picture,
+        status: 0,
       },
     )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
-          // window.location = "/admin/Company";
+          window.location = "/admin/Company";
         }
       })
+      .catch((err) => {
+        console.log(err)
+      });
+  }
+  function handleCompanyDetele() {
+    // console.log("abc" , CompanyDelete);
+    del(`/api/v1.0/company/delete-by-id?id=${CompanyDelete}`).then((res) => {
+      if (res.status === 200 || res.status === 202) {
+        var temp;
+        // temp = useList.filter((x) => x.Id !== CompanyDelete);
+        setUseListCompanyShow(temp);
+        setUseListCompanyShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
+        setTotalNumberPage(Math.ceil(temp.length / 5));
+        window.location.reload();
+
+      }
+    })
       .catch((err) => {
         // setErrorMessage(err.response.data.message);
         // setModalConfirm(true);
@@ -123,251 +224,179 @@ function ManageCompany() {
   return (
     <>
       <Container fluid>
-        <Row>
-          <Col md="12">
-            <Card className="strpied-tabled-with-hover">
-              <Card.Header>
-                <Card.Title as="h4">Manage Company</Card.Title>
-                {/* <Link to="/admin/create/company">
-                  
-                  
+        <Col md="12">
+          <Card className="strpied-tabled-with-hover">
+            <Card.Header>
+              <Card.Title as="h4">Manage Company</Card.Title>
+              {/* <Link to="/admin/create/company">
                 </Link> */}
-                <Button
-                       
-                          onClick={() => {
-                            // setCompanyEdit(e.Id);
-                            // getCompanyListID();
-                            setCompanyModalCreate(true);
-                          }}>
-                        Create new Company
-                      </Button>
-              </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Name</th>
-                      <th className="border-0">Image</th>
-                      <th className="border-0">Country</th>
-                      <th className="border-0">Hotline</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {useListCompanyShowPage.map((e,index)=>{
-                    return(
-                      <tr key={index}>
-                        <td>
-                          {e.Id}
-                        </td>
-                        <td>
-                          {e.Company_Name}
-                        </td>
-                        <td>
-                          {e.Picture}
+              <Button
+                onClick={() => {
+                  // setCompanyEdit(e.Id);
+                  // getCompanyListID();
+                  // handleSubmit(e);
+                  setCompanyModalCreate(true);
+                }}>
+                Create new Company
+              </Button>
+            </Card.Header>
+            <Card.Body className="table-full-width table-responsive px-0">
+              <Table className="table">
+                <thead>
+                  <tr>
+                    {/* <th className="border-0">ID</th> */}
+                    <th className="border-0">Name</th>
+                    <th className="border-0">Address</th>
+                    <th className="border-0">Description</th>
+                    <th className="border-0">Email</th>
+                    <th className="border-0">Hotline</th>
+                    <th className="border-0">Picture</th>
+                    <th className="border-0">State</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {useListCompanyShowPage.map((e, index) => {
+                    return (
+                      <tr className="" key={index}>
+                        {/* <td>
+                            {e.Id}
+                          </td> */}
+                        <td className="nameSize">
+                          {e.CompanyName}
                         </td>
                         <td>
                           {e.Address}
                         </td>
-                        <td>
+                        <td className="descriptionSize">
                           {e.Description}
+                        </td>
+                        <td className="emailSize">
+                          {e.Email}
                         </td>
                         <td>
                           {e.Hotline}
                         </td>
                         <td>
-                          {displayStateName(e.Is_Online)}
+                          {e.Picture}
                         </td>
                         <td>
-                        <Media
-                          src={editIcon}
-                          onClick={() => {
-                            setCompanyEdit(e.Id);
-                            getCompanyListID();
-                            setCompanyModalEdit(true);
-                          }}
-                        />
-                      </td>
-                      <td>
-                        <Media
-                          src={deleteIcon}
-                          onClick={() => {
-                            setCompanyDelete(e.Id);
-                            setCompanyModalDelete(true);
-                          }}
-                        />
-                      </td>
-                      </tr>  
-                   );
+                          {displayStateName(e.Status)}
+                        </td>
+                        <td>
+                          <Media
+                            src={editIcon}
+                            onClick={() => {
+                              // setCompanyEdit(e.Id);
+                              getCompanyByID(e.Id);
+                              setCompanyModalEdit(true);
+                            }}
+                          />
+                        </td>
+                        <td>
+                          <Media
+                            src={deleteIcon}
+                            onClick={() => {
+                              setCompanyDelete(e.Id);
+                              setCompanyModalDelete(true);
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    );
                   })}
-                  </tbody>
-                </Table>
-                <Row>
-        <Col md={6}></Col>
-        <Col md={6}>
-          <Pagination
-            aria-label="Page navigation example"
-            className="page-right"
-          >
-            <PaginationItem disabled={numberPage === 1}>
-              <PaginationLink
-                className="page"
-                previous
-                //disable={numberPage === 1 ? "true" : "false"}
+                </tbody>
+              </Table>
+              <Row>
+                <Col md={6}></Col>
+                <Col md={6}>
+                  <Pagination
+                    aria-label="Page navigation example"
+                    className="page-right"
+                  >
+                    <PaginationItem disabled={numberPage === 1}>
+                      <PaginationLink
+                        className="page"
+                        previous
+                        //disable={numberPage === 1 ? "true" : "false"}
 
-                onClick={() => {
-                  if (numberPage - 1 > 0) {
-                    onClickPage(numberPage - 1);
-                  }
-                }}
-              >
-                Previous
-              </PaginationLink>
-            </PaginationItem>
-            {numberPage - 1 > 0 ? (
-              <PaginationItem>
-                <PaginationLink
-                  className="page"
-                  onClick={() => {
-                    onClickPage(numberPage - 1);
-                  }}
-                >
-                  {numberPage - 1}
-                </PaginationLink>
-              </PaginationItem>
-            ) : (
-              ""
-            )}
-            <PaginationItem active>
-              <PaginationLink className="page-active">
-                {numberPage}
-              </PaginationLink>
-            </PaginationItem>
-            {numberPage + 1 <= totalNumberPage ? (
-              <PaginationItem>
-                <PaginationLink
-                  className="page"
-                  onClick={() => {
-                    onClickPage(numberPage + 1);
-                  }}
-                >
-                  {numberPage + 1}
-                </PaginationLink>
-              </PaginationItem>
-            ) : (
-              ""
-            )}
-            {numberPage + 2 <= totalNumberPage ? (
-              <PaginationItem>
-                <PaginationLink
-                  className="page"
-                  onClick={() => {
-                    onClickPage(numberPage + 2);
-                  }}
-                >
-                  {numberPage + 2}
-                </PaginationLink>
-              </PaginationItem>
-            ) : (
-              ""
-            )}
+                        onClick={() => {
+                          if (numberPage - 1 > 0) {
+                            onClickPage(numberPage - 1);
+                          }
+                        }}
+                      >
+                        Previous
+                      </PaginationLink>
+                    </PaginationItem>
+                    {numberPage - 1 > 0 ? (
+                      <PaginationItem>
+                        <PaginationLink
+                          className="page"
+                          onClick={() => {
+                            onClickPage(numberPage - 1);
+                          }}
+                        >
+                          {numberPage - 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ) : (
+                      ""
+                    )}
+                    <PaginationItem active>
+                      <PaginationLink className="page-active">
+                        {numberPage}
+                      </PaginationLink>
+                    </PaginationItem>
+                    {numberPage + 1 <= totalNumberPage ? (
+                      <PaginationItem>
+                        <PaginationLink
+                          className="page"
+                          onClick={() => {
+                            onClickPage(numberPage + 1);
+                          }}
+                        >
+                          {numberPage + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ) : (
+                      ""
+                    )}
+                    {numberPage + 2 <= totalNumberPage ? (
+                      <PaginationItem>
+                        <PaginationLink
+                          className="page"
+                          onClick={() => {
+                            onClickPage(numberPage + 2);
+                          }}
+                        >
+                          {numberPage + 2}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ) : (
+                      ""
+                    )}
 
-            <PaginationItem disabled={numberPage === totalNumberPage}>
-              <PaginationLink
-                className="page"
-                next
-                //disable={numberPage === totalNumberPage ? true : false}
-                onClick={() => {
-                  if (numberPage + 1 <= totalNumberPage) {
-                    onClickPage(numberPage + 1);
-                  }
-                }}
-              >
-                Next
-              </PaginationLink>
-            </PaginationItem>
-          </Pagination>
+                    <PaginationItem disabled={numberPage === totalNumberPage}>
+                      <PaginationLink
+                        className="page"
+                        next
+                        //disable={numberPage === totalNumberPage ? true : false}
+                        onClick={() => {
+                          if (numberPage + 1 <= totalNumberPage) {
+                            onClickPage(numberPage + 1);
+                          }
+                        }}
+                      >
+                        Next
+                      </PaginationLink>
+                    </PaginationItem>
+                  </Pagination>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
         </Col>
-      </Row>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md="12">
-            <Card className="card-plain table-plain-bg">
-              <Card.Header>
-                <Card.Title as="h4">Hot Service </Card.Title>
-                <p className="card-category">
-                  This is a text
-                </p>
-              </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover">
-                  <thead>
-                    <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Image</th>
-                      <th className="border-0">Service Name</th>
-                      <th className="border-0">Category</th>
-                      <th className="border-0">Description</th>
-                      <th className="border-0">Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>$36,738</td>
-                      <td>Niger</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>$23,789</td>
-                      <td>$23,789</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>$56,142</td>
-                      <td>$56,142</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>$38,735</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                      <td>Overland Park</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>$63,542</td>
-                      <td>Malawi</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                    </tr>
 
-                    <tr>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>$78,615</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                      <td>Gloucester</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
       </Container>
 
       <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
@@ -379,55 +408,83 @@ function ManageCompany() {
           <ModalTitle>Do you want to create new company</ModalTitle>
         </ModalHeader>
         <ModalBody>
-          <Form>
+          <Form 
+          >
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" placeholder="Name" />
+              <Form.Control type="text"
+                placeholder="Name"
+                value={name}
+                onChange={e => setName(e.target.value)}
+              />
             </Form.Group>
+
             <Form.Group className="mb-2">
               <Form.Label>Address</Form.Label>
-              <Form.Control type="text" placeholder="Address" />
+              <Form.Control type="text"
+                type="text"
+                placeholder="Address"
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+
+              // defaultValue={address}
+              // onChange={address}
+              />
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
+              <Form.Control type="text"
                 placeholder="Description"
-                as="textarea"
-                rows={3}
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+
+              // onChange={name}
               />
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="text" placeholder="Email" />
-            </Form.Group>
+              <Form.Control type="text"
+                placeholder="Email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
 
+              // onChange={name}
+              />
+            </Form.Group>
             <Form.Group className="mb-2">
-              <Form.Label>HOTLINE</Form.Label>
-              <Form.Control type="text" placeholder="HOTLINE" />
+              <Form.Label>HotLine</Form.Label>
+              <Form.Control type="text" placeholder="phone"
+                value={hotline}
+                onChange={e => setHotline(e.target.value)}
+              />
             </Form.Group>
-
             <Form.Group className="mb-3">
-              <Form.Label>Picture</Form.Label>
-              <Form.Control type="file" />
+              <Form.Label>Image</Form.Label>
+              <Form.Control type="text" value={picture}
+                onChange={e => setImage(e.target.value)}
+
+              />
             </Form.Group>
-           
+            {/* <Form.Group className="mb-3">
+              <Form.Label>Status</Form.Label>
+              <Form.Control type="text" value={statusCP} name="Status"/>
+            </Form.Group> */}
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={() => { // handleCompanyDetele();
-            
-            setCompanyModalCreate(false);
-          }}
+          <Button onClick={(e) =>  // handleCompanyDetele();
+            handleSubmit()
+            // setCompanyModalEdit(false);
+          }
           >
-            Create
+            Save
           </Button>
           <Button color="secondary" onClick={toggleCreate}>
             Cancel
           </Button>
         </ModalFooter>
       </Modal>
-      
+
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
@@ -440,40 +497,74 @@ function ManageCompany() {
           <Form>
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" placeholder="Service name" />
-            </Form.Group>
-
-            <Form.Group className="mb-2">
-              <Form.Label>Country</Form.Label>
-              <Form.Control type="text" placeholder="Category" />
-            </Form.Group>
-
-            <Form.Group className="mb-2">
-              <Form.Label>City</Form.Label>
-              <Form.Control type="text" placeholder="Price" step="10000" />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Image</Form.Label>
-              <Form.Control type="file" />
-            </Form.Group>
-
-            <Form.Group className="mb-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Description"
-                as="textarea"
-                rows={3}
+              <Form.Control type="text"
+                placeholder="Name"
+                value={name}
+                onChange={e => setName(e.target.value)}
               />
             </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Address</Form.Label>
+              <Form.Control type="text"
+                type="text"
+                placeholder="Address"
+                value={address}
+                onChange={e => setAddress(e.target.value)}
+
+              // defaultValue={address}
+              // onChange={address}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Description</Form.Label>
+              <Form.Control type="text"
+                placeholder="Description"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+
+              // onChange={name}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="text"
+                placeholder="Email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+
+              // onChange={name}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>HotLine</Form.Label>
+              <Form.Control type="text" placeholder="phone"
+                value={hotline}
+                onChange={e => setHotline(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Image</Form.Label>
+              <Form.Control type="text" value={picture}
+                onChange={e => setImage(e.target.value)}
+
+              />
+            </Form.Group>
+
+            {/* <Form.Group className="mb-3">
+              <Form.Label>Status</Form.Label>
+              <Form.Control type="text" value={statusCP} name="Status"/>
+            </Form.Group> */}
+
+
+
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={() => { // handleCompanyDetele();
-            
-            setCompanyModalEdit(false);
-          }}
+          <Button onClick={(e) =>  // handleCompanyDetele();
+            handleEditSubmit(e)
+            // setCompanyModalEdit(false);
+          }
           >
             Edit
           </Button>
@@ -498,6 +589,7 @@ function ManageCompany() {
             onClick={() => {
               handleCompanyDetele();
               setCompanyModalDelete(false);
+
             }}
           >
             Delete
@@ -511,4 +603,3 @@ function ManageCompany() {
   );
 }
 
-export default ManageCompany;
