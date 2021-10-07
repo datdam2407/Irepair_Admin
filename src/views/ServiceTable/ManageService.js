@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { Dropdown } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css';
 import {
   Modal,
   ModalHeader,
@@ -13,9 +14,9 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Dropdown,
   InputGroupButtonDropdown,
-  Input ,
+  Input,
+  FormGroup,
 } from "reactstrap";
 // react-bootstrap components
 import {
@@ -31,7 +32,8 @@ import {
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
-import { del, put , get , getWithParams } from "../../service/ReadAPI";
+
+import { del, put, get, getWithParams } from "../../service/ReadAPI";
 import FilterState from "../MajorFields/FilterState";
 
 // import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -84,7 +86,13 @@ function ManageSevice() {
   const [companyId, setCompanyID] = useState("");
   const [fieldID, setFieldID] = useState("");
   const [serviceID, setserviceID] = useState("");
+  const [fieldSelect, setfieldSelect] = useState("")
+  const [data1, setData1] = useState({ array: [] });
+  const [FieldSelectID, setFieldSelectID] = useState(-1)
 
+
+
+  const [listField, setListField] = useState([]);
   //filter 
   const listStates = [
     "New",
@@ -117,7 +125,38 @@ function ManageSevice() {
     getserviceList(newListState);
   }
 
+  useEffect(() => {
+    let params = {};
+    let currentField = {};
+    let FieldId = "";
+    get(
+      `/api/v1.0/major-fields`,
+    ).then((res) => {
+      FieldId = res.data.FieldId
+      console.log(res.data)
+      currentField['text'] = `${res.data.name}`;
+      currentField['value'] = res.data.fieldId;
+      currentField['key'] = res.data.fieldId;
+      setFieldID(FieldId);
 
+    }).then(() => {
+    });
+
+    params['Status'] = [1].reduce((f, s) => `${f},${s}`);
+    getWithParams("/api/v1.0/major-fields", params,
+    ).then(res => {
+      setData1(res.data);
+      const newlistField = res.data.reduce((list, item) => [...list,
+      {
+        text: `${item.Name}`,
+        value: item.Id,
+        key: item.Id
+      }], [])
+      setListField(
+        [currentField, ...newlistField],
+      );
+    })
+  }, []);
 
 
   const initialValue = { name: "", description: "", imageUrl: "", status: "1" }
@@ -134,7 +173,7 @@ function ManageSevice() {
     setOpen(false);
     setFormData(initialValue)
   };
-  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/service"
+  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/services"
   const columnDefs = [
     { headerName: "ID", field: "Id", },
     { headerName: "ServiceName", field: "servicename", },
@@ -159,33 +198,31 @@ function ManageSevice() {
     setGridApi(params)
   }
 
-console.log(name)
-console.log(description)
-// update
-async function handleEditSubmit(e) {
- await put(
-    `/api/v1.0/service`,
-    {
-      id : serviceID,
-      ServiceName: name,
-      Description: description,
-      FieldId : fieldID,
-      CompanyId :companyId,
-      Price: price,
-      ImageUrl: picture,
-      status: 1,
-    },
-  )
-    .then((res) => {
-      if (res.status === 200) {
-        window.location = "/admin/service";
-      
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
+  // update
+  async function handleEditSubmit(e) {
+    await put(
+      `/api/v1.0/services`,
+      {
+        id: serviceID,
+        ServiceName: name,
+        description: description,
+        FieldId: FieldSelectID,
+        companyId: companyId,
+        Price: price,
+        ImageUrl: picture,
+        status: 1,
+      },
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/service";
+
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   // setting update row data to form data and opening pop up window
   const handleUpdate = (oldData) => {
@@ -239,8 +276,13 @@ async function handleEditSubmit(e) {
   //     setIsDeleted(res.data.is_Delete);
   //   });
   // }, []);
-  function getserviceByID(Id){
-    get(`/api/v1.0/service/${Id}`).then((res)=>{
+  function handleOnchangeSelectedAsset(e, value) {
+    //console.log(e.target,value);
+    setfieldSelect(e.target.fieldId);
+    setFieldSelectID(value.value);
+  }
+  function getserviceByID(Id) {
+    get(`/api/v1.0/services/${Id}`).then((res) => {
       setserviceID(Id);
       setName(res.data.serviceName);
       setDescription(res.data.description);
@@ -249,7 +291,7 @@ async function handleEditSubmit(e) {
       setCompanyID(res.data.companyId);
       setFieldID(res.data.fieldId);
       setStatus(res.data.status);
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log(err);
     });
   }
@@ -257,7 +299,7 @@ async function handleEditSubmit(e) {
   // /api/v1.0/service/{id}
   //delete fc
   function deleteserviceByID() {
-    del(`/api/v1.0/service/${serviceDelete}`
+    del(`/api/v1.0/services/${serviceDelete}`
     )
       .then((res) => {
         if (res.status === 200) {
@@ -272,11 +314,11 @@ async function handleEditSubmit(e) {
   useEffect(() => {
     getserviceList();
   }, []);
-  function getserviceList(stateList ) {
+  function getserviceList(stateList) {
     let params = {};
     if (stateList && stateList.length > 0)
       params["status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithParams(`/api/v1.0/service`, params).then((res) => {
+    getWithParams(`/api/v1.0/services`, params).then((res) => {
       var temp = res.data.filter((x) => x.state !== "Completed");
       setserviceList(temp);
       setUseListserviceShow(temp);
@@ -293,7 +335,7 @@ async function handleEditSubmit(e) {
     setUseListserviceShowPage(useListserviceShow.slice(number * 8 - 8, number * 8));
     setTotalNumberPage(Math.ceil(useListserviceShow.length / 8));
   }
-  
+
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
@@ -329,8 +371,8 @@ async function handleEditSubmit(e) {
         <Row>
           <Col md="12">
             <Card className="table">
-                <Card.Title as="h4">Service</Card.Title>
-                {/* <Button
+              <Card.Title as="h4">Service</Card.Title>
+              {/* <Button
                   onClick={() => {
                     // setserviceEdit(e.Id);
                     // getserviceListID();
@@ -339,10 +381,10 @@ async function handleEditSubmit(e) {
                   }}>
                   Create new service
                 </Button> */}
-                 <Grid align="right">
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>Add service</Button>
-      </Grid>
-      <Col md={2}>
+              <Grid align="right">
+                <Button variant="contained" color="primary" onClick={handleClickOpen}>Add service</Button>
+              </Grid>
+              <Col md={2}>
                 <Row className="fixed">
                   <InputGroup>
                     <Input placeholder="State" disabled />
@@ -373,10 +415,10 @@ async function handleEditSubmit(e) {
                   <thead>
                     <tr>
                       {/* <th className="text-left-topic">Topic</th> */}
-                      <th  >Company</th>
                       {/* <th className="text-left-topic">FieldId</th> */}
                       <th className="th-name-service" >Service Name</th>
                       <th className="description">Description</th>
+                      <th >Company</th>
                       <th >Price</th>
                       <th>Status</th>
                       <th className="text-center">Views</th>
@@ -389,9 +431,7 @@ async function handleEditSubmit(e) {
                           {/* <td>
                             <img src = {e.ImageUrl} />
                           </td> */}
-                          <td>
-                            {displayCompanyName(e.CompanyId)}
-                          </td>
+
                           {/* <td>
                             {e.FieldId}
                           </td> */}
@@ -400,6 +440,9 @@ async function handleEditSubmit(e) {
                           </td>
                           <td>
                             {e.Description}
+                          </td>
+                          <td>
+                            {displayCompanyName(e.CompanyId)}
                           </td>
                           <td>
                             {e.Price}
@@ -439,8 +482,8 @@ async function handleEditSubmit(e) {
                               placement="right"
                             >
                               <Button
-                              // onClick={() => handleUpdate(e.data)}
-                              // onGridReady={onGridReady}
+                                // onClick={() => handleUpdate(e.data)}
+                                // onGridReady={onGridReady}
 
                                 onClick={() => {
                                   // setserviceEdit(e.Id);
@@ -595,15 +638,15 @@ async function handleEditSubmit(e) {
             setserviceModalCreate(false);
           }}
           >
-            <Form.Group className="mb-2">
+            <FormGroup className="mb-2">
               <Form.Label>Name</Form.Label>
               <Form.Control type="text"
                 name="Name"
                 id="service_Name"
                 // onChange={service_Name}
                 placeholder="Name" />
-            </Form.Group>
-            <Form.Group className="mb-2">
+            </FormGroup>
+            <FormGroup className="mb-2">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
@@ -612,12 +655,12 @@ async function handleEditSubmit(e) {
                 as="textarea"
                 rows={3}
               />
-            </Form.Group>
+            </FormGroup>
 
-            <Form.Group className="mb-3">
+            <FormGroup className="mb-3">
               <Form.Label>Picture</Form.Label>
               <Form.Control type="file" />
-            </Form.Group>
+            </FormGroup>
             <Button color="danger"
             >
               Create
@@ -664,47 +707,52 @@ async function handleEditSubmit(e) {
         </ModalHeader>
         <ModalBody>
           <Form>
-            <Form.Group className="mb-2">
+            <FormGroup className="mb-2">
               <Form.Label>Company </Form.Label>
-              <Form.Control disabled  type="text" placeholder="name" value={companyId} 
-              onChange = {e =>setCompanyID(e.target.value)}
+              <Form.Control disabled type="text" placeholder="name" value={companyId}
+                onChange={e => setCompanyID(e.target.value)}
               />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Field </Form.Label>
-              <Form.Control  type="text" placeholder="Field name" value={fieldID} 
-              onChange = {e =>setFieldID(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
+            </FormGroup>
+            <Form.Label>Field </Form.Label>
+            <FormGroup className="mb-2">
+              <Dropdown
+                fluid
+                search
+                selection
+                value={fieldSelect}
+                onChange={handleOnchangeSelectedAsset}
+                options={listField}/>
+            </FormGroup>
+
+            <FormGroup className="mb-2">
               <Form.Label>service name</Form.Label>
-              <Form.Control type="text" placeholder="Service name" value={name} 
-              onChange = {e =>setName(e.target.value)}
+              <Form.Control type="text" placeholder="Service name" value={name}
+                onChange={e => setName(e.target.value)}
               />
-            </Form.Group>
-            <Form.Group className="mb-2">
+            </FormGroup>
+            <FormGroup className="mb-2">
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Description"
                 as="textarea"
                 value={description}
-                onChange = {e => setDescription(e.target.value)}
+                onChange={e => setDescription(e.target.value)}
                 rows={3}
               />
-            </Form.Group>
-            <Form.Group className="mb-2">
+            </FormGroup>
+            <FormGroup className="mb-2">
               <Form.Label>Price</Form.Label>
-              <Form.Control type="text" placeholder="service name" value={price} 
-              onChange = {e =>setPrice(e.target.value)}
+              <Form.Control type="number" placeholder="service name" value={price}
+                onChange={e => setPrice(e.target.value)}
               />
-            </Form.Group>
-            <Form.Group className="mb-3">
+            </FormGroup>
+            <FormGroup className="mb-3">
               <Form.Label>Picture</Form.Label>
               <Form.Control type="text" value={picture}
-              onChange = {e => setImage(e.target.value)}
+                onChange={e => setImage(e.target.value)}
               />
-            </Form.Group>
+            </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -761,7 +809,7 @@ async function handleEditSubmit(e) {
             <Col></Col>
             <Col md={3}>Picture</Col>
             <Col md={8}>
-              {selectservice !== undefined ? <img className="text-left-topic" src = {selectservice.ImageUrl}/> : ""}
+              {selectservice !== undefined ? <img className="text-left-topic" src={selectservice.ImageUrl} /> : ""}
             </Col>
           </Row>
           <Row>
@@ -771,10 +819,10 @@ async function handleEditSubmit(e) {
           </Row>
         </ModalBody>
       </Modal>
-    
+
       <FormDialog open={open} handleClose={handleClose}
         data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
-    
+
     </>
   );
 }

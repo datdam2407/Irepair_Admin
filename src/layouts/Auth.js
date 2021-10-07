@@ -13,7 +13,6 @@ import {
 
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 // dinamically create auth routes
 import routes from "routes.js";
@@ -46,7 +45,6 @@ function Auth() {
         <Switch>{getRoutes(routes)}</Switch>
         <AuthFooter />
       </div>
-      <FixedPlugin />
     </>
   );
 }

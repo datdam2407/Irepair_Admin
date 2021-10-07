@@ -66,7 +66,7 @@ export default function ManageCompany() {
   const [companyID, setCompanyID] = useState("");
 
   async function getCompanyByID(Id) {
-    get(`/api/v1.0/company/${Id}`).then((res) => {
+    get(`/api/v1.0/companies/${Id}`).then((res) => {
       setCompanyID(Id);
       setName(res.data.companyName);
       setAddress(res.data.address);
@@ -82,7 +82,7 @@ export default function ManageCompany() {
   }
   useEffect(() => {
     getCompanyList();
-    get("/api/v1.0/company").then(
+    get("/api/v1.0/companies").then(
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
@@ -93,7 +93,7 @@ export default function ManageCompany() {
   }, []);
 
   function getCompanyList() {
-    get("/api/v1.0/company").then((res) => {
+    get("/api/v1.0/companies").then((res) => {
       var temp = res.data;
       setCompanyList(temp);
       setUseListCompanyShow(temp);
@@ -106,7 +106,7 @@ export default function ManageCompany() {
   // update form 
   async function handleEditSubmit(e) {
     await put(
-      `/api/v1.0/company`,
+      `/api/v1.0/companies`,
       {
         Id: companyID,
         CompanyName: name,
@@ -148,7 +148,7 @@ export default function ManageCompany() {
   }
   function handleSubmit(e) {
     post(
-      "/api/v1.0/company",
+      "/api/v1.0/companies",
       {
         id : null,
         companyName: name,
@@ -171,15 +171,9 @@ export default function ManageCompany() {
   }
   function handleCompanyDetele() {
     // console.log("abc" , CompanyDelete);
-    del(`/api/v1.0/company/${CompanyDelete}`).then((res) => {
-      if (res.status === 200 || res.status === 202) {
-        var temp;
-        // temp = useList.filter((x) => x.Id !== CompanyDelete);
-        setUseListCompanyShow(temp);
-        setUseListCompanyShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
-        setTotalNumberPage(Math.ceil(temp.length / 5));
-        window.location.reload();
-
+    del(`/api/v1.0/companies/${CompanyDelete}`).then((res) => {
+      if (res.status === 200) {
+        window.location = "/admin/Company";
       }
     })
       .catch((err) => {

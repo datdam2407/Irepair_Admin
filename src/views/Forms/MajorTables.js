@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 import {
   Modal,
@@ -7,8 +6,15 @@ import {
   ModalBody,
   ModalFooter,
   Pagination,
+  InputGroup,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  InputGroupButtonDropdown,
   PaginationItem,
+  Input,
   PaginationLink,
+  FormGroup,
 } from "reactstrap";
 // react-bootstrap components
 import {
@@ -24,7 +30,8 @@ import {
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
-import { del, put , get } from "../../service/ReadAPI";
+import FilterState from "../MajorFields/FilterState"
+import { del, put , get, getWithParams  } from "../../service/ReadAPI";
 
 import { AgGridReact } from 'ag-grid-react';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -64,7 +71,6 @@ function MajorTables() {
   const [useListMajorShow, setUseListMajorShow] = useState([]);
   const [useListMajorShowPage, setUseListMajorShowPage] = useState([]);
   const [MajorList, setMajorList] = useState([]);
-  const [MajorListID, setMajorListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
   const [count, setCount] = useState(1);
@@ -76,9 +82,37 @@ function MajorTables() {
   const [isDeleted, setIsDeleted] = useState("");
   const [majorID, setMajorID] = useState("");
 
-
+//filterState
+  const listStates = [
+    "Inactive",
+    "Actice",
+  ];
+  const [filterState, setListFilterState] = useState(listStates);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen1, setDropdownOpen1] = useState(false);
+  const [stateListFilter, setstateListFilter] = useState([]);
+  const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
+  const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
   const initialValue = { name: "", description: "", imageUrl: "", status: "1" }
-
+  
+  async function handleChooseState(e, id) {
+    let newListState = [];
+    if (id === -1) {
+      if (e.target.checked) {
+        newListState = listStates.reduce(
+          (state, index) => [...state, listStates.indexOf(index)],
+          []
+        );
+      }
+    } else {
+      if (e.target.checked) newListState = [...stateListFilter, id];
+      else newListState = stateListFilter.filter((item) => item !== id);
+    }
+    //console.log(newListState);
+    setstateListFilter(newListState);
+    getMajorList(newListState);
+  }
+// form create
   const [gridApi, setGridApi] = useState(null)
   const [tableData, setTableData] = useState(null)
   const [open, setOpen] = React.useState(false);
@@ -91,7 +125,7 @@ function MajorTables() {
     setOpen(false);
     setFormData(initialValue)
   };
-  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/major"
+  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/majors"
   const columnDefs = [
     { headerName: "ID", field: "Id", },
     { headerName: "Name", field: "name", },
@@ -118,7 +152,7 @@ console.log(description)
 // update
 async function handleEditSubmit(e) {
  await put(
-    `/api/v1.0/major`,
+    `/api/v1.0/majors`,
     {
       id : majorID,
       name: name,
@@ -177,21 +211,9 @@ async function handleEditSubmit(e) {
     flex: 1, filter: true,
     floatingFilter: true
   }
-
-
-
-  // Load major by ID
-  // useEffect(() => {
-  //   getMajorByID();
-  //   get(`/Major/get-by-id?id=${MajorEdit}`).then((res)=>{
-  //     setName(res.data.name);
-  //     setDescription(res.data.description);
-  //     setImage(res.data.picture);
-  //     setIsDeleted(res.data.is_Delete);
-  //   });
-  // }, []);
+// get major by ID
   function getMajorByID(Id){
-    get(`/api/v1.0/major/${Id}`).then((res)=>{
+    get(`/api/v1.0/majors/${Id}`).then((res)=>{
       setMajorID(Id);
       setName(res.data.name);
       setDescription(res.data.description);
@@ -202,10 +224,9 @@ async function handleEditSubmit(e) {
     });
   }
 
-  // /api/v1.0/major/{id}
-  //delete fc
+//delete fc
   function deleteMajorByID() {
-    del(`/api/v1.0/major/${MajorDelete}`
+    del(`/api/v1.0/majors/${MajorDelete}`
     )
       .then((res) => {
         if (res.status === 200) {
@@ -216,25 +237,16 @@ async function handleEditSubmit(e) {
         console.log(err);
       });
   }
-  //Load major
+//Load major
   useEffect(() => {
     getMajorList();
-    get("/api/v1.0/major").then(
-      (res) => {
-        if (res && res.status === 200) {
-          setMajorList(res.data);
-          // res.data;
-          console.log(res.data);
-        }
-      });
   }, []);
-  function getMajorList() {
-    get("/api/v1.0/major").then((res) => {
-      var temp = res.data;
-      // setName(temp.name);
-      // setDescription(temp.description);
-      // setImage(temp.picture);
-      // setIsDeleted(temp.is_Delete);
+  function getMajorList(stateList) {
+    let params = {};
+    if (stateList && stateList.length > 0)
+      params["status"] = stateList.reduce((f, s) => `${f},${s}`);
+      getWithParams(`/api/v1.0/majors`,params).then((res) => {
+      var temp = res.data.filter((x) => x.state !== "Completed");
       setMajorList(temp);
       setUseListMajorShow(temp);
       setUseListMajorShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
@@ -250,7 +262,7 @@ async function handleEditSubmit(e) {
     setUseListMajorShowPage(useListMajorShow.slice(number * 5 - 5, number * 5));
     setTotalNumberPage(Math.ceil(useListMajorShow.length / 5));
   }
-  
+  // close button
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
@@ -264,7 +276,7 @@ async function handleEditSubmit(e) {
   function displayStateName(type) {
     const stateValue = {
       1: "Active",
-      0: "Not Alaviable",
+      0: "Inactive",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -277,15 +289,32 @@ async function handleEditSubmit(e) {
             <Card className="table">
               <Card.Header>
                 <Card.Title as="h4">Major</Card.Title>
-                {/* <Button
-                  onClick={() => {
-                    // setMajorEdit(e.Id);
-                    // getMajorListID();
-                    // handleSubmit(e);
-                    setMajorModalCreate(true);
-                  }}>
-                  Create new Major
-                </Button> */}
+                <Col md={2}>
+                <Row className="fixed">
+                  <InputGroup>
+                    <Input placeholder="State" disabled />
+                    <InputGroupButtonDropdown
+                      addonType="append"
+                      isOpen={dropdownOpen}
+                      toggle={toggleDropDown}
+                      className="border border-gray"
+                    >
+                      <DropdownToggle caret>&nbsp;</DropdownToggle>
+                      <DropdownMenu>
+                        <div className="fixed">
+                          <FilterState
+                            list={filterState}
+                            onChangeCheckBox={(e, id) => {
+                              handleChooseState(e, id);
+                            }}
+                            key={filterState}
+                          />
+                        </div>
+                      </DropdownMenu>
+                    </InputGroupButtonDropdown>
+                  </InputGroup>
+                </Row>
+              </Col>
                  <Grid align="right">
         <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
       </Grid>

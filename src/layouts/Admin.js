@@ -6,7 +6,6 @@ import { Switch, Route, useHistory  } from "react-router-dom";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 // dinamically create dashboard routes
 import routes from "routes.js";
@@ -67,7 +66,6 @@ function Admin() {
           />
         </div>
       </div>
-      <FixedPlugin
         setSidebarImageParent={(value) => setSidebarImage(value)}
         sidebarDefaultImage={sidebarImage}
         sidebarImages={[image1, image2, image3, image4]}
@@ -81,7 +79,7 @@ function Admin() {
         ]}
         backgroundColor={sidebarBackground}
         setSidebarBackgroundParent={(value) => setSidebarBackground(value)}
-      />
+      {/* /> */}
     </>
   );
 }

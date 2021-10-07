@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { Dropdown } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css';
 import {
   Modal,
   ModalHeader,
@@ -11,11 +12,11 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Dropdown,
   InputGroupButtonDropdown,
   PaginationItem,
   Input,
   PaginationLink,
+  FormGroup,
 } from "reactstrap";
 // react-bootstrap components
 import {
@@ -88,7 +89,6 @@ function MajorFields() {
   const [useListMajorShow, setUseListMajorShow] = useState([]);
   const [useListMajorShowPage, setUseListMajorShowPage] = useState([]);
   const [MajorList, setMajorList] = useState([]);
-  const [MajorListID, setMajorListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
   const [count, setCount] = useState(1);
@@ -99,6 +99,14 @@ function MajorFields() {
   const [picture, setImage] = useState("");
   const [majorID, setMajorfieldID] = useState("");
   const [major, setMajor] = useState("");
+
+  //select major 
+  const [ID, setMajorID] = useState("");
+  const [majorSelect, setMajorSelect] = useState("")
+  const [data1, setData1] = useState({ array: [] });
+  const [MajorSelectID, setMajorSelectID] = useState(ID)
+  const [listSelectMajor, setListMajor] = useState([]);
+
 
 
   const initialValue = { name: "", description: "", imageUrl: "", status: "1" }
@@ -160,12 +168,12 @@ function MajorFields() {
   // update
   async function handleEditSubmit(e) {
     await put(
-      `/api/v1.0/major-field`,
+      `/api/v1.0/major-fields`,
       {
         id: majorID,
         name: name,
         description: description,
-        majorId: major,
+        majorId: MajorSelectID,
         imageUrl: picture,
         status: 1,
       },
@@ -173,30 +181,12 @@ function MajorFields() {
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/fields";
-
         }
       })
       .catch((err) => {
         console.log(err);
       });
   }
-  // function getMajorFieldsList() {
-  //   get("/api/v1.0/major").then((res) => {
-  //     var temp = res.data;
-  //     // setName(temp.name);
-  //     // setDescription(temp.description);
-  //     // setImage(temp.picture);
-  //     // setIsDeleted(temp.is_Delete);
-  //     setMajorList(temp);
-  //     setUseListMajorShow(temp);
-  //     setUseListMajorShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
-  //     setTotalNumberPage(Math.ceil(temp.length / 5));
-  //     setCount(count);
-  //   }).catch((err) => {
-  //     console.log(err);
-  //   });
-  // }
-
   // setting update row data to form data and opening pop up window
   const handleUpdate = (oldData) => {
     setFormData(oldData)
@@ -248,8 +238,43 @@ function MajorFields() {
     };
     return nameMajor[type] ? nameMajor[type] : "";
   }
+  function handleOnchangeSelectdmajor(e, value) {
+    //console.log(e.target,value);
+    setMajorSelect (e.target.MajorID);
+    setMajorSelectID(value.value);
+  }
+  useEffect(() => {
+    let params = {};
+    let currentField = {};
+    let MajorID = "";
+    get(
+      `/api/v1.0/majors`,
+    ).then((res) => {
+      MajorID = res.data.Id
+      console.log(res.data)
+      currentField['text'] = `${res.data.Name}`;
+      currentField['value'] = res.data.Id;
+      currentField['key'] = res.data.Id;
+      setMajorID(MajorID);
 
+    }).then(() => {
+    });
 
+    params['Status'] = [1].reduce((f, s) => `${f},${s}`);
+    getWithParams("/api/v1.0/majors", params,
+    ).then(res => {
+      setData1(res.data);
+      const newlistMajor = res.data.reduce((list, item) => [...list,
+      {
+        text: `${item.Name}`,
+        value: item.Id,
+        key: item.Id
+      }], [])
+      setListMajor(
+        [currentField, ...newlistMajor],
+      );
+    })
+  }, []);
 
   // Load major by ID
   // useEffect(() => {
@@ -262,7 +287,7 @@ function MajorFields() {
   //   });
   // }, []);
   function getMajorFieldsByID(Id) {
-    get(`/api/v1.0/major-field/${Id}`).then((res) => {
+    get(`/api/v1.0/major-fields/${Id}`).then((res) => {
       setMajorfieldID(Id);
       setName(res.data.value.name);
       setDescription(res.data.value.description);
@@ -277,7 +302,7 @@ function MajorFields() {
   // /api/v1.0/major/{id}
   //delete fc
   function deleteMajorFieldsByID() {
-    del(`/api/v1.0/major-field/${MajorDelete}`
+    del(`/api/v1.0/major-fields/${MajorDelete}`
     )
       .then((res) => {
         if (res.status === 200) {
@@ -296,7 +321,7 @@ function MajorFields() {
     let params = {};
     if (stateList && stateList.length > 0)
       params["status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithParams(`/api/v1.0/major-field`, params).then((res) => {
+    getWithParams(`/api/v1.0/major-fields`, params).then((res) => {
       var temp = res.data.filter((x) => x.state !== "Completed");
       setMajorList(temp);
       setUseListMajorShow(temp);
@@ -579,54 +604,6 @@ function MajorFields() {
         </Row>
       </Container>
 
-      {/* <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
-        <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleCreate)}
-          toggle={toggleCreate}
-        >
-          <ModalTitle>Do you want to create new Major</ModalTitle>
-        </ModalHeader>
-        <ModalBody>
-          <Form onSubmit={(e) => {
-            handleSubmit(e);
-            setMajorModalCreate(false);
-          }}
-          >
-            <Form.Group className="mb-2">
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="text"
-                name="Name"
-                id="Major_Name"
-                // onChange={Major_Name}
-                placeholder="Name" />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                name="description"
-                placeholder="Description"
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Picture</Form.Label>
-              <Form.Control type="file" />
-            </Form.Group>
-            <Button color="danger"
-            >
-              Create
-            </Button>
-            <Button color="secondary" onClick={toggleCreate}>
-              Cancel
-            </Button>
-          </Form>
-        </ModalBody>
-      </Modal> */}
-
       <Modal isOpen={modalMajorFieldDelete} toggle={toggleMajorDelete}>
         <ModalHeader
           style={{ color: "#B22222" }}
@@ -671,9 +648,19 @@ function MajorFields() {
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Major</Form.Label>
-              <Form.Control disabled type="text" placeholder="Major" value={major}
+              {/* <Form.Control disabled type="text" placeholder="Major" value={major}
                 onChange={e => setMajor(e.target.value)}
-              />
+              /> */}
+              <FormGroup className="mb-2">
+              <Dropdown
+                fluid
+                search
+                selection
+                // value={majorSelect}
+                value={majorSelect}
+                onChange={handleOnchangeSelectdmajor}
+                options={listSelectMajor}/>
+            </FormGroup>
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Description</Form.Label>

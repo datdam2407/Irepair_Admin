@@ -32,17 +32,17 @@ function Dashboard() {
 
   const carouselItems = [
     {
-      src: require("assets/img/abc.jpeg").default,
+      src: require("assets/img/Plumber.jpg").default,
       altText: "Slide 1",
       caption: "",
     },
     {
-      src: require("assets/img/Plumber.jpg").default,
+      src: require("assets/img/Electric .jpg").default,
       altText: "Slide 2",
       caption: "",
     },
     {
-      src: require("assets/img/Electric .jpg").default,
+      src: require("assets/img/abc.jpeg").default,
       altText: "Slide 3",
       caption: "",
     },
