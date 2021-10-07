@@ -35,7 +35,7 @@ export async function getWithToken(url, token) {
     },
   });
 }
-export async function getWithTokenParams(url, params, token) {
+export async function getWithTokenParams(url, params) {
   return await axios.get(endpoint + url, {
     params: params,
     headers: {
@@ -43,12 +43,10 @@ export async function getWithTokenParams(url, params, token) {
     },
   });
 }
-export async function postWithTokenParams(url, params, token) {
-  return await axios.post(endpoint + url, {
+export async function getWithParams(url, params) {
+  return await axios.get(endpoint + url, {
     params: params,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { "Content-type": "application/json" },
   });
 }
 export async function post(url, body) {

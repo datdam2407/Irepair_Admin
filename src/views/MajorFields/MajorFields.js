@@ -7,7 +7,14 @@ import {
   ModalBody,
   ModalFooter,
   Pagination,
+  InputGroup,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Dropdown,
+  InputGroupButtonDropdown,
   PaginationItem,
+  Input,
   PaginationLink,
 } from "reactstrap";
 // react-bootstrap components
@@ -24,13 +31,15 @@ import {
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
-import { del, put , get } from "../../service/ReadAPI";
+import { del, put, get, getWithParams } from "../../service/ReadAPI";
 
 import { AgGridReact } from 'ag-grid-react';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
 // import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { Grid } from '@material-ui/core'
 import FormDialog from './DialogFields';
+import FilterState from "./FilterState";
+
 function MajorFields() {
   //delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
@@ -59,6 +68,21 @@ function MajorFields() {
   const toggleDetails = () => setModalStatus(!modalStatus);
   const [selectMajor, setSelectMajor] = useState();
 
+  //Filter
+  const listStates = [
+    "New",
+    "Approved",
+    "Blocked",
+    "Deleted",
+  ];
+  const [filterState, setListFilterState] = useState(listStates);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen1, setDropdownOpen1] = useState(false);
+  const [stateListFilter, setstateListFilter] = useState([]);
+
+
+  const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
+  const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
 
   //Major List
   const [useListMajorShow, setUseListMajorShow] = useState([]);
@@ -114,47 +138,64 @@ function MajorFields() {
     setGridApi(params)
   }
 
-console.log(name)
-console.log(description)
-// update
-async function handleEditSubmit(e) {
- await put(
-    `/api/v1.0/major-field`,
-    {
-      id : majorID,
-      name: name,
-      description: description,
-      majorId : major,
-      imageUrl: picture,
-      status: 1,
-    },
-  )
-    .then((res) => {
-      if (res.status === 200) {
-        window.location = "/admin/fields";
-      
+  //filter
+  async function handleChooseState(e, id) {
+    let newListState = [];
+    if (id === -1) {
+      if (e.target.checked) {
+        newListState = listStates.reduce(
+          (state, index) => [...state, listStates.indexOf(index)],
+          []
+        );
       }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-// function getMajorFieldsList() {
-//   get("/api/v1.0/major").then((res) => {
-//     var temp = res.data;
-//     // setName(temp.name);
-//     // setDescription(temp.description);
-//     // setImage(temp.picture);
-//     // setIsDeleted(temp.is_Delete);
-//     setMajorList(temp);
-//     setUseListMajorShow(temp);
-//     setUseListMajorShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
-//     setTotalNumberPage(Math.ceil(temp.length / 5));
-//     setCount(count);
-//   }).catch((err) => {
-//     console.log(err);
-//   });
-// }
+    } else {
+      if (e.target.checked) newListState = [...stateListFilter, id];
+      else newListState = stateListFilter.filter((item) => item !== id);
+    }
+    //console.log(newListState);
+    setstateListFilter(newListState);
+    getMajorFieldsList(newListState);
+  }
+
+  // update
+  async function handleEditSubmit(e) {
+    await put(
+      `/api/v1.0/major-field`,
+      {
+        id: majorID,
+        name: name,
+        description: description,
+        majorId: major,
+        imageUrl: picture,
+        status: 1,
+      },
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/fields";
+
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  // function getMajorFieldsList() {
+  //   get("/api/v1.0/major").then((res) => {
+  //     var temp = res.data;
+  //     // setName(temp.name);
+  //     // setDescription(temp.description);
+  //     // setImage(temp.picture);
+  //     // setIsDeleted(temp.is_Delete);
+  //     setMajorList(temp);
+  //     setUseListMajorShow(temp);
+  //     setUseListMajorShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
+  //     setTotalNumberPage(Math.ceil(temp.length / 5));
+  //     setCount(count);
+  //   }).catch((err) => {
+  //     console.log(err);
+  //   });
+  // }
 
   // setting update row data to form data and opening pop up window
   const handleUpdate = (oldData) => {
@@ -197,13 +238,13 @@ async function handleEditSubmit(e) {
   }
   function displayMajorName(type) {
     const nameMajor = {
-      "a037b04c-51b3-4650-b369-0ea7ee869821" : "Điện Tử",
-      "27429af0-6de4-4fed-9e25-3a6835ae7c3b" : "Xe máy",
-      "a7fd5dbf-585b-40f4-acbc-495592de7116" : "Điện lạnh",
-      "a2bdd6ec-d60c-476e-b53c-7d92900c3bb3" : "Xe ô tô",
-      "ae54f939-d711-41bc-ab4b-7fa65af9c17b" : "Khóa",
-      "6b80588f-eeb2-4f68-94e0-e245b79be801" : "Ống nước",
-      "45d74304-09cf-4dc7-859d-e464a4a7e053" : "Đồ gia dụng",
+      "a037b04c-51b3-4650-b369-0ea7ee869821": "Điện Tử",
+      "27429af0-6de4-4fed-9e25-3a6835ae7c3b": "Xe máy",
+      "a7fd5dbf-585b-40f4-acbc-495592de7116": "Điện lạnh",
+      "a2bdd6ec-d60c-476e-b53c-7d92900c3bb3": "Xe ô tô",
+      "ae54f939-d711-41bc-ab4b-7fa65af9c17b": "Khóa",
+      "6b80588f-eeb2-4f68-94e0-e245b79be801": "Ống nước",
+      "45d74304-09cf-4dc7-859d-e464a4a7e053": "Đồ gia dụng",
     };
     return nameMajor[type] ? nameMajor[type] : "";
   }
@@ -220,15 +261,15 @@ async function handleEditSubmit(e) {
   //     setIsDeleted(res.data.is_Delete);
   //   });
   // }, []);
-  function getMajorFieldsByID(Id){
-    get(`/api/v1.0/major-field/${Id}`).then((res)=>{
+  function getMajorFieldsByID(Id) {
+    get(`/api/v1.0/major-field/${Id}`).then((res) => {
       setMajorfieldID(Id);
       setName(res.data.value.name);
       setDescription(res.data.value.description);
       setMajor(res.data.value.majorId);
       setImage(res.data.value.imageUrl);
       setStatus(res.data.value.status);
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log(err);
     });
   }
@@ -249,18 +290,15 @@ async function handleEditSubmit(e) {
   }
   //Load major
   useEffect(() => {
-    getMajorFieldsList()
-    get("/api/v1.0/major-field").then(
-      (res) => {
-        if (res && res.status === 200) {
-          setMajorList(res.data);
-          // res.data;
-          console.log(res.data);
-        }
-      });
+    getMajorFieldsList();
   }, []);
-  function getMajorFieldsList() {
-    get("/api/v1.0/major-field").then((res) => {
+  function getMajorFieldsList(stateList) {
+    let params = {};
+
+    if (stateList && stateList.length > 0)
+      params["status"] = stateList.reduce((f, s) => `${f},${s}`);
+    getWithParams(`/api/v1.0/major-field`, params).then((res) => {
+      var temp = res.data.filter((x) => x.state !== "Completed");
       var temp = res.data;
       // setName(temp.name);
       // setDescription(temp.description);
@@ -281,7 +319,7 @@ async function handleEditSubmit(e) {
     setUseListMajorShowPage(useListMajorShow.slice(number * 6 - 6, number * 6));
     setTotalNumberPage(Math.ceil(useListMajorShow.length / 6));
   }
-  
+
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
@@ -319,10 +357,36 @@ async function handleEditSubmit(e) {
                   }}>
                   Create new Major
                 </Button> */}
-                 <Grid align="right">
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>Add MajorField</Button>
-      </Grid>
+                <Grid align="right">
+                  <Button variant="contained" color="primary" onClick={handleClickOpen}>Add MajorField</Button>
+                </Grid>
               </Card.Header>
+              <Col md={2}>
+                <Row className="fixed">
+                  <InputGroup>
+                    <Input placeholder="State" disabled />
+                    <InputGroupButtonDropdown
+                      addonType="append"
+                      isOpen={dropdownOpen}
+                      toggle={toggleDropDown}
+                      className="border border-gray"
+                    >
+                      <DropdownToggle caret>&nbsp;</DropdownToggle>
+                      <DropdownMenu>
+                        <Row className="fixed align-self-center">
+                          <FilterState
+                            list={filterState}
+                            onChangeCheckBox={(e, id) => {
+                              handleChooseState(e, id);
+                            }}
+                            key={filterState}
+                          />
+                        </Row>
+                      </DropdownMenu>
+                    </InputGroupButtonDropdown>
+                  </InputGroup>
+                </Row>
+              </Col>
               <Card.Body className="table">
                 <Table className="table">
                   <thead>
@@ -341,7 +405,7 @@ async function handleEditSubmit(e) {
                       return (
                         <tr key={index}>
                           <td>
-                            <img className="td-img-size" src = {e.ImageUrl} />
+                            <img className="td-img-size" src={e.ImageUrl} />
                           </td>
                           <td>
                             {displayMajorName(e.MajorId)}
@@ -387,8 +451,8 @@ async function handleEditSubmit(e) {
                               placement="right"
                             >
                               <Button
-                              // onClick={() => handleUpdate(e.data)}
-                              // onGridReady={onGridReady}
+                                // onClick={() => handleUpdate(e.data)}
+                                // onGridReady={onGridReady}
 
                                 onClick={() => {
                                   // setMajorEdit(e.Id);
@@ -614,14 +678,14 @@ async function handleEditSubmit(e) {
           <Form>
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" placeholder="Major name" value={name} 
-              onChange = {e =>setName(e.target.value)}
+              <Form.Control type="text" placeholder="Major name" value={name}
+                onChange={e => setName(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Major</Form.Label>
-              <Form.Control type="text" placeholder="Major" value={major} 
-              onChange = {e =>setMajor(e.target.value)}
+              <Form.Control type="text" placeholder="Major" value={major}
+                onChange={e => setMajor(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-2">
@@ -631,14 +695,14 @@ async function handleEditSubmit(e) {
                 placeholder="Description"
                 as="textarea"
                 value={description}
-                onChange = {e => setDescription(e.target.value)}
+                onChange={e => setDescription(e.target.value)}
                 rows={3}
               />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
               <Form.Control type="text" value={picture}
-              onChange = {e => setImage(e.target.value)}
+                onChange={e => setImage(e.target.value)}
               />
             </Form.Group>
           </Form>
@@ -690,7 +754,7 @@ async function handleEditSubmit(e) {
             <Col></Col>
             <Col md={3}>Picture</Col>
             <Col md={8}>
-              {selectMajor !== undefined ? <img className="text-left-topic" src = {selectMajor.ImageUrl}/> : ""}
+              {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
             </Col>
           </Row>
           <Row>
@@ -700,10 +764,10 @@ async function handleEditSubmit(e) {
           </Row>
         </ModalBody>
       </Modal>
-    
+
       <FormDialog open={open} handleClose={handleClose}
         data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
-    
+
     </>
   );
 }
