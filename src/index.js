@@ -21,7 +21,7 @@ ReactDOM.render(
       {/* <Route exact path="/Companyy" component={ManageCompany}/> */}
       {/* <Route path="/admin/profile" component={UserProfile} /> */}
       <Redirect from="/" to="/login" />
-      <Redirect from="/admin/dashboard" to="/admin/dashboard" />
+      {/* <Redirect from="/admin/dashboard" to="/admin/dashboard" /> */}
     </Switch>
   </BrowserRouter>,
   document.getElementById("root")
