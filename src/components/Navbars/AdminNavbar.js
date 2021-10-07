@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { logout } from "Firebase/firebaseConfig";
 // react-bootstrap components
 import {
   Badge,
@@ -225,6 +225,7 @@ function AdminNavbar() {
             color="danger"
             onClick={() => {
               setModalLogOut(false);
+              logout();
               window.location.href = "/";
               localStorage.clear();
               sessionStorage.clear();
