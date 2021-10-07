@@ -17,13 +17,6 @@ import image3 from "assets/img/full-screen-image-3.jpg";
 import image4 from "assets/img/full-screen-image-4.jpg";
 
 function Admin() {
-  let history = useHistory();
-
-  useEffect(() => {
-      if (localStorage.getItem("isLogin") === null) {
-        history.push("/");
-      }
-  }, []);
 
   const [sidebarImage, setSidebarImage] = React.useState(image3);
   const [sidebarBackground, setSidebarBackground] = React.useState("black");

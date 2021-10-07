@@ -21,7 +21,14 @@ import {
 } from "react-bootstrap";
 
 function Dashboard() {
-  
+  let history = useHistory();
+
+useEffect(() => {
+    if (localStorage.getItem("isLogin") === null) {
+      history.push("/");
+    }
+}, []);
+
 
   const carouselItems = [
     {
