@@ -91,6 +91,7 @@ export default function ManageCompany() {
         }
       });
   }, []);
+
   function getCompanyList() {
     get("/api/v1.0/company").then((res) => {
       var temp = res.data;

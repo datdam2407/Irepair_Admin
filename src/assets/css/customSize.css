@@ -10,3 +10,15 @@
 .text-left-topic{
     width: 30%;
 }
+
+/* .row{
+    display: block;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+} */
+.form-check-input {
+    position: inherit;
+    margin-top: 0;
+    margin-left: 0;
+}

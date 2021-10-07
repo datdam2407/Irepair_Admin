@@ -24,19 +24,7 @@ export default class FilterState extends Component {
         })
     }
     render() {
-        return (<><div>
-
-            <Input
-                //className = 'form-control'
-                name='all'
-                type="checkbox"
-                style={{ verticalAlign: "middle", marginTop: "0rem" }}
-                defaultChecked={this.state.defaultCheck}
-                onChange={(e) => {
-                    this.handleCheckAll(e)
-                }}
-            />
-            <Label>All</Label></div>
+        return (<>
             {this.state.states.map((state, index) => (
 
                 <div key={index}><Input key={this.state.defaultCheck}

@@ -27,6 +27,7 @@ import { Link } from "react-router-dom";
 import { del, post, get } from "../../src/service/ReadAPI";
 
 export default function Customer() {
+
   const [CustomerDelete, setCustomerDelete] = useState(null);
   const [modalDelete, setCustomerModalDelete] = useState(false);
   const toggleDelete = () => setCustomerModalDelete(!modalDelete);
