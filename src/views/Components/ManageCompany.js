@@ -24,7 +24,7 @@ import {
 import deleteIcon from "assets/img/remove.png";
 import editIcon from "assets/img/edit.png";
 import { Link } from "react-router-dom";
-import { del, post, get, put } from "../../service/ReadAPI";
+import { del, post, get, put, getWithToken, putWithToken } from "../../service/ReadAPI";
 import "../../assets/css/customSize.css";
 
 export default function ManageCompany() {
@@ -66,7 +66,7 @@ export default function ManageCompany() {
   const [companyID, setCompanyID] = useState("");
 
   async function getCompanyByID(Id) {
-    get(`/api/v1.0/companies/${Id}`).then((res) => {
+    getWithToken(`/api/v1.0/companies/${Id}`,localStorage.getItem("token")).then((res) => {
       setCompanyID(Id);
       setName(res.data.companyName);
       setAddress(res.data.address);
@@ -82,7 +82,7 @@ export default function ManageCompany() {
   }
   useEffect(() => {
     getCompanyList();
-    get("/api/v1.0/companies").then(
+    getWithToken("/api/v1.0/companies" ,localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
@@ -93,7 +93,7 @@ export default function ManageCompany() {
   }, []);
 
   function getCompanyList() {
-    get("/api/v1.0/companies").then((res) => {
+    getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then((res) => {
       var temp = res.data;
       setCompanyList(temp);
       setUseListCompanyShow(temp);
@@ -105,7 +105,7 @@ export default function ManageCompany() {
   }
   // update form 
   async function handleEditSubmit(e) {
-    await put(
+    await putWithToken(
       `/api/v1.0/companies`,
       {
         Id: companyID,
@@ -118,6 +118,7 @@ export default function ManageCompany() {
         ImageUrl: picture,
         Uid: 1,
       },
+      localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -171,7 +172,8 @@ export default function ManageCompany() {
   }
   function handleCompanyDetele() {
     // console.log("abc" , CompanyDelete);
-    del(`/api/v1.0/companies/${CompanyDelete}`).then((res) => {
+    del(`/api/v1.0/companies/${CompanyDelete}`, localStorage.getItem("token")
+    ).then((res) => {
       if (res.status === 200) {
         window.location = "/admin/Company";
       }

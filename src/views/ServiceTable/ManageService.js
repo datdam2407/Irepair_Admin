@@ -33,7 +33,7 @@ import {
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
 
-import { del, put, get, getWithParams } from "../../service/ReadAPI";
+import { del, put, get, getWithParams, getWithToken, getWithTokenParams } from "../../service/ReadAPI";
 import FilterState from "../MajorFields/FilterState";
 
 // import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -129,8 +129,8 @@ function ManageSevice() {
     let params = {};
     let currentField = {};
     let FieldId = "";
-    get(
-      `/api/v1.0/major-fields`,
+    getWithToken(
+      `/api/v1.0/major-fields`,localStorage.getItem("token")
     ).then((res) => {
       FieldId = res.data.FieldId
       console.log(res.data)
@@ -143,7 +143,7 @@ function ManageSevice() {
     });
 
     params['Status'] = [1].reduce((f, s) => `${f},${s}`);
-    getWithParams("/api/v1.0/major-fields", params,
+    getWithTokenParams("/api/v1.0/major-fields", params,localStorage.getItem("token")
     ).then(res => {
       setData1(res.data);
       const newlistField = res.data.reduce((list, item) => [...list,
@@ -235,9 +235,9 @@ function ManageSevice() {
       //updating a user 
       const confirm = window.confirm("Are you sure, you want to update this row ?")
       confirm && fetch(url + `/${formData.id}`, {
-        method: "put", body: JSON.stringify(formData), headers: {
-          'content-type': "application/json"
-        }
+        method: "put", body: JSON.stringify(formData), 
+        headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+        "Content-type": "application/json"}
       }).then(resp => resp.json())
         .then(resp => {
           handleClose()
@@ -247,9 +247,9 @@ function ManageSevice() {
     } else {
       // adding new user
       fetch(url, {
-        method: "post", body: JSON.stringify(formData), headers: {
-          'content-type': "application/json"
-        }
+        method: "post", body: JSON.stringify(formData), 
+        headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+        "Content-type": "application/json"}
       }).then(resp => resp.json())
         .then(resp => {
           handleClose()
@@ -282,7 +282,7 @@ function ManageSevice() {
     setFieldSelectID(value.value);
   }
   function getserviceByID(Id) {
-    get(`/api/v1.0/services/${Id}`).then((res) => {
+    getWithToken(`/api/v1.0/services/${Id}`,localStorage.getItem("token")).then((res) => {
       setserviceID(Id);
       setName(res.data.serviceName);
       setDescription(res.data.description);
@@ -299,7 +299,7 @@ function ManageSevice() {
   // /api/v1.0/service/{id}
   //delete fc
   function deleteserviceByID() {
-    del(`/api/v1.0/services/${serviceDelete}`
+    del(`/api/v1.0/services/${serviceDelete}`,localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -317,8 +317,8 @@ function ManageSevice() {
   function getserviceList(stateList) {
     let params = {};
     if (stateList && stateList.length > 0)
-      params["status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithParams(`/api/v1.0/services`, params).then((res) => {
+      params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
+    getWithTokenParams(`/api/v1.0/services`, params,localStorage.getItem("token")).then((res) => {
       var temp = res.data.filter((x) => x.state !== "Completed");
       setserviceList(temp);
       setUseListserviceShow(temp);

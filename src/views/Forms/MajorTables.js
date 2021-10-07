@@ -31,7 +31,7 @@ import {
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
 import FilterState from "../MajorFields/FilterState"
-import { del, put , get, getWithParams  } from "../../service/ReadAPI";
+import { del, put , get, getWithParams, getWithTokenParams, getWithToken, putWithToken  } from "../../service/ReadAPI";
 
 import { AgGridReact } from 'ag-grid-react';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -151,7 +151,7 @@ console.log(name)
 console.log(description)
 // update
 async function handleEditSubmit(e) {
- await put(
+ await putWithToken(
     `/api/v1.0/majors`,
     {
       id : majorID,
@@ -160,6 +160,7 @@ async function handleEditSubmit(e) {
       imageUrl: picture,
       status: 1,
     },
+    localStorage.getItem("token")
   )
     .then((res) => {
       if (res.status === 200) {
@@ -194,10 +195,11 @@ async function handleEditSubmit(e) {
         })
     } else {
       // adding new user
-      fetch(url, {
-        method: "post", body: JSON.stringify(formData), headers: {
-          'content-type': "application/json"
-        }
+      fetch(url,{
+        method: "post", body: JSON.stringify(formData), 
+        headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+    "Content-type": "application/json",
+    },
       }).then(resp => resp.json())
         .then(resp => {
           handleClose()
@@ -213,7 +215,7 @@ async function handleEditSubmit(e) {
   }
 // get major by ID
   function getMajorByID(Id){
-    get(`/api/v1.0/majors/${Id}`).then((res)=>{
+    getWithToken(`/api/v1.0/majors/${Id}`,localStorage.getItem("token")).then((res)=>{
       setMajorID(Id);
       setName(res.data.name);
       setDescription(res.data.description);
@@ -226,7 +228,7 @@ async function handleEditSubmit(e) {
 
 //delete fc
   function deleteMajorByID() {
-    del(`/api/v1.0/majors/${MajorDelete}`
+    del(`/api/v1.0/majors/${MajorDelete}`,localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -244,8 +246,8 @@ async function handleEditSubmit(e) {
   function getMajorList(stateList) {
     let params = {};
     if (stateList && stateList.length > 0)
-      params["status"] = stateList.reduce((f, s) => `${f},${s}`);
-      getWithParams(`/api/v1.0/majors`,params).then((res) => {
+      params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
+      getWithTokenParams(`/api/v1.0/majors`,params, localStorage.getItem("token")).then((res) => {
       var temp = res.data.filter((x) => x.state !== "Completed");
       setMajorList(temp);
       setUseListMajorShow(temp);

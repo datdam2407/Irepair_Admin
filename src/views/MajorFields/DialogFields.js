@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { TextField } from '@material-ui/core';
-import { del, put, get, getWithParams } from "../../service/ReadAPI";
+import { del, put, get, getWithParams, getWithToken, getWithTokenParams } from "../../service/ReadAPI";
 
 export default function FormDialog({open,handleClose,data,onChange,handleFormSubmit}) {
  const {Id,name,description,imageUrl,majorId}=data
@@ -21,15 +21,18 @@ const [MajorSelectID, setMajorSelectID] = useState(-1)
 const [listSelectMajor, setListMajor] = useState([]);
 function handleOnchangeSelectdmajor(e, value) {
   //console.log(e.target,value);
-  setMajorSelect (e.target.MajorID);
+  setMajorSelect (e.target.majorId);
+  console.log(e.target.majorId)
   setMajorSelectID(value.value);
+  console.log("bbbb",majorSelect);
+  console.log("aaaa",MajorSelectID);
 }
 useEffect(() => {
   let params = {};
   let currentField = {};
   let MajorID = "";
-  get(
-    `/api/v1.0/major`,
+  getWithToken(
+    `/api/v1.0/majors`,localStorage.getItem("token")
   ).then((res) => {
     MajorID = res.data.Id
     console.log(res.data)
@@ -42,7 +45,7 @@ useEffect(() => {
   });
 
   params['Status'] = [1].reduce((f, s) => `${f},${s}`);
-  getWithParams("/api/v1.0/major", params,
+  getWithTokenParams("/api/v1.0/majors", params,localStorage.getItem("token")
   ).then(res => {
     setData1(res.data);
     const newlistMajor = res.data.reduce((list, item) => [...list,
@@ -76,6 +79,8 @@ useEffect(() => {
                 value={majorSelect}
                 onChange={handleOnchangeSelectdmajor}
                 options={listSelectMajor}/>
+         
+
              <TextField id="imageUrl" value={imageUrl} onChange={e=>onChange(e)} placeholder="Enter ImageUrl" label="Image" variant="outlined" margin="dense" fullWidth />
          </form>
         </DialogContent>

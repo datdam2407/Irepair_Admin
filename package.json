@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "@material-ui/core": "^4.12.3",
     "ag-grid-community": "^23.0.2",
     "ag-grid-react": "^26.1.0",
@@ -12,6 +15,7 @@
     "chartist": "0.10.1",
     "dotenv": "^10.0.0",
     "firebase": "^8.10.0",
+    "font-awesome-icons": "^1.6.0",
     "history": "5.0.0",
     "match-sorter": "6.1.0",
     "material-ui-core": "^5.0.1",

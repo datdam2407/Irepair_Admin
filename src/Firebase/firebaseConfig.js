@@ -36,6 +36,8 @@ const signInWithGoogle = async () => {
   try {
     const res = await auth.signInWithPopup(googleProvider);
     const user = res.user;
+    localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4");
+    
     //This is JWT
     console.log(await user.getIdToken());
     ////////////
@@ -51,7 +53,6 @@ const signInWithGoogle = async () => {
         email: user.email,
         
       });
-      localStorage.setItem("isLogin" , "LoginGoogle");
     }
   } catch (err) {
     console.error(err);

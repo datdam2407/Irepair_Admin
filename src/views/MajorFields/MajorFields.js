@@ -32,7 +32,7 @@ import {
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
-import { del, put, get, getWithParams } from "../../service/ReadAPI";
+import { del, put, get, getWithParams, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
 
 import { AgGridReact } from 'ag-grid-react';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -123,7 +123,7 @@ function MajorFields() {
     setOpen(false);
     setFormData(initialValue)
   };
-  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/major-field"
+  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/major-fields"
   const columnDefs = [
     { headerName: "ID", field: "Id", },
     { headerName: "Name", field: "name", },
@@ -167,7 +167,7 @@ function MajorFields() {
 
   // update
   async function handleEditSubmit(e) {
-    await put(
+    await putWithToken(
       `/api/v1.0/major-fields`,
       {
         id: majorID,
@@ -177,6 +177,7 @@ function MajorFields() {
         imageUrl: picture,
         status: 1,
       },
+      localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -210,9 +211,9 @@ function MajorFields() {
     } else {
       // adding new user
       fetch(url, {
-        method: "post", body: JSON.stringify(formData), headers: {
-          'content-type': "application/json"
-        }
+        method: "post", body: JSON.stringify(formData),
+        headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+        "Content-type": "application/json"}
       }).then(resp => resp.json())
         .then(resp => {
           handleClose()
@@ -247,8 +248,8 @@ function MajorFields() {
     let params = {};
     let currentField = {};
     let MajorID = "";
-    get(
-      `/api/v1.0/majors`,
+    getWithToken(
+      `/api/v1.0/majors`,localStorage.getItem("token")
     ).then((res) => {
       MajorID = res.data.Id
       console.log(res.data)
@@ -261,7 +262,7 @@ function MajorFields() {
     });
 
     params['Status'] = [1].reduce((f, s) => `${f},${s}`);
-    getWithParams("/api/v1.0/majors", params,
+    getWithTokenParams("/api/v1.0/majors", params, localStorage.getItem("token")
     ).then(res => {
       setData1(res.data);
       const newlistMajor = res.data.reduce((list, item) => [...list,
@@ -287,7 +288,8 @@ function MajorFields() {
   //   });
   // }, []);
   function getMajorFieldsByID(Id) {
-    get(`/api/v1.0/major-fields/${Id}`).then((res) => {
+ 
+    getWithToken(`/api/v1.0/major-fields/${Id}`,localStorage.getItem("token")).then((res) => {
       setMajorfieldID(Id);
       setName(res.data.value.name);
       setDescription(res.data.value.description);
@@ -302,7 +304,7 @@ function MajorFields() {
   // /api/v1.0/major/{id}
   //delete fc
   function deleteMajorFieldsByID() {
-    del(`/api/v1.0/major-fields/${MajorDelete}`
+    del(`/api/v1.0/major-fields/${MajorDelete}`,localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -320,8 +322,8 @@ function MajorFields() {
   function getMajorFieldsList(stateList) {
     let params = {};
     if (stateList && stateList.length > 0)
-      params["status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithParams(`/api/v1.0/major-fields`, params).then((res) => {
+      params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
+    getWithTokenParams(`/api/v1.0/major-fields`, params, localStorage.getItem("token")).then((res) => {
       var temp = res.data.filter((x) => x.state !== "Completed");
       setMajorList(temp);
       setUseListMajorShow(temp);

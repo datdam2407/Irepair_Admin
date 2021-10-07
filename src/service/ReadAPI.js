@@ -27,7 +27,6 @@ export async function get(url) {
     headers: { "Content-type": "application/json" },
   });
 }
-
 export async function getWithToken(url, token) {
   return await axios.get(endpoint + url, {
     headers: {
@@ -35,7 +34,8 @@ export async function getWithToken(url, token) {
     },
   });
 }
-export async function getWithTokenParams(url, params) {
+
+export async function getWithTokenParams(url, params, token) {
   return await axios.get(endpoint + url, {
     params: params,
     headers: {
