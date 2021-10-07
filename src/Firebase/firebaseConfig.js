@@ -49,7 +49,9 @@ const signInWithGoogle = async () => {
         name: user.displayName,
         authProvider: "google",
         email: user.email,
+        
       });
+      localStorage.setItem("isLogin" , "LoginGoogle");
     }
   } catch (err) {
     console.error(err);

@@ -9,6 +9,13 @@ import {
   Pagination,
   PaginationItem,
   PaginationLink,
+  InputGroup,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  Dropdown,
+  InputGroupButtonDropdown,
+  Input ,
 } from "reactstrap";
 // react-bootstrap components
 import {
@@ -24,9 +31,9 @@ import {
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
-import { del, put , get } from "../../service/ReadAPI";
+import { del, put , get , getWithParams } from "../../service/ReadAPI";
+import FilterState from "../MajorFields/FilterState";
 
-import { AgGridReact } from 'ag-grid-react';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
 // import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { Grid } from '@material-ui/core'
@@ -77,6 +84,40 @@ function ManageSevice() {
   const [companyId, setCompanyID] = useState("");
   const [fieldID, setFieldID] = useState("");
   const [serviceID, setserviceID] = useState("");
+
+  //filter 
+  const listStates = [
+    "New",
+    "Approved",
+    "Blocked",
+    "Deleted",
+  ];
+  const [filterState, setListFilterState] = useState(listStates);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen1, setDropdownOpen1] = useState(false);
+  const [stateListFilter, setstateListFilter] = useState([]);
+  const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
+  const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
+
+  async function handleChooseState(e, id) {
+    let newListState = [];
+    if (id === -1) {
+      if (e.target.checked) {
+        newListState = listStates.reduce(
+          (state, index) => [...state, listStates.indexOf(index)],
+          []
+        );
+      }
+    } else {
+      if (e.target.checked) newListState = [...stateListFilter, id];
+      else newListState = stateListFilter.filter((item) => item !== id);
+    }
+    //console.log(newListState);
+    setstateListFilter(newListState);
+    getserviceList(newListState);
+  }
+
+
 
 
   const initialValue = { name: "", description: "", imageUrl: "", status: "1" }
@@ -230,22 +271,13 @@ async function handleEditSubmit(e) {
   //Load service
   useEffect(() => {
     getserviceList();
-    get("/api/v1.0/service").then(
-      (res) => {
-        if (res && res.status === 200) {
-          setserviceList(res.data);
-          // res.data;
-          console.log(res.data);
-        }
-      });
   }, []);
-  function getserviceList() {
-    get("/api/v1.0/service").then((res) => {
-      var temp = res.data;
-      // setName(temp.name);
-      // setDescription(temp.description);
-      // setImage(temp.picture);
-      // setIsDeleted(temp.is_Delete);
+  function getserviceList(stateList ) {
+    let params = {};
+    if (stateList && stateList.length > 0)
+      params["status"] = stateList.reduce((f, s) => `${f},${s}`);
+    getWithParams(`/api/v1.0/service`, params).then((res) => {
+      var temp = res.data.filter((x) => x.state !== "Completed");
       setserviceList(temp);
       setUseListserviceShow(temp);
       setUseListserviceShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
@@ -297,7 +329,6 @@ async function handleEditSubmit(e) {
         <Row>
           <Col md="12">
             <Card className="table">
-              <Card.Header>
                 <Card.Title as="h4">Service</Card.Title>
                 {/* <Button
                   onClick={() => {
@@ -311,7 +342,32 @@ async function handleEditSubmit(e) {
                  <Grid align="right">
         <Button variant="contained" color="primary" onClick={handleClickOpen}>Add service</Button>
       </Grid>
-              </Card.Header>
+      <Col md={2}>
+                <Row className="fixed">
+                  <InputGroup>
+                    <Input placeholder="State" disabled />
+                    <InputGroupButtonDropdown
+                      addonType="append"
+                      isOpen={dropdownOpen}
+                      toggle={toggleDropDown}
+                      className="border border-gray"
+                    >
+                      <DropdownToggle caret>&nbsp;</DropdownToggle>
+                      <DropdownMenu>
+                        <div className="fixed">
+                          <FilterState
+                            list={filterState}
+                            onChangeCheckBox={(e, id) => {
+                              handleChooseState(e, id);
+                            }}
+                            key={filterState}
+                          />
+                        </div>
+                      </DropdownMenu>
+                    </InputGroupButtonDropdown>
+                  </InputGroup>
+                </Row>
+              </Col>
               <Card.Body className="table">
                 <Table className="table">
                   <thead>
@@ -319,7 +375,7 @@ async function handleEditSubmit(e) {
                       {/* <th className="text-left-topic">Topic</th> */}
                       <th  >Company</th>
                       {/* <th className="text-left-topic">FieldId</th> */}
-                      <th className="th-name-service" >Name</th>
+                      <th className="th-name-service" >Service Name</th>
                       <th className="description">Description</th>
                       <th >Price</th>
                       <th>Status</th>
@@ -610,19 +666,19 @@ async function handleEditSubmit(e) {
           <Form>
             <Form.Group className="mb-2">
               <Form.Label>Company </Form.Label>
-              <Form.Control type="text" placeholder="service name" value={companyId} 
+              <Form.Control disabled  type="text" placeholder="name" value={companyId} 
               onChange = {e =>setCompanyID(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Field </Form.Label>
-              <Form.Control type="text" placeholder="service name" value={fieldID} 
+              <Form.Control  type="text" placeholder="Field name" value={fieldID} 
               onChange = {e =>setFieldID(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>service name</Form.Label>
-              <Form.Control type="text" placeholder="service name" value={name} 
+              <Form.Control type="text" placeholder="Service name" value={name} 
               onChange = {e =>setName(e.target.value)}
               />
             </Form.Group>

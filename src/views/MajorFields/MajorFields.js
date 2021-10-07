@@ -294,16 +294,10 @@ function MajorFields() {
   }, []);
   function getMajorFieldsList(stateList) {
     let params = {};
-
     if (stateList && stateList.length > 0)
       params["status"] = stateList.reduce((f, s) => `${f},${s}`);
     getWithParams(`/api/v1.0/major-field`, params).then((res) => {
       var temp = res.data.filter((x) => x.state !== "Completed");
-      var temp = res.data;
-      // setName(temp.name);
-      // setDescription(temp.description);
-      // setImage(temp.picture);
-      // setIsDeleted(temp.is_Delete);
       setMajorList(temp);
       setUseListMajorShow(temp);
       setUseListMajorShowPage(temp.slice(numberPage * 6 - 6, numberPage * 6));
@@ -348,20 +342,7 @@ function MajorFields() {
             <Card className="table">
               <Card.Header>
                 <Card.Title as="h4">Major Field</Card.Title>
-                {/* <Button
-                  onClick={() => {
-                    // setMajorEdit(e.Id);
-                    // getMajorFieldsListID();
-                    // handleSubmit(e);
-                    setMajorModalCreate(true);
-                  }}>
-                  Create new Major
-                </Button> */}
-                <Grid align="right">
-                  <Button variant="contained" color="primary" onClick={handleClickOpen}>Add MajorField</Button>
-                </Grid>
-              </Card.Header>
-              <Col md={2}>
+                <Col md={2}>
                 <Row className="fixed">
                   <InputGroup>
                     <Input placeholder="State" disabled />
@@ -373,7 +354,7 @@ function MajorFields() {
                     >
                       <DropdownToggle caret>&nbsp;</DropdownToggle>
                       <DropdownMenu>
-                        <Row className="fixed align-self-center">
+                        <div className="fixed">
                           <FilterState
                             list={filterState}
                             onChangeCheckBox={(e, id) => {
@@ -381,12 +362,17 @@ function MajorFields() {
                             }}
                             key={filterState}
                           />
-                        </Row>
+                        </div>
                       </DropdownMenu>
                     </InputGroupButtonDropdown>
                   </InputGroup>
                 </Row>
               </Col>
+                <Grid align="right">
+                  <Button variant="contained" color="primary" onClick={handleClickOpen}>Add MajorField</Button>
+                </Grid>
+              </Card.Header>
+
               <Card.Body className="table">
                 <Table className="table">
                   <thead>
@@ -676,6 +662,7 @@ function MajorFields() {
         </ModalHeader>
         <ModalBody>
           <Form>
+
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
               <Form.Control type="text" placeholder="Major name" value={name}
@@ -684,7 +671,7 @@ function MajorFields() {
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Major</Form.Label>
-              <Form.Control type="text" placeholder="Major" value={major}
+              <Form.Control disabled type="text" placeholder="Major" value={major}
                 onChange={e => setMajor(e.target.value)}
               />
             </Form.Group>

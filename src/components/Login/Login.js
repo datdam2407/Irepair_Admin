@@ -5,17 +5,7 @@ import { auth, signInWithGoogle } from "../../Firebase/firebaseConfig";
 import { FcGoogle } from "react-icons/fc";
 import "./login.css";
 import "firebase/firestore";
-// react-bootstrap components
-import {
-    Badge,
-    Button,
-    Card,
-    Form,
-    Navbar,
-    Nav,
-    Container,
-    Col,
-} from "react-bootstrap";
+import loginMan from "../../assets/img/man.png";
 
 function Login() {
 
@@ -73,6 +63,7 @@ function Login() {
     //       })
     //       ;
     //   }
+    
     return (
         <>
         <div
@@ -84,13 +75,15 @@ function Login() {
             <div className="login">
               <div className="login__container">
   
-                <h2>WELCOME TO IREPAIR</h2>
+                <h3 className="title-login">WELCOME TO IREPAIR</h3>
+                <img  className="login-logon" src= {loginMan}/>
                 <div className="google-btn" onClick={signInWithGoogle}>
                   <div className="google-icon-wrapper">
                     <FcGoogle className="google-icon" />
                   </div>
+                
                   <p className="btn-text">
-                    <b>Sign in with google</b>
+                    <b className="title-login">Sign in with google</b>
                   </p>
                 </div>
               </div>
@@ -135,7 +128,7 @@ function Login() {
               </Col>
             </Container> */}
           </div>
-  
+        
           <div
             className="full-page-background"
             style={{

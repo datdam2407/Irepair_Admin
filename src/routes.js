@@ -1,19 +1,13 @@
 
 import Dashboard from "views/Dashboard.js";
 import ManageCompany from "views/Components/ManageCompany";
-import CreateNewCompany from "views/Components/CreateNewCompany.js";
 // import SweetAlert from "views/Components/SweetAlertPage.js";
-import Notifications from "views/Components/Notifications.js";
-import Icons from "views/Components/Icons.js";
-import Typography from "views/Components/Typography.js";
-import RegularForms from "views/Forms/RegularForms.js";
 import MajorTables from "views/Forms/MajorTables.js";
 import ValidationForms from "views/Forms/ValidationForms.js";
 
 import RepairmanTable from "views/Tables/RepairmanTable.js";
 import MajorFields from "views/MajorFields/MajorFields.js"
 import ManageService from "views/ServiceTable/ManageService.js"
-import CreateNewMajorFields from "views/MajorFields/CreateNewMajorFields.js"
 import GoogleMaps from "views/Maps/GoogleMaps.js";
 import FullScreenMap from "views/Maps/FullScreenMap.js";
 import VectorMap from "views/Maps/VectorMap.js";
@@ -63,13 +57,7 @@ var routes = [
       //   mini: "CC",
       //   component: CreateNewCompany,
       // },
-      // {
-      //   path: "/notifications",
-      //   layout: "/admin",
-      //   name: "Notifications",
-      //   mini: "N",
-      //   component: Notifications,
-      // },
+     
       // {
       //   path: "/icons",
       //   layout: "/admin",
