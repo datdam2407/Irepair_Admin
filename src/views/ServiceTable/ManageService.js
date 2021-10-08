@@ -38,7 +38,19 @@ import FilterState from "../MajorFields/FilterState";
 
 // import 'ag-grid-community/dist/styles/ag-grid.css';
 // import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import { Grid } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
+
+import {
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Avatar,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import FormDialog from './DialogService';
 function ManageSevice() {
   //delete modal  
@@ -107,6 +119,52 @@ function ManageSevice() {
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
 
+  const useStyles = makeStyles((theme) => ({
+    table: {
+      minWidth: 650,
+    },
+    tableContainer: {
+      borderRadius: 15,
+      margin: '10px 10px',
+      maxWidth: ' 100%'
+    },
+    tableHeaderCell: {
+      color: 'burlywood',
+      fontWeight: 'bold',
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+      backgroundColor: 'gray',
+      fontWeight: '700',
+
+    },
+    thmajorheaderform: {
+      fontWeight: 'bold',
+      fontWeight: '700',
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+    },
+
+    avatar: {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.getContrastText(theme.palette.primary.light),
+      fontSize: '200px',
+
+    },
+    name: {
+      fontWeight: 'bold',
+      color: theme.palette.secondary.dark
+    },
+    Status: {
+      fontWeight: '700',
+      width:'71px',
+      fontSize: '0.76rem',
+      color: 'white',
+      backgroundColor: 'green',
+      borderRadius: 8,
+      padding: '3px 10px',
+      display: 'inline-block'
+    }
+  }));
+  const classes = useStyles();
   async function handleChooseState(e, id) {
     let newListState = [];
     if (id === -1) {
@@ -416,28 +474,31 @@ function ManageSevice() {
                     <tr>
                       {/* <th className="text-left-topic">Topic</th> */}
                       {/* <th className="text-left-topic">FieldId</th> */}
-                      <th className="th-name-service" >Service Name</th>
+                      <th className="description" >Service Name</th>
                       <th className="description">Description</th>
-                      <th >Company</th>
-                      <th >Price</th>
-                      <th>Status</th>
-                      <th className="text-center">Views</th>
+                      <th className="description">Company</th>
+                      <th className="description">Price</th>
+                      <th className="description">Status</th>
+                      <th className="viewAll">Views</th>
                     </tr>
                   </thead>
                   <tbody>
                     {useListserviceShowPage.map((e, index) => {
                       return (
                         <tr key={index}>
-                          {/* <td>
-                            <img src = {e.ImageUrl} />
-                          </td> */}
-
-                          {/* <td>
-                            {e.FieldId}
-                          </td> */}
-                          <td>
-                            {e.ServiceName}
-                          </td>
+                         <TableCell>
+                            <Grid container>
+                              <Grid item lg={2}>
+                                <Avatar src={e.ImageUrl} className={classes.avatar} />
+                              </Grid>
+                              <Grid item lg={10}>
+                                <Typography className={classes.name}>{e.ServiceName}</Typography>
+                                <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
+                                {/* <Typography color="textSecondary" variant="body2">{e.Id}</Typography> */}
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+                        
                           <td>
                             {e.Description}
                           </td>
@@ -447,9 +508,21 @@ function ManageSevice() {
                           <td>
                             {e.Price}
                           </td>
-                          <td>
-                            {displayStateName(e.Status)}
-                          </td>
+                          <TableCell>
+                            <Typography
+                              className={classes.Status}
+                              style={{
+                                backgroundColor:
+                                  ((e.Status === 1 && '#145c14') 
+                                  ||
+                                    (e.Status === 0 && 'rgb(50 102 100)')
+                                    || 
+                                    (e.Status === 2 && '#681717')
+                                    || 
+                                    (e.Status === 3 && 'red'))
+                              }}
+                            >{displayStateName(e.Status)}</Typography>
+                          </TableCell>
                           <td className="td-actions">
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}

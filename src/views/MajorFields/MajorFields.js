@@ -28,19 +28,29 @@ import {
   Row,
   Col,
   OverlayTrigger,
-  Tooltip,
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
 import { del, put, get, getWithParams, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
+import { makeStyles } from '@material-ui/core/styles';
 
-import { AgGridReact } from 'ag-grid-react';
-// import 'ag-grid-community/dist/styles/ag-grid.css';
-// import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import { Grid } from '@material-ui/core'
+import {
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Avatar,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import FormDialog from './DialogFields';
 import FilterState from "./FilterState";
-
+import {
+  Tooltip,
+} from 'react-tippy';
+import 'react-tippy/dist/tippy.css'
 function MajorFields() {
   //delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
@@ -76,6 +86,55 @@ function MajorFields() {
     "Blocked",
     "Deleted",
   ];
+
+  // custom table
+  const useStyles = makeStyles((theme) => ({
+    table: {
+      minWidth: 650,
+    },
+    tableContainer: {
+      borderRadius: 15,
+      margin: '10px 10px',
+      maxWidth: ' 100%'
+    },
+    tableHeaderCell: {
+      color: 'burlywood',
+      fontWeight: 'bold',
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+      backgroundColor: 'gray',
+      fontWeight: '700',
+
+    },
+    thmajorheaderform: {
+      fontWeight: 'bold',
+      fontWeight: '700',
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+    },
+
+    avatar: {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.getContrastText(theme.palette.primary.light),
+      fontSize: '200px',
+
+    },
+    name: {
+      fontWeight: 'bold',
+      color: theme.palette.secondary.dark
+    },
+    Status: {
+      fontWeight: '700',
+      width: '71px',
+      fontSize: '0.76rem',
+      color: 'white',
+      backgroundColor: 'green',
+      borderRadius: 8,
+      padding: '3px 10px',
+      display: 'inline-block'
+    }
+  }));
+  const classes = useStyles();
+
   const [filterState, setListFilterState] = useState(listStates);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -212,8 +271,10 @@ function MajorFields() {
       // adding new user
       fetch(url, {
         method: "post", body: JSON.stringify(formData),
-        headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
-        "Content-type": "application/json"}
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+          "Content-type": "application/json"
+        }
       }).then(resp => resp.json())
         .then(resp => {
           handleClose()
@@ -241,7 +302,7 @@ function MajorFields() {
   }
   function handleOnchangeSelectdmajor(e, value) {
     //console.log(e.target,value);
-    setMajorSelect (e.target.MajorID);
+    setMajorSelect(e.target.MajorID);
     setMajorSelectID(value.value);
   }
   useEffect(() => {
@@ -249,7 +310,7 @@ function MajorFields() {
     let currentField = {};
     let MajorID = "";
     getWithToken(
-      `/api/v1.0/majors`,localStorage.getItem("token")
+      `/api/v1.0/majors`, localStorage.getItem("token")
     ).then((res) => {
       MajorID = res.data.Id
       console.log(res.data)
@@ -288,8 +349,8 @@ function MajorFields() {
   //   });
   // }, []);
   function getMajorFieldsByID(Id) {
- 
-    getWithToken(`/api/v1.0/major-fields/${Id}`,localStorage.getItem("token")).then((res) => {
+
+    getWithToken(`/api/v1.0/major-fields/${Id}`, localStorage.getItem("token")).then((res) => {
       setMajorfieldID(Id);
       setName(res.data.value.name);
       setDescription(res.data.value.description);
@@ -304,7 +365,7 @@ function MajorFields() {
   // /api/v1.0/major/{id}
   //delete fc
   function deleteMajorFieldsByID() {
-    del(`/api/v1.0/major-fields/${MajorDelete}`,localStorage.getItem("token")
+    del(`/api/v1.0/major-fields/${MajorDelete}`, localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -370,33 +431,33 @@ function MajorFields() {
               <Card.Header>
                 <Card.Title as="h4">Major Field</Card.Title>
                 <Col md={2}>
-                <Row className="fixed">
-                  <InputGroup>
-                    <Input placeholder="State" disabled />
-                    <InputGroupButtonDropdown
-                      addonType="append"
-                      isOpen={dropdownOpen}
-                      toggle={toggleDropDown}
-                      className="border border-gray"
-                    >
-                      <DropdownToggle caret>&nbsp;</DropdownToggle>
-                      <DropdownMenu>
-                        <div className="fixed">
-                          <FilterState
-                            list={filterState}
-                            onChangeCheckBox={(e, id) => {
-                              handleChooseState(e, id);
-                            }}
-                            key={filterState}
-                          />
-                        </div>
-                      </DropdownMenu>
-                    </InputGroupButtonDropdown>
-                  </InputGroup>
-                </Row>
-              </Col>
+                  <Row className="fixed">
+                    <InputGroup>
+                      <Input placeholder="State" disabled />
+                      <InputGroupButtonDropdown
+                        addonType="append"
+                        isOpen={dropdownOpen}
+                        toggle={toggleDropDown}
+                        className="border border-gray"
+                      >
+                        <DropdownToggle caret>&nbsp;</DropdownToggle>
+                        <DropdownMenu>
+                          <div className="fixed">
+                            <FilterState
+                              list={filterState}
+                              onChangeCheckBox={(e, id) => {
+                                handleChooseState(e, id);
+                              }}
+                              key={filterState}
+                            />
+                          </div>
+                        </DropdownMenu>
+                      </InputGroupButtonDropdown>
+                    </InputGroup>
+                  </Row>
+                </Col>
                 <Grid align="right">
-                  <Button variant="contained" color="primary" onClick={handleClickOpen}>Add MajorField</Button>
+                  <Button variant="contained" className="add-major-custom" onClick={handleClickOpen}>Add MajorField</Button>
                 </Grid>
               </Card.Header>
 
@@ -404,12 +465,11 @@ function MajorFields() {
                 <Table className="table">
                   <thead>
                     <tr>
-                      <th className="text-left-topic">Topic</th>
-                      <th className="th-name-major" >Major</th>
-                      <th className="th-name-major" >Name</th>
+                      <th className="description" >Major Field</th>
+                      <th className="description" >Major</th>
                       <th className="description">Description</th>
-                      <th>Status</th>
-                      <th className="text-center">Views</th>
+                      <th className="description">Status</th>
+                      <th className="viewAll">Views</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -417,21 +477,71 @@ function MajorFields() {
                     {useListMajorShowPage.map((e, index) => {
                       return (
                         <tr key={index}>
-                          <td>
-                            <img className="td-img-size" src={e.ImageUrl} />
-                          </td>
-                          <td>
-                            {displayMajorName(e.MajorId)}
-                          </td>
-                          <td>
-                            {e.Name}
-                          </td>
-                          <td>
-                            {e.Description}
-                          </td>
-                          <td>
-                            {displayStateName(e.Status)}
-                          </td>
+
+                          <TableCell>
+                            <Grid container>
+                              <Tooltip html={(
+                                <div style={{ width: 700, height: 300 }}>
+                                  <strong>
+                                    <ModalHeader
+                                      style={{ color: "#B22222" }}
+                                    >
+                                      Detailed Major Information
+                                    </ModalHeader>
+                                    <ModalBody>
+                                      <Row>
+                                        <Col md={2}> Major Name:</Col>
+                                        <Col md={3}> {e.Name}</Col>
+                                      </Row>
+                                      <Row>
+                                        <Col md={2}>Description:</Col>
+                                        <Col md={3}>
+                                          {e.Description}
+                                        </Col>
+                                      </Row>
+                                      <Row>
+                                        <Col md={3} ><img className="text-left-topic-toolpi" src={e.ImageUrl} /></Col>
+                                      </Row>
+
+                                    </ModalBody>
+                                  </strong>
+                                </div>
+                              )}
+                              >
+                                <Grid item lg={2}>
+                                  <Avatar src={e.ImageUrl} className={classes.avatar} />
+                                </Grid>
+                              </Tooltip>
+                              <Grid item lg={10}>
+                                <Typography className={classes.name}>{e.Name}</Typography>
+                                <Typography color="textSecondary" variant="body2">{displayMajorName(e.MajorId)}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+
+                          <TableCell>
+                            <Typography color="black" fontSize="0.80rem" >{displayMajorName(e.MajorId)}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography color="black" fontSize="0.80rem">{e.Description}</Typography>
+                            {/* <Typography color="textSecondary" variant="body2">{row.company}</Typography> */}
+                          </TableCell>
+
+                          <TableCell>
+                            <Typography
+                              className={classes.Status}
+                              style={{
+                                backgroundColor:
+                                  ((e.Status === 1 && '#145c14')
+                                    ||
+                                    (e.Status === 0 && 'rgb(50 102 100)')
+                                    ||
+                                    (e.Status === 2 && '#681717'))
+                              }}
+                            >{displayStateName(e.Status)}</Typography>
+                          </TableCell>
                           <td className="td-actions">
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
@@ -654,15 +764,15 @@ function MajorFields() {
                 onChange={e => setMajor(e.target.value)}
               /> */}
               <FormGroup className="mb-2">
-              <Dropdown
-                fluid
-                search
-                selection
-                // value={majorSelect}
-                value={majorSelect}
-                onChange={handleOnchangeSelectdmajor}
-                options={listSelectMajor}/>
-            </FormGroup>
+                <Dropdown
+                  fluid
+                  search
+                  selection
+                  // value={majorSelect}
+                  value={majorSelect}
+                  onChange={handleOnchangeSelectdmajor}
+                  options={listSelectMajor} />
+              </FormGroup>
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Description</Form.Label>

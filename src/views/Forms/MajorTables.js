@@ -16,6 +16,10 @@ import {
   PaginationLink,
   FormGroup,
 } from "reactstrap";
+import {
+  Tooltip,
+} from 'react-tippy';
+import 'react-tippy/dist/tippy.css'
 // react-bootstrap components
 import {
   Button,
@@ -26,17 +30,27 @@ import {
   Row,
   Col,
   OverlayTrigger,
-  Tooltip,
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
 import FilterState from "../MajorFields/FilterState"
-import { del, put , get, getWithParams, getWithTokenParams, getWithToken, putWithToken  } from "../../service/ReadAPI";
-
-import { AgGridReact } from 'ag-grid-react';
+import { del, put, get, getWithParams, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
+import { makeStyles } from '@material-ui/core/styles';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
 // import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import { Grid } from '@material-ui/core'
+import {
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Avatar,
+  Grid,
+  Typography,
+  TablePagination,
+  TableFooter
+} from '@material-ui/core';
 import FormDialog from './Dialog';
 function MajorTables() {
   //delete modal  
@@ -82,7 +96,7 @@ function MajorTables() {
   const [isDeleted, setIsDeleted] = useState("");
   const [majorID, setMajorID] = useState("");
 
-//filterState
+  //filterState
   const listStates = [
     "Inactive",
     "Actice",
@@ -94,7 +108,54 @@ function MajorTables() {
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
   const initialValue = { name: "", description: "", imageUrl: "", status: "1" }
-  
+
+
+
+  const useStyles = makeStyles((theme) => ({
+    table: {
+      minWidth: 650,
+    },
+    tableContainer: {
+      borderRadius: 15,
+      margin: '10px 10px',
+      maxWidth: ' 100%'
+    },
+    tableHeaderCell: {
+      color: 'burlywood',
+      fontWeight: 'bold',
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+      backgroundColor: 'gray',
+      fontWeight: '700',
+
+    },
+    thmajorheaderform: {
+      fontWeight: 'bold',
+      fontWeight: '700',
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+    },
+
+    avatar: {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.getContrastText(theme.palette.primary.light),
+      fontSize: '200px',
+
+    },
+    name: {
+      fontWeight: 'bold',
+      color: theme.palette.secondary.dark
+    },
+    Status: {
+      fontWeight: 'bold',
+      fontSize: '0.75rem',
+      color: 'white',
+      backgroundColor: 'green',
+      borderRadius: 8,
+      padding: '3px 10px',
+      display: 'inline-block'
+    }
+  }));
+  const classes = useStyles();
   async function handleChooseState(e, id) {
     let newListState = [];
     if (id === -1) {
@@ -112,7 +173,7 @@ function MajorTables() {
     setstateListFilter(newListState);
     getMajorList(newListState);
   }
-// form create
+  // form create
   const [gridApi, setGridApi] = useState(null)
   const [tableData, setTableData] = useState(null)
   const [open, setOpen] = React.useState(false);
@@ -147,31 +208,31 @@ function MajorTables() {
     setGridApi(params)
   }
 
-console.log(name)
-console.log(description)
-// update
-async function handleEditSubmit(e) {
- await putWithToken(
-    `/api/v1.0/majors`,
-    {
-      id : majorID,
-      name: name,
-      description: description,
-      imageUrl: picture,
-      status: 1,
-    },
-    localStorage.getItem("token")
-  )
-    .then((res) => {
-      if (res.status === 200) {
-        window.location = "/admin/major";
-      
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
+  console.log(name)
+  console.log(description)
+  // update
+  async function handleEditSubmit(e) {
+    await putWithToken(
+      `/api/v1.0/majors`,
+      {
+        id: majorID,
+        name: name,
+        description: description,
+        imageUrl: picture,
+        status: 1,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/major";
+
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   // setting update row data to form data and opening pop up window
   const handleUpdate = (oldData) => {
@@ -195,11 +256,12 @@ async function handleEditSubmit(e) {
         })
     } else {
       // adding new user
-      fetch(url,{
-        method: "post", body: JSON.stringify(formData), 
-        headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
-    "Content-type": "application/json",
-    },
+      fetch(url, {
+        method: "post", body: JSON.stringify(formData),
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+          "Content-type": "application/json",
+        },
       }).then(resp => resp.json())
         .then(resp => {
           handleClose()
@@ -213,22 +275,22 @@ async function handleEditSubmit(e) {
     flex: 1, filter: true,
     floatingFilter: true
   }
-// get major by ID
-  function getMajorByID(Id){
-    getWithToken(`/api/v1.0/majors/${Id}`,localStorage.getItem("token")).then((res)=>{
+  // get major by ID
+  function getMajorByID(Id) {
+    getWithToken(`/api/v1.0/majors/${Id}`, localStorage.getItem("token")).then((res) => {
       setMajorID(Id);
       setName(res.data.name);
       setDescription(res.data.description);
       setImage(res.data.imageUrl);
       setStatus(res.data.status);
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log(err);
     });
   }
 
-//delete fc
+  //delete fc
   function deleteMajorByID() {
-    del(`/api/v1.0/majors/${MajorDelete}`,localStorage.getItem("token")
+    del(`/api/v1.0/majors/${MajorDelete}`, localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -239,7 +301,7 @@ async function handleEditSubmit(e) {
         console.log(err);
       });
   }
-//Load major
+  //Load major
   useEffect(() => {
     getMajorList();
   }, []);
@@ -247,12 +309,12 @@ async function handleEditSubmit(e) {
     let params = {};
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
-      getWithTokenParams(`/api/v1.0/majors`,params, localStorage.getItem("token")).then((res) => {
+    getWithTokenParams(`/api/v1.0/majors`, params, localStorage.getItem("token")).then((res) => {
       var temp = res.data.filter((x) => x.state !== "Completed");
       setMajorList(temp);
       setUseListMajorShow(temp);
-      setUseListMajorShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
-      setTotalNumberPage(Math.ceil(temp.length / 5));
+      setUseListMajorShowPage(temp.slice(numberPage * 7 - 7, numberPage * 7));
+      setTotalNumberPage(Math.ceil(temp.length / 7));
       setCount(count);
     }).catch((err) => {
       console.log(err);
@@ -261,8 +323,8 @@ async function handleEditSubmit(e) {
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListMajorShowPage(useListMajorShow.slice(number * 5 - 5, number * 5));
-    setTotalNumberPage(Math.ceil(useListMajorShow.length / 5));
+    setUseListMajorShowPage(useListMajorShow.slice(number * 7 - 7, number * 7));
+    setTotalNumberPage(Math.ceil(useListMajorShow.length / 7));
   }
   // close button
   const closeBtn = (x) => (
@@ -292,143 +354,200 @@ async function handleEditSubmit(e) {
               <Card.Header>
                 <Card.Title as="h4">Major</Card.Title>
                 <Col md={2}>
-                <Row className="fixed">
-                  <InputGroup>
-                    <Input placeholder="State" disabled />
-                    <InputGroupButtonDropdown
-                      addonType="append"
-                      isOpen={dropdownOpen}
-                      toggle={toggleDropDown}
-                      className="border border-gray"
-                    >
-                      <DropdownToggle caret>&nbsp;</DropdownToggle>
-                      <DropdownMenu>
-                        <div className="fixed">
-                          <FilterState
-                            list={filterState}
-                            onChangeCheckBox={(e, id) => {
-                              handleChooseState(e, id);
-                            }}
-                            key={filterState}
-                          />
-                        </div>
-                      </DropdownMenu>
-                    </InputGroupButtonDropdown>
-                  </InputGroup>
-                </Row>
-              </Col>
-                 <Grid align="right">
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
-      </Grid>
+                  <Row className="fixed">
+                    <InputGroup>
+                      <Input placeholder="State" disabled />
+                      <InputGroupButtonDropdown
+                        addonType="append"
+                        isOpen={dropdownOpen}
+                        toggle={toggleDropDown}
+                        className="border border-gray"
+                      >
+                        <DropdownToggle caret>&nbsp;</DropdownToggle>
+                        <DropdownMenu>
+                          <div className="fixed">
+                            <FilterState
+                              list={filterState}
+                              onChangeCheckBox={(e, id) => {
+                                handleChooseState(e, id);
+                              }}
+                              key={filterState}
+                            />
+                          </div>
+                        </DropdownMenu>
+                      </InputGroupButtonDropdown>
+                    </InputGroup>
+                  </Row>
+                </Col>
+                <Grid align="right">
+                  <Button className="add-major-custom" variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
+                </Grid>
               </Card.Header>
               <Card.Body className="table">
-                <Table className="table">
-                  <thead>
-                    <tr>
-                      <th className="text-left-topic">Topic</th>
-                      <th className="th-name-major" >Name</th>
-                      <th className="description">Description</th>
-                      <th>Status</th>
-                      <th className="text-center">Views</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {useListMajorShowPage.map((e, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>
-                            <img className="td-img-size" src = {e.ImageUrl} />
-                          </td>
-                          <td>
-                            {e.Name}
-                          </td>
-                          <td>
-                            {e.Description}
-                          </td>
-                          <td>
-                            {displayStateName(e.Status)}
-                          </td>
-                          <td className="td-actions">
-                            <OverlayTrigger
-                              onClick={(e) => e.preventDefault()}
-                              overlay={
-                                <Tooltip id="tooltip-960683717">
-                                  View Post..
+                <TableContainer component={Paper} className={classes.tableContainer}>
+                  <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        {/* <TableCell className=thmajorheaderform>Info</TableCell> */}
+
+                        <th className="description">Name</th>
+                        <th className="description">Description</th>
+                        <th className="description">Status</th>
+                        <th className="viewAll">Views</th>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {useListMajorShowPage.map((e, index) => {
+                        return (
+                          <tr key={index}>
+                            {/* <td>
+                            <img className="td-img-size" src={e.ImageUrl} />
+                          </td> */}
+                            <TableCell>
+                              <Grid container>
+                                <Tooltip html={(
+                                  <div style={{ width: 700 , height:300}}>
+                                    <strong>
+                                      <ModalHeader
+                                        style={{ color: "#B22222" }}
+                                      >
+                                       Detailed Major Information
+                                      </ModalHeader>
+                                      <ModalBody>
+                                        <Row>
+                                          <Col md={2}> Major Name:</Col>
+                                          <Col md={3}> {e.Name}</Col>
+                                        </Row>
+                                        <Row>
+                                        <Col md={2}>Description:</Col>
+                                        <Col md={3}>
+                                        {e.Description}
+                                        </Col>
+                                        </Row>
+                                        <Row>
+                                          <Col md={3} ><img className="text-left-topic-toolpi" src={e.ImageUrl} /></Col>
+                                          </Row>
+                                        {/* <Row>
+                                          <Col md={1}>State:</Col>
+                                          {displayStateName(e.Status)}
+                                        </Row> */}
+                                      
+                                      </ModalBody>
+                                    </strong>
+                                  </div>
+                                )}
+                                >
+                                  <Grid item lg={2}>
+                                    <Avatar src={e.ImageUrl} className={classes.avatar} />
+                                  </Grid>
                                 </Tooltip>
-                              }
-                              placement="right"
-                            >
-                              <Button
-                                onClick={() => {
-                                  setModalStatus(true);
-                                  setSelectMajor(e);
+
+                                <Grid item lg={10}>
+                                  <Typography className={classes.name}>{e.Name}</Typography>
+                                  <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
+                                  {/* <Typography color="textSecondary" variant="body2">{e.Id}</Typography> */}
+                                </Grid>
+                              </Grid>
+                            </TableCell>
+                            <TableCell>
+                              <Typography color="black" fontSize="0.80rem">{e.Description}</Typography>
+                              {/* <Typography color="textSecondary" variant="body2">{row.company}</Typography> */}
+                            </TableCell>
+
+                            <TableCell>
+                              <Typography
+                                className={classes.Status}
+                                style={{
+                                  backgroundColor:
+                                    ((e.Status === 1 && 'green') ||
+                                      (e.Status === 0 && 'red'))
                                 }}
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="info"
+                              >{displayStateName(e.Status)}</Typography>
+                            </TableCell>
+
+
+                            <td className="td-actions">
+                              <OverlayTrigger
+                                onClick={(e) => e.preventDefault()}
+                                overlay={
+                                  <Tooltip id="tooltip-960683717">
+                                    View Post..
+                                  </Tooltip>
+                                }
+                                placement="right"
                               >
-                                <i className="far fa-image"></i>
-                              </Button>
-                            </OverlayTrigger>
+                                <Button
+                                  onClick={() => {
+                                    setModalStatus(true);
+                                    setSelectMajor(e);
+                                  }}
+                                  className="btn-link btn-icon"
+                                  type="button"
+                                  variant="info"
+                                >
+                                  <i className="far fa-image"></i>
+                                </Button>
+                              </OverlayTrigger>
 
-                            <OverlayTrigger
-                              overlay={
-                                <Tooltip id="tooltip-436082023">
-                                  Edit Post..
-                                </Tooltip>
-                              }
-                              placement="right"
-                            >
-                              <Button
-                              // onClick={() => handleUpdate(e.data)}
-                              // onGridReady={onGridReady}
-
-                                onClick={() => {
-                                  // setMajorEdit(e.Id);
-                                  getMajorByID(e.Id);
-                                  setMajorModalEdit(true);
-                                }}
-
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="success"
+                              <OverlayTrigger
+                                overlay={
+                                  <Tooltip id="tooltip-436082023">
+                                    Edit Post..
+                                  </Tooltip>
+                                }
+                                placement="right"
                               >
-                                <i className="fas fa-edit"></i>
-                              </Button>
-                            </OverlayTrigger>
+                                <Button
+                                  // onClick={() => handleUpdate(e.data)}
+                                  // onGridReady={onGridReady}
+
+                                  onClick={() => {
+                                    // setMajorEdit(e.Id);
+                                    getMajorByID(e.Id);
+                                    setMajorModalEdit(true);
+                                  }}
+
+                                  className="btn-link btn-icon"
+                                  type="button"
+                                  variant="success"
+                                >
+                                  <i className="fas fa-edit"></i>
+                                </Button>
+                              </OverlayTrigger>
 
 
-                            <OverlayTrigger
-                              onClick={(e) => e.preventDefault()}
+                              <OverlayTrigger
+                                onClick={(e) => e.preventDefault()}
 
-                              overlay={
-                                <Tooltip id="tooltip-334669391">
-                                  Remove Post..
-                                </Tooltip>
-                              }
-                              placement="right\"
-                            >
-                              <Button
-                                onClick={() => {
-                                  setMajorDelete(e.Id);
-                                  setMajorModalDelete(true);
-                                }}
-
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="danger"
+                                overlay={
+                                  <Tooltip id="tooltip-334669391">
+                                    Remove Post..
+                                  </Tooltip>
+                                }
+                                placement="right\"
                               >
-                                <i className="fas fa-times"></i>
-                              </Button>
-                            </OverlayTrigger>
+                                <Button
+                                  onClick={() => {
+                                    setMajorDelete(e.Id);
+                                    setMajorModalDelete(true);
+                                  }}
 
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </Table>
+                                  className="btn-link btn-icon"
+                                  type="button"
+                                  variant="danger"
+                                >
+                                  <i className="fas fa-times"></i>
+                                </Button>
+                              </OverlayTrigger>
+
+                            </td>
+                          </tr>
+
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
                 <Row>
                   <Col md={6}></Col>
                   <Col md={6}>
@@ -608,8 +727,8 @@ async function handleEditSubmit(e) {
           <Form>
             <Form.Group className="mb-2">
               <Form.Label>Major name</Form.Label>
-              <Form.Control type="text" placeholder="Major name" value={name} 
-              onChange = {e =>setName(e.target.value)}
+              <Form.Control type="text" placeholder="Major name" value={name}
+                onChange={e => setName(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-2">
@@ -619,14 +738,14 @@ async function handleEditSubmit(e) {
                 placeholder="Description"
                 as="textarea"
                 value={description}
-                onChange = {e => setDescription(e.target.value)}
+                onChange={e => setDescription(e.target.value)}
                 rows={3}
               />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
               <Form.Control type="text" value={picture}
-              onChange = {e => setImage(e.target.value)}
+                onChange={e => setImage(e.target.value)}
               />
             </Form.Group>
           </Form>
@@ -671,7 +790,7 @@ async function handleEditSubmit(e) {
             <Col></Col>
             <Col md={3}>Picture</Col>
             <Col md={8}>
-              {selectMajor !== undefined ? <img className="text-left-topic" src = {selectMajor.ImageUrl}/> : ""}
+              {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
             </Col>
           </Row>
           <Row>
@@ -681,10 +800,10 @@ async function handleEditSubmit(e) {
           </Row>
         </ModalBody>
       </Modal>
-    
+
       <FormDialog open={open} handleClose={handleClose}
         data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
-    
+
     </>
   );
 }

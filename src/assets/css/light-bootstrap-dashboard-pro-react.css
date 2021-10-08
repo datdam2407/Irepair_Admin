@@ -2363,8 +2363,8 @@ input:focus {
   border-bottom-width: 1px;
   font-size: 0.75rem;
   text-transform: uppercase;
-  color: #9A9A9A;
-  font-weight: 400;
+  color: #fdfdfd;
+  font-weight: 600;
   padding-bottom: 5px; }
 
 .table table > tr > td.td-actions {

@@ -22,3 +22,43 @@
     margin-top: 0;
     margin-left: 0;
 }
+.add-major-custom{
+    background-color:  rgb(116, 60, 7);
+    font-size: larger;
+    border-radius: 3px;
+}
+.add-major-custom:hover {
+    /* color: #922301; */
+    background-color: rgb(236, 153, 94);
+} 
+.td-status-active-major{
+    color: darkgreen;
+    font-size: large;
+}
+.td-status-inactive-major{
+    color: darkred;
+    font-size: large;
+
+}.th-major-header-form{
+    color :rgb(116, 60, 7)
+}
+.view-major{
+    text-align: end;
+    font-size: larger;
+    font-weight: 700;
+}
+.fa-image:before{
+font-size: large;
+
+}
+.fa, .fas {
+    font-weight: 900;
+    font-size: large;
+
+}
+.fa, .fas, .far, .fal, .fad, .fab {
+    width: 15px;
+}
+.text-left-topic-toolpi{
+    width: 100%;
+}
