@@ -17,13 +17,13 @@ import image4 from "assets/img/full-screen-image-4.jpg";
 
 function Admin() {
 
-    let history = useHistory();
+//     let history = useHistory();
 
-useEffect(() => {
-    if (localStorage.getItem("token") === null) {
-      history.push("/");
-    }
-}, []);
+// useEffect(() => {
+//     if (localStorage.getItem("token") === null) {
+//       history.push("/");
+//     }
+// }, []);
   const [sidebarImage, setSidebarImage] = React.useState(image3);
   const [sidebarBackground, setSidebarBackground] = React.useState("black");
   const getRoutes = (routes) => {
