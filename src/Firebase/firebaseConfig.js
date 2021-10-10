@@ -36,7 +36,9 @@ const signInWithGoogle = async () => {
   try {
     const res = await auth.signInWithPopup(googleProvider);
     const user = res.user;
-    localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNzgxMTM5LCJleHAiOjE2MzM4Njc1MzksImlhdCI6MTYzMzc4MTEzOX0.oHGEAEQTLc_oFPzcfD2_LXDtoBUU38Xd9AuiZ8CEoRE");
+    localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzODY4MzQ0LCJleHAiOjE2MzM5NTQ3NDQsImlhdCI6MTYzMzg2ODM0NH0.UGHIVGarMnVEevVMIKNw-2Qd0lcJV7eAEuL_XwOgDfw");
+    // localStorage.setItem("name", res.name);
+    // localStorage.setItem("email", res.data.email);
     
     //This is JWT
     console.log(await user.getIdToken());

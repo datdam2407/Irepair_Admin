@@ -37,129 +37,125 @@ var routes = [
   //   icon: "nc-icon nc-chart-pie-35",
   //   component: Sidebar,
   // },
+  // {
+  //   collapse: true,
+  //   name: "Company",
+  //   state: "openComponents",
+  //   icon: "nc-icon nc-istanbul",
+  //   views: [
+  //     {
+  //       path: "/Company",
+  //       layout: "/admin",
+  //       name: "Manage Company",
+  //       mini: "GS",
+  //       component: ManageCompany,
+  //     },
+  //   ],
+  // },
   {
-    collapse: true,
+  
     name: "Company",
-    state: "openComponents",
     icon: "nc-icon nc-istanbul",
-    views: [
-      {
-        path: "/Company",
-        layout: "/admin",
-        name: "Manage Company",
-        mini: "GS",
-        component: ManageCompany,
-      },
-      // {
-      //   path: "/create/company",
-      //   layout: "/admin",
-      //   name: "Create Company",
-      //   mini: "CC",
-      //   component: CreateNewCompany,
-      // },
-     
-      // {
-      //   path: "/icons",
-      //   layout: "/admin",
-      //   name: "Icons",
-      //   mini: "I",
-      //   component: Icons,
-      // },
-      // {
-      //   path: "/typography",
-      //   layout: "/admin",
-      //   name: "Typography",
-      //   mini: "T",
-      //   component: Typography,
-      // },
-    ],
   },
   {
-    collapse: true,
-    path: "/major",
+    path: "/Company",
+    layout: "/admin",
+    name: "Manage Company",
+    mini: "MC: ",
+    component: ManageCompany,
+  },
+  // {
+  //   collapse: true,
+  //   path: "/major",
+  //   name: "Major",
+  //   state: "openForms",
+  //   icon: "nc-icon nc-notes",
+  //   views: [
+  //     // {
+  //     //   path: "/regular-forms",
+  //     //   layout: "/admin",
+  //     //   name: "Regular Forms",
+  //     //   mini: "RF",
+  //     //   component: RegularForms,
+  //     // },
+  //     {
+  //       path: "/major",
+  //       layout: "/admin",
+  //       name: "Manage Major",
+  //       mini: "Mt",
+  //       component: MajorTables,
+  //     },
+  //     // {
+  //     //   path: "/validation-forms",
+  //     //   layout: "/admin",
+  //     //   name: "Validation Forms",
+  //     //   mini: "VF",
+  //     //   component: ValidationForms,
+  //     // },
+  //   ],
+  // },
+
+  {
     name: "Major",
     state: "openForms",
     icon: "nc-icon nc-notes",
-    views: [
-      // {
-      //   path: "/regular-forms",
-      //   layout: "/admin",
-      //   name: "Regular Forms",
-      //   mini: "RF",
-      //   component: RegularForms,
-      // },
-      {
-        path: "/major",
-        layout: "/admin",
-        name: "Manage Major",
-        mini: "Mt",
-        component: MajorTables,
-      },
-      // {
-      //   path: "/validation-forms",
-      //   layout: "/admin",
-      //   name: "Validation Forms",
-      //   mini: "VF",
-      //   component: ValidationForms,
-      // },
-      // {
-      //   path: "/create/major",
-      //   layout: "/admin",
-      //   name: "Create Major",
-      //   mini: "Cm",
-      //   component: CreateNewMajor,
-      // },
-     
-    ],
   },
-  
+
   {
-    collapse: true,
-    path: "/majorfield",
-    name: "Major Field",
-    state: "openTablesFields",
+    path: "/major",
+    layout: "/admin",
+    name: "Manage Major",
+    mini: "MM: ",
+    component: MajorTables,
+  },
+
+  {
     icon: "nc-icon nc-layers-3",
-    views: [
-      // {
-      //   path: "/create/fields",
-      //   layout: "/admin",
-      //   name: "Major Fields",
-      //   mini: "CMr",
-      //   component: CreateNewMajorFields,
-      // },
-      {
-        path: "/fields",
-        layout: "/admin",
-        name: "Manage MajorFields",
-        mini: "MT",
-        component: MajorFields,
-      },
-    ],
+    name: " Major Field",
   },
   {
-    collapse: true,
-    path: "/service",
-    name: "Service",
-    state: "openTablesService",
-    icon: "nc-icon nc-single-copy-04",
-    views: [
-      // {
-      //   path: "/create/service",
-      //   layout: "/admin",
-      //   name: "Create Service",
-      //   mini: "Cs",
-      //   component: CreateNewService,
-      // },
-    
-      {
-        path: "/service",
-        layout: "/admin",
-        name: "Service Table",
-        mini: "MT",
-        component: ManageService,
-      },
-    ],
+    path: "/fields",
+    layout: "/admin",
+    name: "Manage Major Fields",
+    mini: "MT: ",
+    component: MajorFields,
   },
+
+  {
+    icon: "nc-icon nc-single-copy-04",
+    name: "   Service",
+  },
+  {
+    path: "/service",
+    layout: "/admin",
+    name: " Service Table",
+    mini: "sT:  ",
+    component: ManageService,
+  },
+  // {
+  //   collapse: true,
+  //   path: "/service",
+  //   name: "Service",
+  //   state: "openTablesService",
+  //   icon: "nc-icon nc-single-copy-04",
+  //   views: [
+  //     // {
+  //     //   path: "/create/service",
+  //     //   layout: "/admin",
+  //     //   name: "Create Service",
+  //     //   mini: "Cs",
+  //     //   component: CreateNewService,
+  //     // },
+    
+  //     {
+  //       path: "/service",
+  //       layout: "/admin",
+  //       name: "Service Table",
+  //       mini: "MT",
+  //       component: ManageService,
+  //     },
+  //   ],
+  // },
   // {
   //   collapse: true,
   //   path: "/maps",

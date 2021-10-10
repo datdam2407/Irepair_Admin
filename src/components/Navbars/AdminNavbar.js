@@ -85,7 +85,7 @@ function AdminNavbar() {
                   alignRight
                   aria-labelledby="navbarDropdownMenuLink"
                 >
-                  <Dropdown.Item
+                  {/* <Dropdown.Item
                     href="#pablo"
                     onClick={(e) => e.preventDefault()}
                   >
@@ -98,15 +98,15 @@ function AdminNavbar() {
                   >
                     <i className="nc-icon nc-umbrella-13"></i>
                     Help Center
-                  </Dropdown.Item>
-                  <Dropdown.Item
+                  </Dropdown.Item> */}
+                  {/* <Dropdown.Item
                     href="#pablo"
                     onClick={(e) => e.preventDefault()}
                   >
                     <i className="nc-icon nc-settings-90"></i>
                     Settings
                   </Dropdown.Item>
-                  <div className="divider"></div>
+                  <div className="divider"></div> */}
 
                   <Dropdown.Item
                     className="text-danger"

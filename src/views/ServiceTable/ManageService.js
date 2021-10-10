@@ -147,6 +147,9 @@ function ManageSevice() {
       backgroundColor: theme.palette.primary.light,
       color: theme.palette.getContrastText(theme.palette.primary.light),
       fontSize: '200px',
+      right: '10px',
+      overflow: 'unset',
+      borderRadius :'32%',
 
     },
     name: {
@@ -164,6 +167,7 @@ function ManageSevice() {
       display: 'inline-block'
     }
   }));
+  
   const classes = useStyles();
   async function handleChooseState(e, id) {
     let newListState = [];
@@ -255,7 +259,7 @@ function ManageSevice() {
   const onGridReady = (params) => {
     setGridApi(params)
   }
-
+console.log("field", FieldSelectID)
   // update
   async function handleEditSubmit(e) {
     await put(
@@ -348,7 +352,6 @@ function ManageSevice() {
       setPrice(res.data.price);
       setCompanyID(res.data.companyId);
       setFieldID(res.data.fieldId);
-      setStatus(res.data.status);
     }).catch((err) => {
       console.log(err);
     });
@@ -419,6 +422,8 @@ function ManageSevice() {
       "7e179e62-21da-45c1-afe4-114a580f0a12": "Công ty điện lạnh Long Châu",
       "404f25c6-4f40-4f83-acfd-16a0d7c2f8e9": "Công ty điện lạnh, điện gia dụng Thủy Tiên",
       "4bb0a83e-e9d9-47b5-8019-20c19e953181": "Công ty điện lạnh Hòa Hưng",
+      "dd0b937a-8e90-4af3-bfe8-0a8cc0722f6a": "IrepairX",
+      "17ab8695-daec-4ceb-9f78-07c9528c0009": "CompanyX",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -429,20 +434,10 @@ function ManageSevice() {
         <Row>
           <Col md="12">
             <Card className="table">
-              <Card.Title as="h4">Service</Card.Title>
-              {/* <Button
-                  onClick={() => {
-                    // setserviceEdit(e.Id);
-                    // getserviceListID();
-                    // handleSubmit(e);
-                    setserviceModalCreate(true);
-                  }}>
-                  Create new service
-                </Button> */}
-              <Grid align="right">
-                <Button variant="contained" color="primary" onClick={handleClickOpen}>Add service</Button>
-              </Grid>
-              <Col md={2}>
+            <div className= "header-form">
+              <Row>
+                <div className="header-body-filter">
+                  <Col md={7}>
                 <Row className="fixed">
                   <InputGroup>
                     <Input placeholder="State" disabled />
@@ -453,8 +448,8 @@ function ManageSevice() {
                       className="border border-gray"
                     >
                       <DropdownToggle caret>&nbsp;</DropdownToggle>
-                      <DropdownMenu>
-                        <div className="fixed">
+                      <DropdownMenu >
+                        <div className="fixed" >
                           <FilterState
                             list={filterState}
                             onChangeCheckBox={(e, id) => {
@@ -466,8 +461,15 @@ function ManageSevice() {
                       </DropdownMenu>
                     </InputGroupButtonDropdown>
                   </InputGroup>
+                  
                 </Row>
               </Col>
+              </div>
+              <Col md={10} align="right">
+                <Button variant="contained" className="add-major-custom" color="primary" onClick={handleClickOpen}>Add service</Button>
+              </Col>
+                  </Row>
+                  </div>
               <Card.Body className="table">
                 <Table className="table">
                   <thead>
@@ -479,7 +481,7 @@ function ManageSevice() {
                       <th className="description">Company</th>
                       <th className="description">Price</th>
                       <th className="description">Status</th>
-                      <th className="viewAll">Views</th>
+                      <th className="viewAll">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -488,9 +490,12 @@ function ManageSevice() {
                         <tr key={index}>
                          <TableCell>
                             <Grid container>
-                              <Grid item lg={2}>
-                                <Avatar src={e.ImageUrl} className={classes.avatar} />
-                              </Grid>
+                              {/* <Grid item lg={2}>
+                                <Avatar src={e.ImageUrl} className={classes.avatar}>
+                                <img src="string"/>
+
+                                </Avatar>
+                              </Grid> */}
                               <Grid item lg={10}>
                                 <Typography className={classes.name}>{e.ServiceName}</Typography>
                                 <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
@@ -513,13 +518,13 @@ function ManageSevice() {
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 1 && '#145c14') 
+                                  ((e.Status === 1 && 'rgb(34, 176, 34)') 
                                   ||
-                                    (e.Status === 0 && 'rgb(50 102 100)')
+                                    (e.Status === 0 && 'rgb(50, 102, 100)')
                                     || 
-                                    (e.Status === 2 && '#681717')
+                                    (e.Status === 2 && 'red')
                                     || 
-                                    (e.Status === 3 && 'red'))
+                                    (e.Status === 3 && '#1f0202'))
                               }}
                             >{displayStateName(e.Status)}</Typography>
                           </TableCell>
@@ -546,7 +551,7 @@ function ManageSevice() {
                               </Button>
                             </OverlayTrigger>
 
-                            <OverlayTrigger
+                            {/* <OverlayTrigger
                               overlay={
                                 <Tooltip id="tooltip-436082023">
                                   Edit Post..
@@ -595,7 +600,7 @@ function ManageSevice() {
                               >
                                 <i className="fas fa-times"></i>
                               </Button>
-                            </OverlayTrigger>
+                            </OverlayTrigger> */}
 
                           </td>
                         </tr>

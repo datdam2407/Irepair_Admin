@@ -10,24 +10,75 @@ import {
   Col,
   ModalTitle,
   Table,
+  OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import {
   Modal,
   ModalHeader,
-  Media,
   ModalBody,
   ModalFooter,
   Pagination,
+  InputGroup,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
+  InputGroupButtonDropdown,
   PaginationItem,
+  Input,
   PaginationLink,
+  FormGroup,
+  Media,
+  
 } from "reactstrap";
 import deleteIcon from "assets/img/remove.png";
 import editIcon from "assets/img/edit.png";
-import { Link } from "react-router-dom";
-import { del, post, get, put, getWithToken, putWithToken } from "../../service/ReadAPI";
+import { del, post, get, put, getWithToken, putWithToken, getWithTokenParams, postWithToken } from "../../service/ReadAPI";
 import "../../assets/css/customSize.css";
 
+import FilterState from "../MajorFields/FilterState";
+
 export default function ManageCompany() {
+  //Filter
+  const listStates = [
+    "New",
+    "Approved",
+    "Deleted",
+  ];
+  const [filterState, setListFilterState] = useState(listStates);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen1, setDropdownOpen1] = useState(false);
+  const [stateListFilter, setstateListFilter] = useState([]);
+
+
+  const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
+  const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
+
+  async function handleChooseState(e, id) {
+    let newListState = [];
+    if (id === -1) {
+      if (e.target.checked) {
+        newListState = listStates.reduce(
+          (state, index) => [...state, listStates.indexOf(index)],
+          []
+        );
+      }
+    } else {
+      if (e.target.checked) newListState = [...stateListFilter, id];
+      else newListState = stateListFilter.filter((item) => item !== id);
+    }
+    //console.log(newListState);
+    setstateListFilter(newListState);
+    getCompanyList(newListState);
+  }
+
+  //check image
+  function checkDisableImage(state) {
+    const list = [1 , 3];
+    if (list.includes(state)) return true;
+    else return false;
+  }
+
   const [CompanyDelete, setCompanyDelete] = useState(null);
   const [modalDelete, setCompanyModalDelete] = useState(false);
   const toggleDelete = () => setCompanyModalDelete(!modalDelete);
@@ -39,12 +90,11 @@ export default function ManageCompany() {
   const [modalCreate, setCompanyModalCreate] = useState(false);
   const toggleCreate = () => setCompanyModalCreate(!modalCreate)
 
-  const [button, setButton] = useState(true);
-  const [male, setMale] = useState(true);
-  const [female, setFemale] = useState(false);
-  const [dobError, setDobError] = useState("");
-  const [joinDateError, setJoinDateError] = useState("");
-  const [currentDate, setCurrentDate] = useState();
+    //Approved Company 
+      //Approved
+  const [CompanyApprove, setCompanyApprove] = useState(null);
+  const [modalApprove, setCompanyModalApprove] = useState(false);
+  const toggleApprove = () => setCompanyModalApprove(!modalApprove)
 
   const [useList, setUseList] = useState([]);
 
@@ -66,7 +116,7 @@ export default function ManageCompany() {
   const [companyID, setCompanyID] = useState("");
 
   async function getCompanyByID(Id) {
-    getWithToken(`/api/v1.0/companies/${Id}`,localStorage.getItem("token")).then((res) => {
+    getWithToken(`/api/v1.0/companies/${Id}`, localStorage.getItem("token")).then((res) => {
       setCompanyID(Id);
       setName(res.data.companyName);
       setAddress(res.data.address);
@@ -80,9 +130,31 @@ export default function ManageCompany() {
       console.log(err);
     });
   }
+  async function handleEditSubmit(e) {
+    await putWithToken(
+      `/api/v1.0/major-fields`,
+      {
+        id: majorID,
+        name: name,
+        description: description,
+        majorId: MajorSelectID,
+        imageUrl: picture,
+        status: 1,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/fields";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   useEffect(() => {
     getCompanyList();
-    getWithToken("/api/v1.0/companies" ,localStorage.getItem("token")).then(
+    getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
@@ -92,13 +164,16 @@ export default function ManageCompany() {
       });
   }, []);
 
-  function getCompanyList() {
-    getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then((res) => {
-      var temp = res.data;
+  function getCompanyList(stateList) {
+    let params = {};
+    if (stateList && stateList.length > 0)
+      params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
+    getWithTokenParams("/api/v1.0/companies", params, localStorage.getItem("token")).then((res) => {
+      var temp = res.data.filter((x) => x.state !== "Completed");
       setCompanyList(temp);
       setUseListCompanyShow(temp);
-      setUseListCompanyShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
-      setTotalNumberPage(Math.ceil(temp.length / 5));
+      setUseListCompanyShowPage(temp.slice(numberPage * 15 - 15, numberPage * 15));
+      setTotalNumberPage(Math.ceil(temp.length / 15));
     }).catch((err) => {
       console.log(err);
     });
@@ -133,10 +208,9 @@ export default function ManageCompany() {
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListCompanyShowPage(useListCompanyShow.slice(number * 5 - 5, number * 5));
-    setTotalNumberPage(Math.ceil(useListCompanyShow.length / 5));
+    setUseListCompanyShowPage(useListCompanyShow.slice(number * 15 - 15, number * 15));
+    setTotalNumberPage(Math.ceil(useListCompanyShow.length / 15));
   }
-  
   // custom state
   function displayStateName(type) {
     const stateValue = {
@@ -147,19 +221,22 @@ export default function ManageCompany() {
     };
     return stateValue[type] ? stateValue[type] : "";
   }
-  function handleSubmit(e) {
-    post(
+  console.log("cpName" ,name)
+  function handleEditSubmit2(e) {
+    putWithToken(
       "/api/v1.0/companies",
       {
-        id : null,
+        id: null,
         companyName: name,
         address: address,
         description: description,
         email: email,
         hotline: hotline,
         imageUrl: picture,
-        status: 0,
+        status: 1,
       },
+      localStorage.getItem("token")
+
     )
       .then((res) => {
         if (res.status === 200) {
@@ -198,32 +275,65 @@ export default function ManageCompany() {
       <Container fluid>
         <Col md="12">
           <Card className="strpied-tabled-with-hover">
-            <Card.Header>
-              <Card.Title as="h4">Manage Company</Card.Title>
-              {/* <Link to="/admin/create/company">
-                </Link> */}
-              <Button
-                onClick={() => {
-                  // setCompanyEdit(e.Id);
-                  // getCompanyListID();
-                  // handleSubmit(e);
-                  setCompanyModalCreate(true);
-                }}>
-                Create new Company
-              </Button>
-            </Card.Header>
+            <div className="header-form">
+              <Row>
+
+                <div className="header-body-filter">
+                  <Col md={7}>
+                    <Row className="fixed">
+                      <InputGroup>
+                        <Input placeholder="State" disabled />
+                        <InputGroupButtonDropdown
+                          addonType="append"
+                          isOpen={dropdownOpen}
+                          toggle={toggleDropDown}
+                          className="border border-gray"
+                        >
+                          <DropdownToggle caret>&nbsp;</DropdownToggle>
+                          <DropdownMenu>
+                            <div className="fixed">
+                              <FilterState
+                                list={filterState}
+                                onChangeCheckBox={(e, id) => {
+                                  handleChooseState(e, id);
+                                }}
+                                key={filterState}
+                              />
+                            </div>
+                          </DropdownMenu>
+                        </InputGroupButtonDropdown>
+                      </InputGroup>
+                    </Row>
+                  </Col>
+                </div>
+                <Col>
+                  <Col align="right">
+                    <Button
+                      onClick={() => {
+                        // setCompanyEdit(e.Id);
+                        // getCompanyListID();
+                        // handleSubmit(e);
+                        setCompanyModalCreate(true);
+                      }}>
+                      Create new Company
+                    </Button>
+                  </Col>
+                </Col>
+              </Row>
+            </div>
             <Card.Body className="table-full-width table-responsive px-0">
               <Table className="table">
                 <thead>
                   <tr>
-                    {/* <th className="border-0">ID</th> */}
-                    <th className="border-0">Name</th>
-                    <th className="border-0">Address</th>
-                    <th className="border-0">Description</th>
-                    <th className="border-0">Email</th>
-                    <th className="border-0">Hotline</th>
-                    <th className="border-0">Picture</th>
-                    <th className="border-0">State</th>
+                    {/* <th className="description">ID</th> */}
+                    <th className="description">Name</th>
+                    <th className="description">Address</th>
+                    <th className="description">Description</th>
+                    <th className="description">Email</th>
+                    <th className="description">Hotline</th>
+                    {/* <th className="description">Picture</th> */}
+                    <th className="description">State</th>
+                    <th className="description">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -248,31 +358,71 @@ export default function ManageCompany() {
                         <td>
                           {e.Hotline}
                         </td>
-                        <td>
+                        {/* <td>
                           {e.Picture}
-                        </td>
+                        </td> */}
                         <td>
                           {displayStateName(e.Status)}
                         </td>
                         <td>
-                          <Media
-                            src={editIcon}
-                            onClick={() => {
-                              // setCompanyEdit(e.Id);
-                              getCompanyByID(e.Id);
-                              setCompanyModalEdit(true);
-                            }}
-                          />
-                        </td>
-                        <td>
-                          <Media
-                            src={deleteIcon}
-                            onClick={() => {
-                              setCompanyDelete(e.Id);
-                              setCompanyModalDelete(true);
-                            }}
-                          />
-                        </td>
+                        <OverlayTrigger
+                              overlay={
+                                <Tooltip id="tooltip-436082023">
+                                  APPROVE..
+                                </Tooltip>
+                              }
+                              placement="right"
+                            >
+
+                              <Button
+                                // onClick={() => handleUpdate(e.data)}
+                                // onGridReady={onGridReady}
+
+                                onClick={() => {
+                                  // setMajorEdit(e.Id);
+                                  getCompanyByID(e.Id);
+                                  setCompanyModalApprove(true);
+                                }}
+
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="success"
+                              >
+                                {checkDisableImage(e.state) ? (
+                                <i className="fas fa-check"></i>
+                                ) : (
+                                  <i className="fas fa-check"></i>
+                                )}
+                              </Button>
+                            </OverlayTrigger>
+
+                            <OverlayTrigger
+                                onClick={(e) => e.preventDefault()}
+
+                                overlay={
+                                  <Tooltip id="tooltip-334669391">
+                                    Delete Company..
+                                  </Tooltip>
+                                }
+                                placement="right\"
+                              >
+                                <Button
+                                  onClick={() => {
+                                    setCompanyDelete(e.Id);
+                                    setCompanyModalDelete(true);
+                                  }}
+
+                                  className="btn-link btn-icon"
+                                  type="button"
+                                  variant="danger"
+                                >
+                                  <i className="fas fa-times"></i>
+                                </Button>
+                              </OverlayTrigger>
+       
+                          </td>
+                        
+                       
                       </tr>
                     );
                   })}
@@ -380,7 +530,7 @@ export default function ManageCompany() {
           <ModalTitle>Do you want to create new company</ModalTitle>
         </ModalHeader>
         <ModalBody>
-          <Form 
+          <Form
           >
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
@@ -567,6 +717,31 @@ export default function ManageCompany() {
             Delete
           </Button>{" "}
           <Button color="secondary" onClick={toggleDelete}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+      <Modal isOpen={modalApprove} toggle={toggleApprove}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleApprove)}
+          toggle={toggleApprove}
+        >
+          Are you sure?
+        </ModalHeader>
+        <ModalBody>Do you want to appprove this Company</ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              // deleteMajorFieldsByID();
+              handleEditSubmit2();
+              setCompanyModalApprove(false);
+            }}
+          >
+            Approved
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleApprove}>
             Cancel
           </Button>
         </ModalFooter>

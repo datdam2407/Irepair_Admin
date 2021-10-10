@@ -10,6 +10,8 @@ import {
   Col,
   ModalTitle,
   Table,
+  OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import {
   Modal,
@@ -21,10 +23,23 @@ import {
   PaginationItem,
   PaginationLink,
 } from "reactstrap";
+import moment from "moment";
+import {
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Avatar,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import deleteIcon from "assets/img/remove.png";
 import editIcon from "assets/img/edit.png";
 import { Link } from "react-router-dom";
-import { del, post, get } from "../../src/service/ReadAPI";
+import { del, post, get, getWithToken } from "../../src/service/ReadAPI";
+import { makeStyles } from '@material-ui/core/styles';
 
 export default function Customer() {
 
@@ -39,14 +54,21 @@ export default function Customer() {
   const [modalCreate, setCustomerModalCreate] = useState(false);
   const toggleCreate = () => setCustomerModalCreate(!modalCreate)
 
-  const [button, setButton] = useState(true);
-  const [male, setMale] = useState(true);
-  const [female, setFemale] = useState(false);
-  const [dobError, setDobError] = useState("");
+  //view modal
+  const [modalStatus, setModalStatus] = useState(false);
+  const toggleDetails = () => setModalStatus(!modalStatus);
+  const [Selectservice, setSelectservice] = useState();
+
+
   const [customer_Name, setcustomer_Name] = useState("");
   const [address, setaddress] = useState("");
-  const [joinDateError, setJoinDateError] = useState("");
-  const [currentDate, setCurrentDate] = useState();
+
+  const [AvatarCus, setAvatarCus] = useState("");
+  const [CreateDate, setCreateDate] = useState("");
+  const [Email, setEmail] = useState("");
+  const [FullName, setFullName] = useState("");
+  const [PhoneNumber, setPhoneNumber] = useState("");
+  const [Username, setUsername] = useState("");
 
 
   const [useListCustomerShow, setUseListCustomerShow] = useState([]);
@@ -58,30 +80,82 @@ export default function Customer() {
 
   useEffect(() => {
     getCustomerList();
-    get("/api/v1.0/customer/get-all").then(
+    getWithToken("/api/v1.0/customers", localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
           var temp = res.data;
           setCustomerList(temp);
           setUseListCustomerShow(temp);
-          setUseListCustomerShowPage(temp.slice(numberPage * 5 - 5, numberPage * 5));
-          setTotalNumberPage(Math.ceil(temp.length / 5));
+          setUseListCustomerShowPage(temp.slice(numberPage * 10 - 10, numberPage * 10));
+          setTotalNumberPage(Math.ceil(temp.length / 10));
         }
       });
   }, []);
   function getCustomerList() {
-    get("/api/v1.0/customer/get-all").then((res) => {
+    getWithToken("/api/v1.0/customers", localStorage.getItem("token")).then((res) => {
       var temp = res.data;
       // setName(temp.name);
       // setDescription(temp.description);
       // setImage(temp.picture);
       // setIsDeleted(temp.is_Delete);
-     
+
     }).catch((err) => {
       console.log(err);
     });
   }
 
+
+  const useStyles = makeStyles((theme) => ({
+    table: {
+      minWidth: 650,
+    },
+    tableContainer: {
+      borderRadius: 15,
+      margin: '10px 10px',
+      maxWidth: ' 100%'
+    },
+    tableHeaderCell: {
+      color: 'burlywood',
+      fontWeight: 'bold',
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+      backgroundColor: 'gray',
+      fontWeight: '700',
+
+    },
+    thmajorheaderform: {
+      fontWeight: 'bold',
+      fontWeight: '700',
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+    },
+
+    avatar: {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.getContrastText(theme.palette.primary.light),
+      fontSize: '200px',
+      right: '10px',
+      overflow: 'unset',
+      borderRadius: '32%',
+      // img: 'string',
+
+    },
+    name: {
+      fontWeight: 'bold',
+      color: theme.palette.secondary.dark,
+
+    },
+    Status: {
+      fontWeight: '700',
+      width: '71px',
+      fontSize: '0.76rem',
+      color: 'white',
+      backgroundColor: 'green',
+      borderRadius: 8,
+      padding: '3px 10px',
+      display: 'inline-block'
+    }
+  }));
+  const classes = useStyles();
   function getCustomerListID() {
     get("/api/v1.0/customer/get-by-id" + CustomerEdit).then((res) => {
       var temp = res.data;
@@ -91,12 +165,11 @@ export default function Customer() {
     });
   }
 
-
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListCustomerShowPage(useListCustomerShow.slice(number * 5 - 5, number * 5));
-    setTotalNumberPage(Math.ceil(useListCustomerShow.length / 5));
+    setUseListCustomerShowPage(useListCustomerShow.slice(number * 10 - 10, number * 10));
+    setTotalNumberPage(Math.ceil(useListCustomerShow.length / 10));
   }
   // create form 
   function handleSubmit(e) {
@@ -133,26 +206,6 @@ export default function Customer() {
     return stateValue[type] ? stateValue[type] : "";
   }
 
-  function handleCustomerDetele() {
-    // console.log("abc" , CustomerDelete);
-    post("/Customer/" + CustomerDelete,
-      {
-        is_Online: 0,
-        is_Delete: 1,
-      },
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data)
-          // window.location = "/admin/Customer";
-        }
-      })
-      .catch((err) => {
-        // setErrorMessage(err.response.data.message);
-        // setModalConfirm(true);
-        console.log(err)
-      });
-  }
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
@@ -164,15 +217,10 @@ export default function Customer() {
   );
   return (
     <>
-          <Col md="12">
-            <Card className="strpied-tabled-with-hover">
-              <Card.Header>
-                <Card.Title as="h4">Manage Customer</Card.Title>
-                {/* <Link to="/admin/create/customer">
-                  
-                  
-                </Link> */}
-                <Button
+      <Col md="12">
+        <Card className="strpied-tabled-with-hover">
+          <Card.Header>
+            {/* <Button
 
                   onClick={() => {
                     // setCustomerEdit(e.Id);
@@ -181,164 +229,218 @@ export default function Customer() {
                     setCustomerModalCreate(true);
                   }}>
                   Create new Customer
-                </Button>
-              </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover table-striped">
-                  <thead>
-                    <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Avatar</th>
-                      <th className="border-0">Phone </th>
-                      <th className="border-0">Email</th>
-                      <th className="border-0">Usernam</th>
-                      <th className="border-0">Create Date</th>
-                      <th className="border-0">FullName</th>
-                      <th className="border-0">Uid</th>
+                </Button> */}
+          </Card.Header>
+          <Card.Body className="table-full-width table-responsive px-0">
+            <Table className="table-hover table-striped">
+              <thead>
+                <tr>
+                  <th className="description">Image</th>
+                  <th className="description">Customer</th>
+                  <th className="description">Phone </th>
+                  <th className="description">Email</th>
+                  {/* <th className="description">Username</th> */}
+                  <th className="description">Create Date</th>
+                  <th className="description">FullName</th>
+                  <th className="description">Uid</th>
+                  <th className="description">Views</th>
+                </tr>
+              </thead>
+              <tbody>
+                {useListCustomerShowPage.map((e, index) => {
+                  return (
+                    <tr key={index}>
+                      
+                      <td>
+                        <img src={e.Avatar}/>
+                      </td>
+                     <TableCell>
+                            <Grid container>
+                              <Tooltip html={(
+                                <div style={{ width: 700, height: 300 }}>
+                                  <strong>
+                                    <ModalHeader
+                                      style={{ color: "yellow" }}
+                                    >
+                                      Detailed User Information
+                                    </ModalHeader>
+                                    <ModalBody>
+                                      <Row>
+                                        <Col md={2}> Full Name:</Col>
+                                        <Col md={3}> {e.FullName}</Col>
+                                      </Row>
+                                      <Row>
+                                        <Col md={2}>Create Date:</Col>
+                                        <Col md={3}>
+                                          {e.CreateDate}
+                                        </Col>
+                                      </Row>
+                                      <Row>
+                                        <Col md={2}>Email:</Col>
+                                        <Col md={3}>
+                                          {e.Email}
+                                        </Col>
+                                      </Row>
+                                      <Row>
+                                        <Col md={3} ><img className="text-left-topic-toolpi" src={e.Avatar} /></Col>
+                                      </Row>
+
+                                    </ModalBody>
+                                  </strong>
+                                </div>
+                              )}
+                              >
+                                <Grid item lg={2}>
+                                  <Avatar src={e.Avatar} className={classes.avatar}>
+                                  </Avatar>
+                                </Grid>
+                              </Tooltip>
+                              <Grid item lg={10}>
+                                <Typography className={classes.name}>{e.FullName}</Typography>
+                                <Typography color="textSecondary" variant="body2">{e.Id}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          </TableCell>
+              
+              
+                      <td>
+                        {e.PhoneNumber}
+                      </td>
+                      <td>
+                        {e.Email}
+                      </td>
+                      {/* <td>
+                        {e.Username}
+                      </td> */}
+                      <td >{moment(e.CreateDate).format("MM-DD-YYYY")}
+                      </td>
+                      <td>
+                        {e.FullName}
+                      </td>
+                      <td>
+                        {e.Uid}
+                      </td>
+
+                      <td>
+                        <OverlayTrigger
+                          onClick={(e) => e.preventDefault()}
+                          overlay={
+                            <Tooltip id="tooltip-960683717">
+                              View Post..
+                            </Tooltip>
+                          }
+                          placement="right"
+                        >
+                          <Button
+                            onClick={() => {
+                              setModalStatus(true);
+                              setSelectservice(e);
+                            }}
+                            className="btn-link btn-icon"
+                            type="button"
+                            variant="info"
+                          >
+                            <i className="far fa-image"></i>
+                          </Button>
+                        </OverlayTrigger>
+
+                      </td>
+
                     </tr>
-                  </thead>
-                  <tbody>
-                    {useListCustomerShowPage.map((e, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>
-                            {e.Id}
-                          </td>
-                          <td>
-                            {e.Avatar}
-                          </td>
-                          <td>
-                            {e.Phone_Number}
-                          </td>
-                          <td>
-                            {e.Email}
-                          </td>
-                          <td>
-                            {e.Username}
-                          </td>
-                          <td>
-                            {e.Create_Date}
-                          </td>
-                          <td>
-                            {e.Full_Name}
-                          </td>
-                          <td>
-                            {e.Uid}
-                          </td>
-                          
-                          <td>
-                            <Media
-                              src={editIcon}
-                              onClick={() => {
-                                setCustomerEdit(e.Id);
-                                getCustomerListID();
-                                setCustomerModalEdit(true);
-                              }}
-                            />
-                          </td>
-                          <td>
-                            <Media
-                              src={deleteIcon}
-                              onClick={() => {
-                                setCustomerDelete(e.Id);
-                                setCustomerModalDelete(true);
-                              }}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </Table>
-                <Row>
-                  <Col md={6}></Col>
-                  
-                    <Pagination
-                      aria-label="Page navigation example"
-                      className="page-right"
+                  );
+                })}
+              </tbody>
+            </Table>
+            <Row>
+              <Col md={6}></Col>
+
+              <Pagination
+                aria-label="Page navigation example"
+                className="page-right"
+              >
+                <PaginationItem disabled={numberPage === 1}>
+                  <PaginationLink
+                    className="page"
+                    previous
+                    //disable={numberPage === 1 ? "true" : "false"}
+
+                    onClick={() => {
+                      if (numberPage - 1 > 0) {
+                        onClickPage(numberPage - 1);
+                      }
+                    }}
+                  >
+                    Previous
+                  </PaginationLink>
+                </PaginationItem>
+                {numberPage - 1 > 0 ? (
+                  <PaginationItem>
+                    <PaginationLink
+                      className="page"
+                      onClick={() => {
+                        onClickPage(numberPage - 1);
+                      }}
                     >
-                      <PaginationItem disabled={numberPage === 1}>
-                        <PaginationLink
-                          className="page"
-                          previous
-                          //disable={numberPage === 1 ? "true" : "false"}
+                      {numberPage - 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : (
+                  ""
+                )}
+                <PaginationItem active>
+                  <PaginationLink className="page-active">
+                    {numberPage}
+                  </PaginationLink>
+                </PaginationItem>
+                {numberPage + 1 <= totalNumberPage ? (
+                  <PaginationItem>
+                    <PaginationLink
+                      className="page"
+                      onClick={() => {
+                        onClickPage(numberPage + 1);
+                      }}
+                    >
+                      {numberPage + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : (
+                  ""
+                )}
+                {numberPage + 2 <= totalNumberPage ? (
+                  <PaginationItem>
+                    <PaginationLink
+                      className="page"
+                      onClick={() => {
+                        onClickPage(numberPage + 2);
+                      }}
+                    >
+                      {numberPage + 2}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : (
+                  ""
+                )}
 
-                          onClick={() => {
-                            if (numberPage - 1 > 0) {
-                              onClickPage(numberPage - 1);
-                            }
-                          }}
-                        >
-                          Previous
-                        </PaginationLink>
-                      </PaginationItem>
-                      {numberPage - 1 > 0 ? (
-                        <PaginationItem>
-                          <PaginationLink
-                            className="page"
-                            onClick={() => {
-                              onClickPage(numberPage - 1);
-                            }}
-                          >
-                            {numberPage - 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ) : (
-                        ""
-                      )}
-                      <PaginationItem active>
-                        <PaginationLink className="page-active">
-                          {numberPage}
-                        </PaginationLink>
-                      </PaginationItem>
-                      {numberPage + 1 <= totalNumberPage ? (
-                        <PaginationItem>
-                          <PaginationLink
-                            className="page"
-                            onClick={() => {
-                              onClickPage(numberPage + 1);
-                            }}
-                          >
-                            {numberPage + 1}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ) : (
-                        ""
-                      )}
-                      {numberPage + 2 <= totalNumberPage ? (
-                        <PaginationItem>
-                          <PaginationLink
-                            className="page"
-                            onClick={() => {
-                              onClickPage(numberPage + 2);
-                            }}
-                          >
-                            {numberPage + 2}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ) : (
-                        ""
-                      )}
-
-                      <PaginationItem disabled={numberPage === totalNumberPage}>
-                        <PaginationLink
-                          className="page"
-                          next
-                          //disable={numberPage === totalNumberPage ? true : false}
-                          onClick={() => {
-                            if (numberPage + 1 <= totalNumberPage) {
-                              onClickPage(numberPage + 1);
-                            }
-                          }}
-                        >
-                          Next
-                        </PaginationLink>
-                      </PaginationItem>
-                    </Pagination>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
+                <PaginationItem disabled={numberPage === totalNumberPage}>
+                  <PaginationLink
+                    className="page"
+                    next
+                    //disable={numberPage === totalNumberPage ? true : false}
+                    onClick={() => {
+                      if (numberPage + 1 <= totalNumberPage) {
+                        onClickPage(numberPage + 1);
+                      }
+                    }}
+                  >
+                    Next
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            </Row>
+          </Card.Body>
+        </Card>
+      </Col>
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
@@ -431,6 +533,54 @@ export default function Customer() {
             Cancel
           </Button>
         </ModalFooter>
+      </Modal>
+
+
+      <Modal isOpen={modalStatus} toggle={toggleDetails}>
+        <ModalHeader
+          toggle={toggleDetails}
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleDetails)}
+        >
+          Detailed Field Information
+        </ModalHeader>
+        <ModalBody>
+        <Row>
+            <Col></Col>
+            <Col md={3}>Picture</Col>
+            <Col md={8}>
+              {Selectservice !== undefined ? <img className="text-left-topic" src={Selectservice.Avatar} /> : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}> FullName</Col>
+            <Col md={8}>
+              {Selectservice !== undefined ? Selectservice.FullName : ""}
+              {/* {setSelectservice !== undefined ? displayMajorName(Selectservice.MajorId) : ""} */}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Email</Col>
+            <Col md={8}>
+              {Selectservice !== undefined ? Selectservice.Email : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>Create Date</Col>
+            <Col md={8}>
+              {Selectservice !== undefined ? Selectservice.CreateDate : ""}
+            </Col>
+          </Row>
+          
+          <Row>
+            <Col></Col>
+            <Col md={3}>Phone</Col>
+            <Col md={8}>{Selectservice !== undefined ? Selectservice.PhoneNumber : ""}</Col>
+          </Row>
+        </ModalBody>
       </Modal>
     </>
   );

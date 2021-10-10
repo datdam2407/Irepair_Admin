@@ -1117,7 +1117,7 @@ input:focus {
 .fixed-plugin .badge-orange {
   background-color: #f96332; }
 
-.fixed-plugin .badge-yellow {
+.fixed-plugin .badge-#B22222 {
   background-color: #FFB236; }
 
 .fixed-plugin .badge-red {
@@ -4041,7 +4041,8 @@ input:focus {
   .card label {
     font-size: 0.75rem;
     margin-bottom: 5px;
-    text-transform: uppercase; }
+    text-transform: uppercase; 
+ }
   .card .card-title {
     margin: 0;
     color: #333333;

@@ -123,6 +123,11 @@ function Sidebar({ routes, image, background }) {
   const activeRoute = (routeName) => {
     return location.pathname === routeName ? "active" : "";
   };
+  // var nameLogin =localStorage.getItem("name")
+  // var Email =localStorage.getItem("email")
+  
+  // console.log("aaaa", Email)
+  // console.log(nameLogin)
   return (
     <>
       <div className="sidebar" data-color={background} data-image={image}>
@@ -165,7 +170,7 @@ function Sidebar({ routes, image, background }) {
                 aria-expanded={userCollapseState}
               >
                 <span>
-                  Nguyen Khanh <b className="caret"></b>
+                 Dam Dat <b className="caret"></b>
                 </span>
               </a>
               <Collapse id="collapseExample" in={userCollapseState}>

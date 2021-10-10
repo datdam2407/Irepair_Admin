@@ -52,6 +52,7 @@ import {
   TableFooter
 } from '@material-ui/core';
 import FormDialog from './Dialog';
+
 function MajorTables() {
   //delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
@@ -79,7 +80,10 @@ function MajorTables() {
   const [modalStatus, setModalStatus] = useState(false);
   const toggleDetails = () => setModalStatus(!modalStatus);
   const [selectMajor, setSelectMajor] = useState();
-
+  //Approved
+  const [majorApprove, setMajorApprove] = useState(null);
+  const [modalApprove, setMajorModalApprove] = useState(false);
+  const toggleApprove = () => setMajorModalApprove(!modalApprove)
 
   //Major List
   const [useListMajorShow, setUseListMajorShow] = useState([]);
@@ -139,15 +143,21 @@ function MajorTables() {
       backgroundColor: theme.palette.primary.light,
       color: theme.palette.getContrastText(theme.palette.primary.light),
       fontSize: '200px',
+      right: '10px',
+      overflow: 'unset',
+      borderRadius :'32%',
+      // img: 'string',
 
     },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark
+      color: theme.palette.secondary.dark,
+
     },
     Status: {
-      fontWeight: 'bold',
-      fontSize: '0.75rem',
+      fontWeight: '700',
+      width:'71px',
+      fontSize: '0.76rem',
       color: 'white',
       backgroundColor: 'green',
       borderRadius: 8,
@@ -207,10 +217,37 @@ function MajorTables() {
   const onGridReady = (params) => {
     setGridApi(params)
   }
-
+  //check disable img
+  function checkDisableImage(state) {
+    const list = [1 , 3];
+    if (list.includes(state)) return true;
+    else return false;
+  }
   console.log(name)
   console.log(description)
   // update
+  async function handleEditSubmit2(e) {
+    await putWithToken(
+      `/api/v1.0/majors`,
+      {
+        id: majorID,
+        name: name,
+        description: description,
+        imageUrl: picture,
+        status: 1,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/major";
+
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   async function handleEditSubmit(e) {
     await putWithToken(
       `/api/v1.0/majors`,
@@ -351,9 +388,10 @@ function MajorTables() {
         <Row>
           <Col md="12">
             <Card className="table">
-              <Card.Header>
-                <Card.Title as="h4">Major</Card.Title>
-                <Col md={2}>
+            <div className= "header-form">
+              <Row>
+                <div className="header-body-filter">
+                <Col md={7}>
                   <Row className="fixed">
                     <InputGroup>
                       <Input placeholder="State" disabled />
@@ -379,10 +417,12 @@ function MajorTables() {
                     </InputGroup>
                   </Row>
                 </Col>
-                <Grid align="right">
+                </div>
+                <Col align="right">
                   <Button className="add-major-custom" variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
-                </Grid>
-              </Card.Header>
+                </Col>
+                </Row> 
+                </div>
               <Card.Body className="table">
                 <TableContainer component={Paper} className={classes.tableContainer}>
                   <Table className={classes.table} aria-label="simple table">
@@ -393,7 +433,7 @@ function MajorTables() {
                         <th className="description">Name</th>
                         <th className="description">Description</th>
                         <th className="description">Status</th>
-                        <th className="viewAll">Views</th>
+                        <th className="viewAll">Actions</th>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -409,7 +449,7 @@ function MajorTables() {
                                   <div style={{ width: 700 , height:300}}>
                                     <strong>
                                       <ModalHeader
-                                        style={{ color: "#B22222" }}
+                                        style={{ color: "yellow" }}
                                       >
                                        Detailed Major Information
                                       </ModalHeader>
@@ -438,7 +478,9 @@ function MajorTables() {
                                 )}
                                 >
                                   <Grid item lg={2}>
-                                    <Avatar src={e.ImageUrl} className={classes.avatar} />
+                                    <Avatar src={e.ImageUrl} className={classes.avatar} >
+                                      <img src="none"/>
+                                    </Avatar>
                                   </Grid>
                                 </Tooltip>
 
@@ -453,13 +495,12 @@ function MajorTables() {
                               <Typography color="black" fontSize="0.80rem">{e.Description}</Typography>
                               {/* <Typography color="textSecondary" variant="body2">{row.company}</Typography> */}
                             </TableCell>
-
                             <TableCell>
                               <Typography
                                 className={classes.Status}
                                 style={{
                                   backgroundColor:
-                                    ((e.Status === 1 && 'green') ||
+                                    ((e.Status === 1 && 'rgb(34 176 34)') ||
                                       (e.Status === 0 && 'red'))
                                 }}
                               >{displayStateName(e.Status)}</Typography>
@@ -471,6 +512,8 @@ function MajorTables() {
                                 onClick={(e) => e.preventDefault()}
                                 overlay={
                                   <Tooltip id="tooltip-960683717">
+                                    <br/>
+                                  <br/>
                                     View Post..
                                   </Tooltip>
                                 }
@@ -492,6 +535,8 @@ function MajorTables() {
                               <OverlayTrigger
                                 overlay={
                                   <Tooltip id="tooltip-436082023">
+                                    <br/>
+                                  <br/>
                                     Edit Post..
                                   </Tooltip>
                                 }
@@ -515,6 +560,38 @@ function MajorTables() {
                                 </Button>
                               </OverlayTrigger>
 
+                              <OverlayTrigger
+                              overlay={
+                                <Tooltip id="tooltip-436082023">
+                                  <br />
+                                  <br />
+                                  APPROVE..
+                                </Tooltip>
+                              }
+                              placement="right"
+                            >
+
+                              <Button
+                                // onClick={() => handleUpdate(e.data)}
+                                // onGridReady={onGridReady}
+
+                                onClick={() => {
+                                  // setMajorEdit(e.Id);
+                                  getMajorByID(e.Id);
+                                  setMajorModalApprove(true);
+                                }}
+
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="success"
+                              >
+                                {checkDisableImage(e.state) ? (
+                                <i className="fas fa-check"></i>
+                                ) : (
+                                  <i className="fas fa-check"></i>
+                                )}
+                              </Button>
+                            </OverlayTrigger>
 
                               <OverlayTrigger
                                 onClick={(e) => e.preventDefault()}
@@ -804,6 +881,31 @@ function MajorTables() {
       <FormDialog open={open} handleClose={handleClose}
         data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
 
+<Modal isOpen={modalApprove} toggle={toggleApprove}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleApprove)}
+          toggle={toggleApprove}
+        >
+          Are you sure?
+        </ModalHeader>
+        <ModalBody>Do you want to Appprove this major</ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              // deleteMajorFieldsByID();
+              handleEditSubmit2();
+              setMajorModalApprove(false);
+            }}
+          >
+            Approved
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleApprove}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 }

@@ -23,13 +23,14 @@
     margin-left: 0;
 }
 .add-major-custom{
-    background-color:  rgb(116, 60, 7);
+    background-color:  rgb(30 30 172);
     font-size: larger;
     border-radius: 3px;
+    margin-right: 10px;
 }
 .add-major-custom:hover {
     /* color: #922301; */
-    background-color: rgb(236, 153, 94);
+    background-color: rgb(71, 49, 199);
 } 
 .td-status-active-major{
     color: darkgreen;
@@ -61,4 +62,63 @@ font-size: large;
 }
 .text-left-topic-toolpi{
     width: 100%;
+}
+.fixed{
+    background-color: rgb(238, 238, 245);
+    margin-bottom: 0px;
+}
+.Col-filter .dropdown {
+    float: left;
+    width: 240px;
+    
+  }
+  .Col-filter {
+    padding-bottom: 0px;
+    width: 100%;
+  }
+
+  .Col-filter .nav-links-create {
+    float: right;
+  }
+  
+  /*Resize the wrap to see the search bar change!*/
+  .wrap{
+    width: 350px;
+    /* margin: 10% auto; */
+    /* margin-top: 30px; */
+    /* margin-right: 80px; */
+  }
+  .checkbox-type{
+    position: absolute;
+    will-change: transform;
+    padding: 10px;
+    background-color: #f1f0f3;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    transform: translate3d(0px, -166px, 0px);
+  }
+  .dropdown-toggle{
+    margin-bottom: 0px;
+    background-color :rgb(30 30 172);
+
+  }
+  .dropdown-toggle:hover{
+    background-color: rgb(71, 49, 199);
+
+}
+.form-check-input{
+    margin-left: 30px;
+}
+label{ margin-left: 10px;
+font-size: larger;}
+.MuiAvatar{
+    overflow: unset;
+}
+.div-service{
+    margin-left: 50px;
+}.header-form{
+    padding-top: 10px;
+}.header-body-filter{
+    margin-left: 40px;
 }

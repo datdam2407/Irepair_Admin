@@ -30,16 +30,17 @@ function handleOnchangeSelectdmajor(e, value) {
 useEffect(() => {
   let params = {};
   let currentField = {};
-  let MajorID = "";
+  // let MajorID = "";
   getWithToken(
     `/api/v1.0/majors`,localStorage.getItem("token")
   ).then((res) => {
-    MajorID = res.data.Id
+    // MajorID = res.data.Id
     console.log(res.data)
     currentField['text'] = `${res.data.Name}`;
     currentField['value'] = res.data.Id;
     currentField['key'] = res.data.Id;
-    setMajorID(MajorID);
+    // setMajorID(MajorID);
+    setMajorSelectID(res.data.majorId)
 
   }).then(() => {
   });

@@ -31,7 +31,7 @@ import {
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
-import { del, put, get, getWithParams, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
+import { del, put, get, postWithToken , getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
@@ -65,10 +65,15 @@ function MajorFields() {
   const [modalCreate, setMajorModalCreate] = useState(false);
   const toggleCreate = () => setMajorModalCreate(!modalCreate)
 
+  // const[MajorNameByFieldID, setMajorName] = useState("");
   //Edit Major
   const [MajorEdit, setMajorEdit] = useState(null);
   const [modalEdit, setMajorModalEdit] = useState(false);
   const toggleEdit = () => setMajorModalEdit(!modalEdit)
+  //Approved
+  const [majorApprove, setMajorApprove] = useState(null);
+  const [modalApprove, setMajorModalApprove] = useState(false);
+  const toggleApprove = () => setMajorModalApprove(!modalApprove)
   //Delete Major
   const [MajorDelete, setMajorFieldDelete] = useState(null);
   const [modalMajorFieldDelete, setMajorModalFieldDelete] = useState(false);
@@ -81,10 +86,9 @@ function MajorFields() {
 
   //Filter
   const listStates = [
-    "New",
-    "Approved",
-    "Blocked",
-    "Deleted",
+    "Active",
+    "Inactive",
+    
   ];
 
   // custom table
@@ -116,6 +120,9 @@ function MajorFields() {
       backgroundColor: theme.palette.primary.light,
       color: theme.palette.getContrastText(theme.palette.primary.light),
       fontSize: '200px',
+      right: '10px',
+      overflow: 'unset',
+      borderRadius: '32%',
 
     },
     name: {
@@ -225,6 +232,51 @@ function MajorFields() {
   }
 
   // update
+
+  async function handleEditSubmit2(e) {
+    await putWithToken(
+      `/api/v1.0/major-fields`,
+      {
+        id: majorID,
+        name: name,
+        description: description,
+        majorId: major,
+        imageUrl: picture,
+        status: 1,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/fields";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  async function handleCreateSubmit(e) {
+    await postWithToken(
+      `/api/v1.0/major-fields`,
+      {
+        id: null,
+        name: name,
+        description: description,
+        majorId: MajorSelectID,
+        imageUrl: picture,
+        status: 1,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/fields";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   async function handleEditSubmit(e) {
     await putWithToken(
       `/api/v1.0/major-fields`,
@@ -253,6 +305,11 @@ function MajorFields() {
     console.log(oldData)
     handleClickOpen()
   }
+  function checkDisableImage(state) {
+    const list = [1 , 3];
+    if (list.includes(state)) return true;
+    else return false;
+  }
   const handleFormSubmit = () => {
     if (formData.id) {
       //updating a user 
@@ -272,7 +329,7 @@ function MajorFields() {
       fetch(url, {
         method: "post", body: JSON.stringify(formData),
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzODY4MzQ0LCJleHAiOjE2MzM5NTQ3NDQsImlhdCI6MTYzMzg2ODM0NH0.UGHIVGarMnVEevVMIKNw-2Qd0lcJV7eAEuL_XwOgDfw`,
           "Content-type": "application/json"
         }
       }).then(resp => resp.json())
@@ -297,6 +354,9 @@ function MajorFields() {
       "ae54f939-d711-41bc-ab4b-7fa65af9c17b": "Khóa",
       "6b80588f-eeb2-4f68-94e0-e245b79be801": "Ống nước",
       "45d74304-09cf-4dc7-859d-e464a4a7e053": "Đồ gia dụng",
+      "bd3ee5ea-9cea-4df6-99e0-03b4f46bc25e": "Sửa đồ gỗ",
+      "11fedcef-5113-4fb8-8854-42622e68cac6": "Sửa điện lạnh",
+      "3d38e346-ba11-4f70-b18d-ea2515752ab8": "Keys",
     };
     return nameMajor[type] ? nameMajor[type] : "";
   }
@@ -305,19 +365,24 @@ function MajorFields() {
     setMajorSelect(e.target.MajorID);
     setMajorSelectID(value.value);
   }
+  console.log("aaaa", MajorSelectID)
+  // console.log("majornam", MajorNameByFieldID)
   useEffect(() => {
     let params = {};
     let currentField = {};
     let MajorID = "";
+    // let MajorNameByFieldID = "";
     getWithToken(
       `/api/v1.0/majors`, localStorage.getItem("token")
     ).then((res) => {
       MajorID = res.data.Id
+      // MajorNameByFieldID = res.data.name
       console.log(res.data)
       currentField['text'] = `${res.data.Name}`;
       currentField['value'] = res.data.Id;
       currentField['key'] = res.data.Id;
       setMajorID(MajorID);
+      // setMajorName(MajorNameByFieldID);
 
     }).then(() => {
     });
@@ -338,16 +403,7 @@ function MajorFields() {
     })
   }, []);
 
-  // Load major by ID
-  // useEffect(() => {
-  //   getMajorByID();
-  //   get(`/Major/get-by-id?id=${MajorEdit}`).then((res)=>{
-  //     setName(res.data.name);
-  //     setDescription(res.data.description);
-  //     setImage(res.data.picture);
-  //     setIsDeleted(res.data.is_Delete);
-  //   });
-  // }, []);
+  
   function getMajorFieldsByID(Id) {
 
     getWithToken(`/api/v1.0/major-fields/${Id}`, localStorage.getItem("token")).then((res) => {
@@ -414,10 +470,8 @@ function MajorFields() {
   // Custom state 
   function displayStateName(type) {
     const stateValue = {
-      1: "Approved",
-      0: "New",
-      2: "Blocked",
-      3: "Deleted"
+      0: "Inactive",
+      1: "Active",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -428,39 +482,44 @@ function MajorFields() {
         <Row>
           <Col md="12">
             <Card className="table">
-              <Card.Header>
-                <Card.Title as="h4">Major Field</Card.Title>
-                <Col md={2}>
-                  <Row className="fixed">
-                    <InputGroup>
-                      <Input placeholder="State" disabled />
-                      <InputGroupButtonDropdown
-                        addonType="append"
-                        isOpen={dropdownOpen}
-                        toggle={toggleDropDown}
-                        className="border border-gray"
-                      >
-                        <DropdownToggle caret>&nbsp;</DropdownToggle>
-                        <DropdownMenu>
-                          <div className="fixed">
-                            <FilterState
-                              list={filterState}
-                              onChangeCheckBox={(e, id) => {
-                                handleChooseState(e, id);
-                              }}
-                              key={filterState}
-                            />
-                          </div>
-                        </DropdownMenu>
-                      </InputGroupButtonDropdown>
-                    </InputGroup>
-                  </Row>
-                </Col>
-                <Grid align="right">
-                  <Button variant="contained" className="add-major-custom" onClick={handleClickOpen}>Add MajorField</Button>
-                </Grid>
-              </Card.Header>
+              <div className="header-form">
+                <Row>
+                  <div className="header-body-filter">
+                    <Col md={7}>
+                      <Row className="fixed">
+                        <InputGroup>
+                          <Input placeholder="State" disabled />
+                          <InputGroupButtonDropdown
+                            addonType="append"
+                            isOpen={dropdownOpen}
+                            toggle={toggleDropDown}
+                            className="border border-gray"
+                          >
+                            <DropdownToggle caret>&nbsp;</DropdownToggle>
+                            <DropdownMenu>
+                              <div className="fixed">
+                                <FilterState
+                                  list={filterState}
+                                  onChangeCheckBox={(e, id) => {
+                                    handleChooseState(e, id);
+                                  }}
+                                  key={filterState}
+                                />
+                              </div>
+                            </DropdownMenu>
+                          </InputGroupButtonDropdown>
+                        </InputGroup>
 
+                      </Row>
+                    </Col>
+                  </div>
+                  <Col>
+                    <Col align="right">
+                      <Button variant="contained" className="add-major-custom" onClick={ ()=> {setMajorModalCreate(true);}}>Add MajorField</Button>
+                    </Col>
+                  </Col>
+                </Row>
+              </div>
               <Card.Body className="table">
                 <Table className="table">
                   <thead>
@@ -469,7 +528,7 @@ function MajorFields() {
                       <th className="description" >Major</th>
                       <th className="description">Description</th>
                       <th className="description">Status</th>
-                      <th className="viewAll">Views</th>
+                      <th className="viewAll">Actions</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -484,7 +543,7 @@ function MajorFields() {
                                 <div style={{ width: 700, height: 300 }}>
                                   <strong>
                                     <ModalHeader
-                                      style={{ color: "#B22222" }}
+                                      style={{ color: "yellow" }}
                                     >
                                       Detailed Major Information
                                     </ModalHeader>
@@ -509,12 +568,15 @@ function MajorFields() {
                               )}
                               >
                                 <Grid item lg={2}>
-                                  <Avatar src={e.ImageUrl} className={classes.avatar} />
+                                  <Avatar src={e.ImageUrl} className={classes.avatar}>
+                                    <img src="string" />
+
+                                  </Avatar>
                                 </Grid>
                               </Tooltip>
                               <Grid item lg={10}>
                                 <Typography className={classes.name}>{e.Name}</Typography>
-                                <Typography color="textSecondary" variant="body2">{displayMajorName(e.MajorId)}
+                                <Typography color="textSecondary" variant="body2">{e.Id}
                                 </Typography>
                               </Grid>
                             </Grid>
@@ -522,6 +584,7 @@ function MajorFields() {
 
                           <TableCell>
                             <Typography color="black" fontSize="0.80rem" >{displayMajorName(e.MajorId)}
+                              {/* <Typography color="black" fontSize="0.80rem" >{MajorNameByFieldID} */}
                             </Typography>
                           </TableCell>
                           <TableCell>
@@ -534,11 +597,11 @@ function MajorFields() {
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 1 && '#145c14')
+                                  ((e.Status === 1 && 'rgb(34 176 34)')
                                     ||
-                                    (e.Status === 0 && 'rgb(50 102 100)')
+                                    (e.Status === 0 && 'red')
                                     ||
-                                    (e.Status === 2 && '#681717'))
+                                    (e.Status === 2 && 'red'))
                               }}
                             >{displayStateName(e.Status)}</Typography>
                           </TableCell>
@@ -547,6 +610,8 @@ function MajorFields() {
                               onClick={(e) => e.preventDefault()}
                               overlay={
                                 <Tooltip id="tooltip-960683717">
+                                  <br />
+                                  <br />
                                   View Post..
                                 </Tooltip>
                               }
@@ -568,6 +633,8 @@ function MajorFields() {
                             <OverlayTrigger
                               overlay={
                                 <Tooltip id="tooltip-436082023">
+                                  <br />
+                                  <br />
                                   Edit Post..
                                 </Tooltip>
                               }
@@ -588,6 +655,40 @@ function MajorFields() {
                                 variant="success"
                               >
                                 <i className="fas fa-edit"></i>
+                              </Button>
+                            </OverlayTrigger>
+
+
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="tooltip-436082023">
+                                  <br />
+                                  <br />
+                                  APPROVE..
+                                </Tooltip>
+                              }
+                              placement="right"
+                            >
+
+                              <Button
+                                // onClick={() => handleUpdate(e.data)}
+                                // onGridReady={onGridReady}
+
+                                onClick={() => {
+                                  // setMajorEdit(e.Id);
+                                  getMajorFieldsByID(e.Id);
+                                  setMajorModalApprove(true);
+                                }}
+
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="success"
+                              >
+                                {checkDisableImage(e.state) ? (
+                                <i className="fas fa-check"></i>
+                                ) : (
+                                  <i className="fas fa-check"></i>
+                                )}
                               </Button>
                             </OverlayTrigger>
 
@@ -740,6 +841,31 @@ function MajorFields() {
           </Button>
         </ModalFooter>
       </Modal>
+      <Modal isOpen={modalApprove} toggle={toggleApprove}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleApprove)}
+          toggle={toggleApprove}
+        >
+          Are you sure?
+        </ModalHeader>
+        <ModalBody>Do you want to Appprove this major</ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              // deleteMajorFieldsByID();
+              handleEditSubmit2();
+              setMajorModalApprove(false);
+            }}
+          >
+            Approved
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleApprove}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
 
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
@@ -806,6 +932,73 @@ function MajorFields() {
           </Button>
         </ModalFooter>
       </Modal>
+
+      <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleCreate)}
+          toggle={toggleCreate}
+        >
+          <ModalTitle>Do you want to create major field ?</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <Form>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Name</Form.Label>
+              <Form.Control type="text" placeholder="Major name" value={name}
+                onChange={e => setName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Major</Form.Label>
+              {/* <Form.Control disabled type="text" placeholder="Major" value={major}
+                onChange={e => setMajor(e.target.value)}
+              /> */}
+              <FormGroup className="mb-2">
+                <Dropdown
+                  fluid
+                  search
+                  selection
+                  // value={majorSelect}
+                  value={majorSelect}
+                  onChange={handleOnchangeSelectdmajor}
+                  options={listSelectMajor} />
+              </FormGroup>
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Description"
+                as="textarea"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                rows={3}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Picture</Form.Label>
+              <Form.Control type="text" value={picture}
+                onChange={e => setImage(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={() => { // handleServiceDetele();
+            handleCreateSubmit();
+            setMajorModalCreate(false);
+          }}
+          >
+            Save
+          </Button>
+          <Button color="secondary" onClick={toggleEdit}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+      
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
           toggle={toggleDetails}
