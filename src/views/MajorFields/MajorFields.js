@@ -18,6 +18,7 @@ import {
   PaginationLink,
   FormGroup,
 } from "reactstrap";
+import { storage } from "Firebase/firebaseConfig";
 // react-bootstrap components
 import {
   Button,
@@ -475,6 +476,27 @@ function MajorFields() {
     };
     return stateValue[type] ? stateValue[type] : "";
   }
+
+  // upload img
+  // handleImageupload = (e) =>{
+  //   if (target.files[0]){
+  //     const image = (e.target.files[0]);
+  //     const uploadTask = storage.ref(`image/${image.name}`).put(image)
+  //     uploadTask.on('change_stage', 
+  //     (snapshot) => {
+  //       console.log(snapshot)
+  //     },
+  //     (err) => {
+  //       console.log(err);
+  //     }, () =>{
+  //       storage.ref('image').child(image.name).getDowLoadUrl().then(url => {
+  //         this.setState(url);
+  //       })
+  //     }
+  //     )
+  //   }
+  // }
+
 
   return (
     <>
@@ -979,7 +1001,8 @@ function MajorFields() {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
-              <Form.Control type="text" value={picture}
+              <Form.Control type="file" value={picture}
+              
                 onChange={e => setImage(e.target.value)}
               />
             </Form.Group>
@@ -993,7 +1016,7 @@ function MajorFields() {
           >
             Save
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
+          <Button color="secondary" onClick={toggleCreate}>
             Cancel
           </Button>
         </ModalFooter>

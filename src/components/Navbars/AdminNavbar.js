@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { logout } from "Firebase/firebaseConfig";
+import "../../assets/css/customSize.css";
 // react-bootstrap components
 import {
   Badge,
@@ -8,6 +9,8 @@ import {
   Navbar,
   Nav,
   Container,
+  Row,
+  Col,
 } from "react-bootstrap";
 import {
   Modal,
@@ -85,28 +88,51 @@ function AdminNavbar() {
                   alignRight
                   aria-labelledby="navbarDropdownMenuLink"
                 >
-                  {/* <Dropdown.Item
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
-                  >
+                  <Row>
+                    <Col md={4}>
+                  <div className="photoCustomer">
+                    <img
+                      alt="..."
+                      src={require("assets/img/new_logo.png").default}
+                    ></img>
+                  </div>
+                  </Col>
+                  <Col>
+                  <div className="info-customer">
+                    <a
+                      data-toggle="collapse"
+                      href="#pablo"
+                    >
+                      <span>
+                        Dam Dat <b className="caret"></b>
+                      </span>
+                    </a>
+                  </div>
+                  </Col>
+                  </Row>
+                  <Dropdown.Item>
+                  
                     <i className="nc-icon nc-email-85"></i>
                     Messages
                   </Dropdown.Item>
-                  <Dropdown.Item
+                  {/* <Dropdown.Item
                     href="#pablo"
                     onClick={(e) => e.preventDefault()}
                   >
                     <i className="nc-icon nc-umbrella-13"></i>
                     Help Center
                   </Dropdown.Item> */}
-                  {/* <Dropdown.Item
+                  <Dropdown.Item
                     href="#pablo"
-                    onClick={(e) => e.preventDefault()}
+                    
+                    onClick={(e) => 
+                      // window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/user-page"}
+                      window.location.href = "http://localhost:3000/admin/user-page"}
                   >
                     <i className="nc-icon nc-settings-90"></i>
-                    Settings
+                    Setting
                   </Dropdown.Item>
-                  <div className="divider"></div> */}
+                  <div className="divider"></div>
 
                   <Dropdown.Item
                     className="text-danger"

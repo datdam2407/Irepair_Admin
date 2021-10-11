@@ -61,7 +61,10 @@ function UserPage() {
                             <Form.Control
                               placeholder="Email"
                               type="email"
-                            ></Form.Control>
+                              value= {localStorage.getItem("email")}
+                              disabled
+                            > 
+                            </Form.Control>
                           </Form.Group>
                         </Col>
                       </Row>
@@ -92,7 +95,7 @@ function UserPage() {
                           <Form.Group>
                             <label>Address</label>
                             <Form.Control
-                              defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                              defaultValue="Bld Mihail Kogalniceanu"
                               placeholder="Home Address"
                               type="text"
                             ></Form.Control>

@@ -151,8 +151,8 @@ function Sidebar({ routes, image, background }) {
               Irepair
             </a>
           </div>
-          <div className="user">
-            <div className="photo">
+          {/* <div className="user"> */}
+            {/* <div className="photo">
               <img
                 alt="..."
                 src={require("assets/img/new_logo.png").default}
@@ -212,8 +212,8 @@ function Sidebar({ routes, image, background }) {
                   </Nav>
                 </div>
               </Collapse>
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
           <Nav as="ul">{createLinks(routes)}</Nav>
         </div>
         <div
