@@ -2,6 +2,8 @@ import firebase from "firebase";
 import "firebase/storage";
 import 'firebase/firestore';
 import 'firebase/auth';
+import { post } from "../../src/service/ReadAPI";
+
 
 // const firebaseConfig = {
 //     apiKey: "AIzaSyArlmG733yMlNx9NB1dU36CF0ABsy9X7B4",
@@ -35,32 +37,19 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
     const res = await auth.signInWithPopup(googleProvider);
-    const user = res.user;
-    localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzODY4MzQ0LCJleHAiOjE2MzM5NTQ3NDQsImlhdCI6MTYzMzg2ODM0NH0.UGHIVGarMnVEevVMIKNw-2Qd0lcJV7eAEuL_XwOgDfw");
+    let t = await getToken(res.user._lat);
+    localStorage.setItem("token", t.data.token);
     // localStorage.setItem("name", res.name);
     // localStorage.setItem("email", res.data.email);
-    
-    //This is JWT
-    console.log(await user.getIdToken());
-    ////////////
-    const query = await db
-      .collection("users")
-      .where("uid", "==", user.uid)
-      .get();
-    if (query.docs.length === 0) {
-      await db.collection("users").add({
-        uid: user.uid,
-        name: user.displayName,
-        authProvider: "google",
-        email: user.email,
-        
-      });
-    }
   } catch (err) {
-    console.error(err);
-    alert(err.message);
+      console.log(err)
+      return
   }
 };
+async function getToken (FBasetoken){
+  return await post(`/api/v1.0/authenticate-admins?token=${FBasetoken}` ,
+  {  token : FBasetoken} );
+}
 
 // const signInWithEmailAndPassword = async (email, password) => {
 //   try {
