@@ -25,7 +25,8 @@ function Login() {
     if (loading) {
       return;
     }
-    if (user) history.replace("/admin/dashboard");
+    if (user)
+     history.replace("/admin/dashboard");
   }, [user, loading]);
 
 
@@ -69,7 +70,6 @@ function Login() {
   //               // ? history.push("/Admin")
   //               // : history.push("/Staff");
   //               ? window.location.href = "/Admin"
-  //               : window.location.href = "/Staff";
   //       })
   //       ;
   //   }

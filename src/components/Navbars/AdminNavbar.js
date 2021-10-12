@@ -60,7 +60,7 @@ function AdminNavbar() {
             <Navbar.Brand
               href="#home"
               onClick={(e) => e.preventDefault()}
-              className="mr-2"
+              className="mr-2-css"
             >
               {getBrandText()}
             </Navbar.Brand>
@@ -76,19 +76,14 @@ function AdminNavbar() {
           </button>
           <Navbar.Collapse className="justify-content-end" in={collapseOpen}>
             <Nav navbar>
-              <Dropdown as={Nav.Item}>
+              <Dropdown className="userDropdown" as={Nav.Item}>
                 <Dropdown.Toggle
                   as={Nav.Link}
                   id="dropdown-41471887333"
                   variant="default"
+                  className="userDropdown"
                 >
-                  <i className="nc-icon nc-bullet-list-67"></i>
-                </Dropdown.Toggle>
-                <Dropdown.Menu
-                  alignRight
-                  aria-labelledby="navbarDropdownMenuLink"
-                >
-                  <Row>
+                        <Row>
                     <Col md={4}>
                   <div className="photoCustomer">
                     <img
@@ -110,6 +105,12 @@ function AdminNavbar() {
                   </div>
                   </Col>
                   </Row>
+                </Dropdown.Toggle>
+                <Dropdown.Menu
+                  alignRight
+                  aria-labelledby="navbarDropdownMenuLink"
+                >
+            
                   <Dropdown.Item>
                   
                     <i className="nc-icon nc-email-85"></i>
@@ -168,8 +169,6 @@ function AdminNavbar() {
               setModalLogOut(false);
               logout();
               window.location.href = "/";
-              localStorage.clear();
-              sessionStorage.clear();
             }}
           >
             Log out

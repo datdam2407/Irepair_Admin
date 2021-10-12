@@ -351,7 +351,7 @@ input:focus {
       position: absolute;
       left: 0px; }
   .sidebar .logo {
-    padding: 12px 0px 9px;
+    padding: 12px 0px 15px;
     margin: 0;
     position: relative;
     z-index: 4;
@@ -371,16 +371,7 @@ input:focus {
       -o-transform: translate3d(0px, 0, 0);
       -ms-transform: translate3d(0px, 0, 0);
       transform: translate3d(0px, 0, 0); }
-    .sidebar .logo .simple-text {
-      text-transform: uppercase;
-      padding: 5px 0px;
-      display: inline-block;
-      font-size: 1.125rem;
-      font-weight: 400;
-      line-height: 30px;
-      white-space: nowrap;
-      color: #FFFFFF;
-      overflow: hidden; }
+    
     .sidebar .logo p {
       float: left;
       font-size: 20px;
@@ -421,6 +412,7 @@ input:focus {
       white-space: nowrap;
       position: relative;
       color: #FFFFFF;
+
       -webkit-transform: translate3d(0px, 0, 0);
       -moz-transform: translate3d(0px, 0, 0);
       -o-transform: translate3d(0px, 0, 0);
@@ -538,7 +530,7 @@ input:focus {
     .sidebar .nav .nav-item.active .nav-link {
       color: #FFFFFF;
       opacity: 1;
-      background: rgba(255, 255, 255, 0.23); }
+      background: rgba(235, 148, 10, 0.23); }
     .sidebar .nav .nav-item.separator {
       margin: 15px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
@@ -5030,7 +5022,7 @@ input:focus {
         opacity: .86;
         padding: 8px 50px; }
         .nav-mobile-menu .dropdown .dropdown-menu .dropdown-item:hover {
-          background-color: rgba(255, 255, 255, 0.23); }
+          background-color: rgba(235, 148, 10, 0.23);}
         .nav-mobile-menu .dropdown .dropdown-menu .dropdown-item .nc-icon {
           margin-left: -40px; }
     .nav-mobile-menu .nav-item .nav-link span {

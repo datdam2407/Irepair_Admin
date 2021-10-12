@@ -1,14 +1,6 @@
 import React from "react";
-
-// react-bootstrap components
 import {
-  Badge,
-  Button,
   Card,
-  Form,
-  InputGroup,
-  Navbar,
-  Nav,
   Container,
   Row,
   Col,
@@ -19,8 +11,9 @@ const SatelliteMap = () => {
   React.useEffect(() => {
     let google = window.google;
     let map = mapRef.current;
-    let lat = "40.748817";
-    let lng = "-73.985428";
+    let lat = "7.5554942";
+    let lng = "80.7137847";
+    
     const myLatlng = new google.maps.LatLng(lat, lng);
     const mapOptions = {
       zoom: 3,
@@ -62,8 +55,8 @@ const RegularMap = () => {
   React.useEffect(() => {
     let google = window.google;
     let map = mapRef.current;
-    let lat = "40.748817";
-    let lng = "-73.985428";
+    let lat = "7.5554942";
+    let lng = "80.7137847";
     const myLatlng = new google.maps.LatLng(lat, lng);
     const mapOptions = {
       zoom: 13,
@@ -104,8 +97,8 @@ const CustomSkinMap = () => {
   React.useEffect(() => {
     let google = window.google;
     let map = mapRef.current;
-    let lat = "40.748817";
-    let lng = "-73.985428";
+    let lat = "7.5554942";
+    let lng = "80.7137847";
     const myLatlng = new google.maps.LatLng(lat, lng);
     const mapOptions = {
       zoom: 13,

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
-
+import "../../assets/css/customSize.css";
 // react-bootstrap components
 import {
   Badge,
@@ -110,8 +110,8 @@ function Sidebar({ routes, image, background }) {
               </>
             ) : (
               <>
-                <span className="sidebar-mini">{prop.mini}</span>
-                <span className="sidebar-normal">{prop.name}</span>
+                <span className="sidebar-mini-css">{prop.mini}</span>
+                <span className="sidebar-normal-css">{prop.name}</span>
               </>
             )}
           </Nav.Link>
@@ -151,69 +151,6 @@ function Sidebar({ routes, image, background }) {
               Irepair
             </a>
           </div>
-          {/* <div className="user"> */}
-            {/* <div className="photo">
-              <img
-                alt="..."
-                src={require("assets/img/new_logo.png").default}
-              ></img>
-            </div>
-            <div className="info">
-              <a
-                className={userCollapseState ? "collapsed" : ""}
-                data-toggle="collapse"
-                href="#pablo"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setUserCollapseState(!userCollapseState);
-                }}
-                aria-expanded={userCollapseState}
-              >
-                <span>
-                 Dam Dat <b className="caret"></b>
-                </span>
-              </a>
-              <Collapse id="collapseExample" in={userCollapseState}>
-                <div>
-                  <Nav as="ul">
-                  <li>
-                      <Link
-                        className="profile-dropdown"
-                        onClick={() => {
-                          window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/user-page";
-                        }}
-                      >
-                        <span className="sidebar-mini">MP</span>
-                        <span className="sidebar-normal">My Profile</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="profile-dropdown"
-                        onClick={() => {
-                          window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/user-page";
-                        }}
-                      >
-                        <span className="sidebar-mini">EP</span>
-                        <span className="sidebar-normal">Edit Profile</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="profile-dropdown"
-                        onClick={() => {
-                          window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/user-page";
-                        }}
-                      >
-                        <span className="sidebar-mini">S</span>
-                        <span className="sidebar-normal">Settings</span>
-                      </Link>
-                    </li>
-                  </Nav>
-                </div>
-              </Collapse>
-            </div> */}
-          {/* </div> */}
           <Nav as="ul">{createLinks(routes)}</Nav>
         </div>
         <div

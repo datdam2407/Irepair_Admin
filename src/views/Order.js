@@ -41,7 +41,7 @@ import { Link } from "react-router-dom";
 import { del, post, get, getWithToken } from "../../src/service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 
-export default function Customer() {
+export default function Order() {
 
   const [CustomerDelete, setCustomerDelete] = useState(null);
   const [modalDelete, setCustomerModalDelete] = useState(false);
@@ -79,7 +79,7 @@ export default function Customer() {
   const [totalNumberPage, setTotalNumberPage] = useState(1);
 
   useEffect(() => {
-    getWithToken("/api/v1.0/customers", localStorage.getItem("token")).then(
+    getWithToken("/api/v1.0/order", localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
           var temp = res.data;
@@ -90,8 +90,6 @@ export default function Customer() {
         }
       });
   }, []);
- 
-
 
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -225,12 +223,15 @@ export default function Customer() {
                 <tr>
                   <th className="description">Image</th>
                   <th className="description">Customer</th>
-                  <th className="description">Phone </th>
-                  <th className="description">Email</th>
+                  <th className="description">Feedback</th>
                   {/* <th className="description">Username</th> */}
-                  <th className="description">Created Date</th>
-                  <th className="description">FullName</th>
-                  <th className="description">Uid</th>
+                  <th className="description">Total</th>
+                  <th className="description">Address </th>
+                  <th className="description">Create </th>
+                  <th className="description">Point</th>
+                  <th className="description">Payment</th>
+                  <th className="description">Repairman</th>
+                  <th className="description">Service</th>
                   <th className="description">Views</th>
                 </tr>
               </thead>
@@ -238,7 +239,6 @@ export default function Customer() {
                 {useListCustomerShowPage.map((e, index) => {
                   return (
                     <tr key={index}>
-                      
                       <td>
                         <img src={e.Avatar}/>
                       </td>
@@ -285,7 +285,7 @@ export default function Customer() {
                               </Tooltip>
                               <Grid item lg={10}>
                                 <Typography className={classes.name}>{e.FullName}</Typography>
-                                <Typography color="textSecondary" variant="body2">{e.Id}
+                                <Typography color="textSecondary" variant="body2">{e.CustomerId}
                                 </Typography>
                               </Grid>
                             </Grid>
@@ -293,21 +293,30 @@ export default function Customer() {
               
               
                       <td>
-                        {e.PhoneNumber}
+                        {e.FeedbackMessage}
                       </td>
                       <td>
-                        {e.Email}
+                        {e.Total}
+                      </td>
+                      <td>
+                        {e.CustomerAddress}
                       </td>
                       {/* <td>
                         {e.Username}
                       </td> */}
-                      <td >{moment(e.CreateDate).format("MM-DD-YYYY")}
+                      <td >{moment(e.CreateTime).format("MM-DD-YYYY")}
                       </td>
                       <td>
-                        {e.FullName}
+                        {e.FeedbackPoint}
                       </td>
                       <td>
-                        {e.Uid}
+                        {e.PaymentTime}
+                      </td>
+                      <td>
+                        {e.RepairmanId}
+                      </td>
+                      <td>
+                        {e.ServiceId}
                       </td>
 
                       <td>

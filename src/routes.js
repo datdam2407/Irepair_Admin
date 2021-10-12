@@ -5,7 +5,7 @@ import ManageCompany from "views/Components/ManageCompany";
 import MajorTables from "views/Forms/MajorTables.js";
 import ValidationForms from "views/Forms/ValidationForms.js";
 
-import RepairmanTable from "views/Tables/RepairmanTable.js";
+import Repairman from "views/Repairman.js";
 import MajorFields from "views/MajorFields/MajorFields.js"
 import ManageService from "views/ServiceTable/ManageService.js"
 import GoogleMaps from "views/Maps/GoogleMaps.js";
@@ -18,17 +18,11 @@ import UserPage from "views/Pages/UserPage.js";
 import RegisterPage from "views/Pages/RegisterPage.js";
 // import LockScreenPage from "views/Pages/LockScreenPage.js";
 import img1 from "../src/assets/img/company.png"
+import Order from "views/Order";
 var routes = [
   
 
-  //aaaa
-  {
-    path: "/dashboard",
-    layout: "/admin",
-    name: "Dashboard",
-    icon: "nc-icon nc-chart-pie-35",
-    component: Dashboard,
-  },
+  //Used 
   
   // {
   //   path: "/Sidebar",
@@ -52,19 +46,8 @@ var routes = [
   //     },
   //   ],
   // },
-  {
-  
-    name: "Company",
-    icon: "nc-icon nc-istanbul",
-  },
-  {
-    path: "/Company",
-    layout: "/admin",
-    name: "Manage Company",
-    mini: "MC: ",
-    component: ManageCompany,
-  },
-  // {
+
+    // {
   //   collapse: true,
   //   path: "/major",
   //   name: "Major",
@@ -94,50 +77,77 @@ var routes = [
   //     // },
   //   ],
   // },
+  //aaaa
+  
+  {
+    path: "/dashboard",
+    layout: "/admin",
+    name: "Dashboard",
+    icon: "nc-icon nc-chart-pie-35",
+    component: Dashboard,
+  },
+  // manage repairman
+ 
 
   {
-    name: "Major",
-    state: "openForms",
-    icon: "nc-icon nc-notes",
+    path: "/customer",
+    layout: "/admin",
+    name: "Customer",
+    icon: "nc-icon nc-badge",
+    component: Customer,
   },
+  {
+    path: "/Company",
+    layout: "/admin",
+    name: " Company",
+    icon: "nc-icon nc-istanbul",
+    component: ManageCompany,
+  },
+  {
+    path: "/order",
+    layout: "/admin",
+    name: " Order",
+    icon: "nc-icon nc-cart-simple",
+    component: Order,
+  },
+  {
+    path: "/repairman",
+    layout: "/admin",
+    name: "Repairman",
+    // mini: "ST",
+    icon: "nc-icon nc-settings-tool-66",
 
+    component: Repairman,
+  },
   {
     path: "/major",
     layout: "/admin",
-    name: "Manage Major",
-    mini: "MM: ",
-    component: MajorTables,
-  },
-
-  {
+    name: " Major",
     icon: "nc-icon nc-layers-3",
-    name: " Major Field",
+    component: MajorTables,
   },
   {
     path: "/fields",
     layout: "/admin",
-    name: "Manage Major Fields",
-    mini: "MT: ",
+    name: "Major Fields",
+    icon: "nc-icon nc-single-copy-04",
+
     component: MajorFields,
   },
 
   {
-    icon: "nc-icon nc-single-copy-04",
-    name: "   Service",
-  },
-  {
     path: "/service",
     layout: "/admin",
     name: " Service Table",
-    mini: "sT:  ",
+    icon: "nc-icon nc-paper-2",
     component: ManageService,
   },
+
   // {
   //   collapse: true,
   //   path: "/service",
   //   name: "Service",
   //   state: "openTablesService",
-  //   icon: "nc-icon nc-single-copy-04",
   //   views: [
   //     // {
   //     //   path: "/create/service",
@@ -186,65 +196,18 @@ var routes = [
   //     },
   //   ],
   // },
-  {
-    collapse: true,
-    path: "/repairman",
-    name: "RepairMan",
-    state: "openTables",
-    icon: "nc-icon nc-settings-tool-66",
-    views: [
-      // {
-      //   path: "/create/repairman",
-      //   layout: "/admin",
-      //   name: "Create Repairman",
-      //   mini: "CR",
-      //   component: CreateNewRepairMan,
-      // },
-    
-      {
-        path: "/repairman",
-        layout: "/admin",
-        name: "Repairman Table",
-        mini: "ST",
-        component: RepairmanTable,
-      },
-    ],
-  },
-  {
-    path: "/customer",
-    layout: "/admin",
-    name: "Manage Customer",
-    icon: "nc-icon nc-badge",
-    component: Customer,
-  },
   // {
-  //   path: "/calendar",
-  //   layout: "/admin",
-  //   name: "Calendar",
-  //   icon: "nc-icon nc-single-copy-04",
-  //   component: Calendar,
+  //   name: "Manage Company",
+  //   mini: "MC: ",
+
   // },
-  {
-    collapse: true,
-    path: "/pages",
-    name: "Pages",
-    state: "openPages",
-    icon: "nc-icon nc-puzzle-10",
-    views: [
+  
       {
         path: "/user-page",
         layout: "/admin",
-        name: "User Page",
-        mini: "UP",
         component: UserPage,
       },
-      {
-        path: "/register-page",
-        layout: "/auth",
-        name: "Register",
-        mini: "RP",
-        component: RegisterPage,
-      },
+    
       // {
       //   path: "/lock-screen-page",
       //   layout: "/auth",
@@ -252,7 +215,6 @@ var routes = [
       //   mini: "LSP",
       //   component: LockScreenPage,
       // },
-    ],
-  },
+  
 ];
 export default routes;

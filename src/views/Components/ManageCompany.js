@@ -29,19 +29,32 @@ import {
   PaginationLink,
   FormGroup,
   Media,
-  
+
 } from "reactstrap";
 import deleteIcon from "assets/img/remove.png";
 import editIcon from "assets/img/edit.png";
 import { del, post, get, put, getWithToken, putWithToken, getWithTokenParams, postWithToken } from "../../service/ReadAPI";
 import "../../assets/css/customSize.css";
 
+import {
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Avatar,
+  Grid,
+  Typography,
+} from '@material-ui/core';
+
 import FilterState from "../MajorFields/FilterState";
+import { makeStyles } from '@material-ui/core/styles';
 
 export default function ManageCompany() {
   //Filter
   const listStates = [
-    "New",
+   
     "Approved",
     "Deleted",
   ];
@@ -53,6 +66,57 @@ export default function ManageCompany() {
 
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
+
+  const useStyles = makeStyles((theme) => ({
+    table: {
+      minWidth: 650,
+    },
+    tableContainer: {
+      borderRadius: 15,
+      margin: '10px 10px',
+      maxWidth: ' 100%'
+    },
+    tableHeaderCell: {
+      color: 'burlywood',
+      fontWeight: 'bold',
+      backgroundColor: theme.palette.primary.dark,
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+      backgroundColor: 'gray',
+      fontWeight: '700',
+
+    },
+    thmajorheaderform: {
+      fontWeight: 'bold',
+      fontWeight: '700',
+      color: theme.palette.getContrastText(theme.palette.primary.dark),
+    },
+
+    avatar: {
+      backgroundColor: '#FFFFFF',
+      fontSize: '200px',
+      right: '10px',
+      overflow: 'unset',
+      borderRadius: '32%',
+      // img: 'string',
+
+    },
+    name: {
+      fontWeight: 'bold',
+      color: theme.palette.secondary.dark,
+
+    },
+    Status: {
+      fontWeight: '700',
+      width: '71px',
+      fontSize: '0.76rem',
+      color: 'white',
+      backgroundColor: 'red',
+      borderRadius: 8,
+      padding: '3px 10px',
+      display: 'inline-block'
+    }
+  }));
+  const classes = useStyles();
 
   async function handleChooseState(e, id) {
     let newListState = [];
@@ -74,7 +138,7 @@ export default function ManageCompany() {
 
   //check image
   function checkDisableImage(state) {
-    const list = [1 , 3];
+    const list = [1, 3];
     if (list.includes(state)) return true;
     else return false;
   }
@@ -90,8 +154,8 @@ export default function ManageCompany() {
   const [modalCreate, setCompanyModalCreate] = useState(false);
   const toggleCreate = () => setCompanyModalCreate(!modalCreate)
 
-    //Approved Company 
-      //Approved
+  //Approved Company 
+  //Approved
   const [CompanyApprove, setCompanyApprove] = useState(null);
   const [modalApprove, setCompanyModalApprove] = useState(false);
   const toggleApprove = () => setCompanyModalApprove(!modalApprove)
@@ -214,14 +278,13 @@ export default function ManageCompany() {
   // custom state
   function displayStateName(type) {
     const stateValue = {
-      0: "New",
-      1: "Approved",
-      2: "Blocked",
-      3: "Deleted",
+      1: "Deleted",
+      3: "Approved",
+    
     };
     return stateValue[type] ? stateValue[type] : "";
   }
-  console.log("cpName" ,name)
+  console.log("cpName", name)
   function handleEditSubmit2(e) {
     putWithToken(
       "/api/v1.0/companies",
@@ -282,14 +345,13 @@ export default function ManageCompany() {
                   <Col md={7}>
                     <Row className="fixed">
                       <InputGroup>
-                        <Input placeholder="State" disabled />
+                        {/* <Input placeholder="State" disabled    /> */}
                         <InputGroupButtonDropdown
                           addonType="append"
                           isOpen={dropdownOpen}
                           toggle={toggleDropDown}
-                          className="border border-gray"
                         >
-                          <DropdownToggle caret>&nbsp;</DropdownToggle>
+                          <DropdownToggle className="dropdown-filter-css" caret> Filter&nbsp;</DropdownToggle>
                           <DropdownMenu>
                             <div className="fixed">
                               <FilterState
@@ -362,67 +424,79 @@ export default function ManageCompany() {
                           {e.Picture}
                         </td> */}
                         <td>
-                          {displayStateName(e.Status)}
+
+                          <TableCell>
+                            <Typography
+                              className={classes.Status}
+                              style={{
+                                backgroundColor:
+                                  ((e.Status === 1 && 'red')||
+                                  (e.Status === 3 && 'green')
+                                  )
+                              }}
+                            >{displayStateName(e.Status)}</Typography>
+                          </TableCell>
+
                         </td>
                         <td>
-                        <OverlayTrigger
-                              overlay={
-                                <Tooltip id="tooltip-436082023">
-                                  APPROVE..
-                                </Tooltip>
-                              }
-                              placement="right"
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-436082023">
+                                APPROVE..
+                              </Tooltip>
+                            }
+                            placement="right"
+                          >
+
+                            <Button
+                              // onClick={() => handleUpdate(e.data)}
+                              // onGridReady={onGridReady}
+
+                              onClick={() => {
+                                // setMajorEdit(e.Id);
+                                getCompanyByID(e.Id);
+                                setCompanyModalApprove(true);
+                              }}
+
+                              className="btn-link btn-icon"
+                              type="button"
+                              variant="success"
                             >
-
-                              <Button
-                                // onClick={() => handleUpdate(e.data)}
-                                // onGridReady={onGridReady}
-
-                                onClick={() => {
-                                  // setMajorEdit(e.Id);
-                                  getCompanyByID(e.Id);
-                                  setCompanyModalApprove(true);
-                                }}
-
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="success"
-                              >
-                                {checkDisableImage(e.state) ? (
+                              {checkDisableImage(e.state) ? (
                                 <i className="fas fa-check"></i>
-                                ) : (
-                                  <i className="fas fa-check"></i>
-                                )}
-                              </Button>
-                            </OverlayTrigger>
+                              ) : (
+                                <i className="fas fa-check"></i>
+                              )}
+                            </Button>
+                          </OverlayTrigger>
 
-                            <OverlayTrigger
-                                onClick={(e) => e.preventDefault()}
+                          <OverlayTrigger
+                            onClick={(e) => e.preventDefault()}
 
-                                overlay={
-                                  <Tooltip id="tooltip-334669391">
-                                    Delete Company..
-                                  </Tooltip>
-                                }
-                                placement="right\"
-                              >
-                                <Button
-                                  onClick={() => {
-                                    setCompanyDelete(e.Id);
-                                    setCompanyModalDelete(true);
-                                  }}
+                            overlay={
+                              <Tooltip id="tooltip-334669391">
+                                Delete Company..
+                              </Tooltip>
+                            }
+                            placement="right\"
+                          >
+                            <Button
+                              onClick={() => {
+                                setCompanyDelete(e.Id);
+                                setCompanyModalDelete(true);
+                              }}
 
-                                  className="btn-link btn-icon"
-                                  type="button"
-                                  variant="danger"
-                                >
-                                  <i className="fas fa-times"></i>
-                                </Button>
-                              </OverlayTrigger>
-       
-                          </td>
-                        
-                       
+                              className="btn-link btn-icon"
+                              type="button"
+                              variant="danger"
+                            >
+                              <i className="fas fa-times"></i>
+                            </Button>
+                          </OverlayTrigger>
+
+                        </td>
+
+
                       </tr>
                     );
                   })}

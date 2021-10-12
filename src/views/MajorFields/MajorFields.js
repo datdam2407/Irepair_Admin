@@ -32,7 +32,7 @@ import {
   ModalTitle,
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
-import { del, put, get, postWithToken , getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
+import { del, put, get, postWithToken, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
@@ -87,9 +87,9 @@ function MajorFields() {
 
   //Filter
   const listStates = [
-    "Active",
     "Inactive",
-    
+    "Active",
+
   ];
 
   // custom table
@@ -118,8 +118,8 @@ function MajorFields() {
     },
 
     avatar: {
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.getContrastText(theme.palette.primary.light),
+      backgroundColor: '#FFFFFF',
+      // color: theme.palette.getContrastText(theme.palette.primary.light),
       fontSize: '200px',
       right: '10px',
       overflow: 'unset',
@@ -307,7 +307,7 @@ function MajorFields() {
     handleClickOpen()
   }
   function checkDisableImage(state) {
-    const list = [1 , 3];
+    const list = [1, 3];
     if (list.includes(state)) return true;
     else return false;
   }
@@ -404,7 +404,7 @@ function MajorFields() {
     })
   }, []);
 
-  
+
   function getMajorFieldsByID(Id) {
 
     getWithToken(`/api/v1.0/major-fields/${Id}`, localStorage.getItem("token")).then((res) => {
@@ -510,15 +510,13 @@ function MajorFields() {
                     <Col md={7}>
                       <Row className="fixed">
                         <InputGroup>
-                          <Input placeholder="State" disabled />
                           <InputGroupButtonDropdown
                             addonType="append"
                             isOpen={dropdownOpen}
                             toggle={toggleDropDown}
-                            className="border border-gray"
+                            className="border border-gray-css"
                           >
-                            <DropdownToggle caret>&nbsp;</DropdownToggle>
-                            <DropdownMenu>
+                            <DropdownToggle className="dropdown-filter-css" caret> Filter&nbsp;</DropdownToggle>                            <DropdownMenu>
                               <div className="fixed">
                                 <FilterState
                                   list={filterState}
@@ -537,7 +535,7 @@ function MajorFields() {
                   </div>
                   <Col>
                     <Col align="right">
-                      <Button variant="contained" className="add-major-custom" onClick={ ()=> {setMajorModalCreate(true);}}>Add MajorField</Button>
+                      <Button variant="contained" className="add-major-custom" onClick={() => { setMajorModalCreate(true); }}>Add MajorField</Button>
                     </Col>
                   </Col>
                 </Row>
@@ -569,7 +567,7 @@ function MajorFields() {
                                     >
                                       Detailed Major Information
                                     </ModalHeader>
-                                    <ModalBody>
+                                    <ModalBody >
                                       <Row>
                                         <Col md={2}> Major Name:</Col>
                                         <Col md={3}> {e.Name}</Col>
@@ -707,7 +705,7 @@ function MajorFields() {
                                 variant="success"
                               >
                                 {checkDisableImage(e.state) ? (
-                                <i className="fas fa-check"></i>
+                                  <i className="fas fa-check"></i>
                                 ) : (
                                   <i className="fas fa-check"></i>
                                 )}
@@ -1002,7 +1000,7 @@ function MajorFields() {
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
               <Form.Control type="file" value={picture}
-              
+
                 onChange={e => setImage(e.target.value)}
               />
             </Form.Group>
@@ -1021,49 +1019,48 @@ function MajorFields() {
           </Button>
         </ModalFooter>
       </Modal>
-      
+
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
           toggle={toggleDetails}
           style={{ color: "#B22222" }}
           close={closeBtn(toggleDetails)}
+          className="view-item-size"
         >
-          Detailed Field Information
+          <h3> INFORMATION </h3>
         </ModalHeader>
-        <ModalBody>
-          <Row>
-            <Col></Col>
-            <Col md={3}> Major</Col>
-            <Col md={8}>
+        <ModalBody className="Modal-body-view-all">
+        <Row>
+         <Col md={8} >
+         <Row>
+            <Col className="view-item-size-main" md={4}> Major:</Col>
+            <Col className="view-item-size" md={7}>
               {selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
             </Col>
           </Row>
           <Row>
-            <Col></Col>
-            <Col md={3}> Name</Col>
-            <Col md={8}>
+            <Col className="view-item-size-main" md={4}>Field:</Col>
+            <Col className="view-item-size" md={7}>
               {selectMajor !== undefined ? selectMajor.Name : ""}
             </Col>
           </Row>
+        
+        
           <Row>
-            <Col></Col>
-            <Col md={3}>Description</Col>
-            <Col md={8}>
+            <Col className="view-item-size-main" md={4}>State:</Col>
+            <Col className="view-item-size" md={7}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
+          </Row>
+          <Row>
+            <Col className="view-item-size-main" md={4}>Description:</Col>
+            <Col className="view-item-size" md={7}>
               {selectMajor !== undefined ? selectMajor.Description : ""}
             </Col>
           </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>Picture</Col>
-            <Col md={8}>
+         </Col>
+            <Col className="view-item-size">
               {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
             </Col>
-          </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>State</Col>
-            <Col md={8}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
-          </Row>
+         </Row>
         </ModalBody>
       </Modal>
 

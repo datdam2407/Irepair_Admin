@@ -17,16 +17,7 @@ import {
 
 var mapData = {
   VN: 1300,
-  BR: 550,
-  CA: 120,
-  DE: 1300,
-  FR: 540,
-  GB: 690,
-  GE: 200,
-  IN: 200,
-  RO: 600,
-  RU: 2,
-  US: 1,
+  HN:1000,
 };
 
 function VectorMapView() {
@@ -39,17 +30,6 @@ function VectorMapView() {
               <Card.Header>
                 <Card.Title as="h4" className="text-center">
                   World Map <br></br>
-                  <small>
-                    Looks great on any resolution. Made by our friends from{" "}
-                    <a
-                      href="https://github.com/kadoshms/react-jvectormap"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      React jVector Map
-                    </a>
-                    .
-                  </small>
                 </Card.Title>
               </Card.Header>
               <Card.Body>

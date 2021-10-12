@@ -140,12 +140,11 @@ function MajorTables() {
     },
 
     avatar: {
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.getContrastText(theme.palette.primary.light),
+      backgroundColor: '#FFFFFF',
       fontSize: '200px',
       right: '10px',
       overflow: 'unset',
-      borderRadius :'32%',
+      borderRadius: '32%',
       // img: 'string',
 
     },
@@ -156,7 +155,7 @@ function MajorTables() {
     },
     Status: {
       fontWeight: '700',
-      width:'71px',
+      width: '71px',
       fontSize: '0.76rem',
       color: 'white',
       backgroundColor: 'green',
@@ -219,7 +218,7 @@ function MajorTables() {
   }
   //check disable img
   function checkDisableImage(state) {
-    const list = [1 , 3];
+    const list = [1, 3];
     if (list.includes(state)) return true;
     else return false;
   }
@@ -388,41 +387,39 @@ function MajorTables() {
         <Row>
           <Col md="12">
             <Card className="table">
-            <div className= "header-form">
-              <Row>
-                <div className="header-body-filter">
-                <Col md={7}>
-                  <Row className="fixed">
-                    <InputGroup>
-                      <Input placeholder="State" disabled />
-                      <InputGroupButtonDropdown
-                        addonType="append"
-                        isOpen={dropdownOpen}
-                        toggle={toggleDropDown}
-                        className="border border-gray"
-                      >
-                        <DropdownToggle caret>&nbsp;</DropdownToggle>
-                        <DropdownMenu>
-                          <div className="fixed">
-                            <FilterState
-                              list={filterState}
-                              onChangeCheckBox={(e, id) => {
-                                handleChooseState(e, id);
-                              }}
-                              key={filterState}
-                            />
-                          </div>
-                        </DropdownMenu>
-                      </InputGroupButtonDropdown>
-                    </InputGroup>
-                  </Row>
-                </Col>
-                </div>
-                <Col align="right">
-                  <Button className="add-major-custom" variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
-                </Col>
-                </Row> 
-                </div>
+              <div className="header-form">
+                <Row>
+                  <div className="header-body-filter">
+                    <Col md={7}>
+                      <Row className="fixed">
+                        <InputGroup>
+                          <InputGroupButtonDropdown
+                            addonType="append"
+                            isOpen={dropdownOpen}
+                            toggle={toggleDropDown}
+                            className="border border-gray-css"
+                          >
+                            <DropdownToggle className="dropdown-filter-css" caret> Filter&nbsp;</DropdownToggle>                        <DropdownMenu>
+                              <div className="fixed">
+                                <FilterState
+                                  list={filterState}
+                                  onChangeCheckBox={(e, id) => {
+                                    handleChooseState(e, id);
+                                  }}
+                                  key={filterState}
+                                />
+                              </div>
+                            </DropdownMenu>
+                          </InputGroupButtonDropdown>
+                        </InputGroup>
+                      </Row>
+                    </Col>
+                  </div>
+                  <Col align="right">
+                    <Button className="add-major-custom" variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
+                  </Col>
+                </Row>
+              </div>
               <Card.Body className="table">
                 <TableContainer component={Paper} className={classes.tableContainer}>
                   <Table className={classes.table} aria-label="simple table">
@@ -440,38 +437,39 @@ function MajorTables() {
                       {useListMajorShowPage.map((e, index) => {
                         return (
                           <tr key={index}>
+                            
                             {/* <td>
                             <img className="td-img-size" src={e.ImageUrl} />
                           </td> */}
                             <TableCell>
                               <Grid container>
                                 <Tooltip html={(
-                                  <div style={{ width: 700 , height:300}}>
+                                  <div style={{ width: 700, height: 300}}>
                                     <strong>
                                       <ModalHeader
                                         style={{ color: "yellow" }}
                                       >
-                                       Detailed Major Information
+                                        Detailed Major Information
                                       </ModalHeader>
                                       <ModalBody>
                                         <Row>
                                           <Col md={2}> Major Name:</Col>
-                                          <Col md={3}> {e.Name}</Col>
+                                          <Col md={3}>  {e.Name}</Col>
                                         </Row>
                                         <Row>
-                                        <Col md={2}>Description:</Col>
-                                        <Col md={3}>
-                                        {e.Description}
-                                        </Col>
+                                          <Col md={2}>Description:</Col>
+                                          <Col md={3}>
+                                            {e.Description}
+                                          </Col>
                                         </Row>
                                         <Row>
                                           <Col md={3} ><img className="text-left-topic-toolpi" src={e.ImageUrl} /></Col>
-                                          </Row>
+                                        </Row>
                                         {/* <Row>
                                           <Col md={1}>State:</Col>
                                           {displayStateName(e.Status)}
                                         </Row> */}
-                                      
+
                                       </ModalBody>
                                     </strong>
                                   </div>
@@ -479,7 +477,7 @@ function MajorTables() {
                                 >
                                   <Grid item lg={2}>
                                     <Avatar src={e.ImageUrl} className={classes.avatar} >
-                                      <img src="none"/>
+                                      <img src="none" />
                                     </Avatar>
                                   </Grid>
                                 </Tooltip>
@@ -512,8 +510,8 @@ function MajorTables() {
                                 onClick={(e) => e.preventDefault()}
                                 overlay={
                                   <Tooltip id="tooltip-960683717">
-                                    <br/>
-                                  <br/>
+                                    <br />
+                                    <br />
                                     View Post..
                                   </Tooltip>
                                 }
@@ -535,8 +533,8 @@ function MajorTables() {
                               <OverlayTrigger
                                 overlay={
                                   <Tooltip id="tooltip-436082023">
-                                    <br/>
-                                  <br/>
+                                    <br />
+                                    <br />
                                     Edit Post..
                                   </Tooltip>
                                 }
@@ -561,37 +559,37 @@ function MajorTables() {
                               </OverlayTrigger>
 
                               <OverlayTrigger
-                              overlay={
-                                <Tooltip id="tooltip-436082023">
-                                  <br />
-                                  <br />
-                                  APPROVE..
-                                </Tooltip>
-                              }
-                              placement="right"
-                            >
-
-                              <Button
-                                // onClick={() => handleUpdate(e.data)}
-                                // onGridReady={onGridReady}
-
-                                onClick={() => {
-                                  // setMajorEdit(e.Id);
-                                  getMajorByID(e.Id);
-                                  setMajorModalApprove(true);
-                                }}
-
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="success"
+                                overlay={
+                                  <Tooltip id="tooltip-436082023">
+                                    <br />
+                                    <br />
+                                    APPROVE..
+                                  </Tooltip>
+                                }
+                                placement="right"
                               >
-                                {checkDisableImage(e.state) ? (
-                                <i className="fas fa-check"></i>
-                                ) : (
-                                  <i className="fas fa-check"></i>
-                                )}
-                              </Button>
-                            </OverlayTrigger>
+
+                                <Button
+                                  // onClick={() => handleUpdate(e.data)}
+                                  // onGridReady={onGridReady}
+
+                                  onClick={() => {
+                                    // setMajorEdit(e.Id);
+                                    getMajorByID(e.Id);
+                                    setMajorModalApprove(true);
+                                  }}
+
+                                  className="btn-link btn-icon"
+                                  type="button"
+                                  variant="success"
+                                >
+                                  {checkDisableImage(e.state) ? (
+                                    <i className="fas fa-check"></i>
+                                  ) : (
+                                    <i className="fas fa-check"></i>
+                                  )}
+                                </Button>
+                              </OverlayTrigger>
 
                               <OverlayTrigger
                                 onClick={(e) => e.preventDefault()}
@@ -719,54 +717,6 @@ function MajorTables() {
         </Row>
       </Container>
 
-      {/* <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
-        <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleCreate)}
-          toggle={toggleCreate}
-        >
-          <ModalTitle>Do you want to create new Major</ModalTitle>
-        </ModalHeader>
-        <ModalBody>
-          <Form onSubmit={(e) => {
-            handleSubmit(e);
-            setMajorModalCreate(false);
-          }}
-          >
-            <Form.Group className="mb-2">
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="text"
-                name="Name"
-                id="Major_Name"
-                // onChange={Major_Name}
-                placeholder="Name" />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                name="description"
-                placeholder="Description"
-                as="textarea"
-                rows={3}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Picture</Form.Label>
-              <Form.Control type="file" />
-            </Form.Group>
-            <Button color="danger"
-            >
-              Create
-            </Button>
-            <Button color="secondary" onClick={toggleCreate}>
-              Cancel
-            </Button>
-          </Form>
-        </ModalBody>
-      </Modal> */}
-
       <Modal isOpen={modalMajorDelete} toggle={toggleMajorDelete}>
         <ModalHeader
           style={{ color: "#B22222" }}
@@ -846,34 +796,32 @@ function MajorTables() {
           style={{ color: "#B22222" }}
           close={closeBtn(toggleDetails)}
         >
-          Detailed Major Information
+          <h3> INFORMATION </h3>
         </ModalHeader>
         <ModalBody>
           <Row>
-            <Col></Col>
-            <Col md={3}> Major Name</Col>
-            <Col md={8}>
+          <Col md={8}>
+          <Row>
+            <Col className="view-item-size-main" md={4}>Major:</Col>
+            <Col className="view-item-size" md={7}>
               {selectMajor !== undefined ? selectMajor.Name : ""}
             </Col>
           </Row>
           <Row>
-            <Col></Col>
-            <Col md={3}>Description</Col>
-            <Col md={8}>
+            <Col className="view-item-size-main" md={4}>Description:</Col>
+            <Col className="view-item-size" md={7}>
               {selectMajor !== undefined ? selectMajor.Description : ""}
             </Col>
           </Row>
+        
           <Row>
-            <Col></Col>
-            <Col md={3}>Picture</Col>
-            <Col md={8}>
-              {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
-            </Col>
+            <Col className="view-item-size-main" md={4}>State:</Col>
+            <Col className="view-item-size" md={7}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
           </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>State</Col>
-            <Col md={8}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
+          </Col>
+            <Col className="view-item-size" >
+              {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
+          </Col>
           </Row>
         </ModalBody>
       </Modal>
@@ -881,7 +829,7 @@ function MajorTables() {
       <FormDialog open={open} handleClose={handleClose}
         data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
 
-<Modal isOpen={modalApprove} toggle={toggleApprove}>
+      <Modal isOpen={modalApprove} toggle={toggleApprove}>
         <ModalHeader
           style={{ color: "#B22222" }}
           close={closeBtn(toggleApprove)}

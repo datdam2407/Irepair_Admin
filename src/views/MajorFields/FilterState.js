@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 // import { get } from '../../service/ReadAPI';
+import "../../assets/css/customSize.css"
 import {
     Input, Label, Row, Col
 } from "reactstrap";
@@ -28,7 +29,7 @@ export default class FilterState extends Component {
             {this.state.states.map((state, index) => (
 
                 <div key={index}><Input key={this.state.defaultCheck}
-                    //className = 'form-control'
+                    // className = "dropdown-filter-css"
                     name={state}
                     type="checkbox"
                     style={{ verticalAlign: "middle", marginTop: "0rem" }}

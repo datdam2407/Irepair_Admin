@@ -149,7 +149,7 @@ function ManageSevice() {
       fontSize: '200px',
       right: '10px',
       overflow: 'unset',
-      borderRadius :'32%',
+      borderRadius: '32%',
 
     },
     name: {
@@ -158,7 +158,7 @@ function ManageSevice() {
     },
     Status: {
       fontWeight: '700',
-      width:'71px',
+      width: '71px',
       fontSize: '0.76rem',
       color: 'white',
       backgroundColor: 'green',
@@ -167,7 +167,7 @@ function ManageSevice() {
       display: 'inline-block'
     }
   }));
-  
+
   const classes = useStyles();
   async function handleChooseState(e, id) {
     let newListState = [];
@@ -192,7 +192,7 @@ function ManageSevice() {
     let currentField = {};
     let FieldId = "";
     getWithToken(
-      `/api/v1.0/major-fields`,localStorage.getItem("token")
+      `/api/v1.0/major-fields`, localStorage.getItem("token")
     ).then((res) => {
       FieldId = res.data.FieldId
       console.log(res.data)
@@ -205,7 +205,7 @@ function ManageSevice() {
     });
 
     params['Status'] = [1].reduce((f, s) => `${f},${s}`);
-    getWithTokenParams("/api/v1.0/major-fields", params,localStorage.getItem("token")
+    getWithTokenParams("/api/v1.0/major-fields", params, localStorage.getItem("token")
     ).then(res => {
       setData1(res.data);
       const newlistField = res.data.reduce((list, item) => [...list,
@@ -259,7 +259,7 @@ function ManageSevice() {
   const onGridReady = (params) => {
     setGridApi(params)
   }
-console.log("field", FieldSelectID)
+  console.log("field", FieldSelectID)
   // update
   async function handleEditSubmit(e) {
     await put(
@@ -297,9 +297,11 @@ console.log("field", FieldSelectID)
       //updating a user 
       const confirm = window.confirm("Are you sure, you want to update this row ?")
       confirm && fetch(url + `/${formData.id}`, {
-        method: "put", body: JSON.stringify(formData), 
-        headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
-        "Content-type": "application/json"}
+        method: "put", body: JSON.stringify(formData),
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+          "Content-type": "application/json"
+        }
       }).then(resp => resp.json())
         .then(resp => {
           handleClose()
@@ -309,9 +311,11 @@ console.log("field", FieldSelectID)
     } else {
       // adding new user
       fetch(url, {
-        method: "post", body: JSON.stringify(formData), 
-        headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
-        "Content-type": "application/json"}
+        method: "post", body: JSON.stringify(formData),
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+          "Content-type": "application/json"
+        }
       }).then(resp => resp.json())
         .then(resp => {
           handleClose()
@@ -344,7 +348,7 @@ console.log("field", FieldSelectID)
     setFieldSelectID(value.value);
   }
   function getserviceByID(Id) {
-    getWithToken(`/api/v1.0/services/${Id}`,localStorage.getItem("token")).then((res) => {
+    getWithToken(`/api/v1.0/services/${Id}`, localStorage.getItem("token")).then((res) => {
       setserviceID(Id);
       setName(res.data.serviceName);
       setDescription(res.data.description);
@@ -360,7 +364,7 @@ console.log("field", FieldSelectID)
   // /api/v1.0/service/{id}
   //delete fc
   function deleteserviceByID() {
-    del(`/api/v1.0/services/${serviceDelete}`,localStorage.getItem("token")
+    del(`/api/v1.0/services/${serviceDelete}`, localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -379,7 +383,7 @@ console.log("field", FieldSelectID)
     let params = {};
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithTokenParams(`/api/v1.0/services`, params,localStorage.getItem("token")).then((res) => {
+    getWithTokenParams(`/api/v1.0/services`, params, localStorage.getItem("token")).then((res) => {
       var temp = res.data.filter((x) => x.state !== "Completed");
       setserviceList(temp);
       setUseListserviceShow(temp);
@@ -434,42 +438,40 @@ console.log("field", FieldSelectID)
         <Row>
           <Col md="12">
             <Card className="table">
-            <div className= "header-form">
-              <Row>
-                <div className="header-body-filter">
-                  <Col md={7}>
-                <Row className="fixed">
-                  <InputGroup>
-                    <Input placeholder="State" disabled />
-                    <InputGroupButtonDropdown
-                      addonType="append"
-                      isOpen={dropdownOpen}
-                      toggle={toggleDropDown}
-                      className="border border-gray"
-                    >
-                      <DropdownToggle caret>&nbsp;</DropdownToggle>
-                      <DropdownMenu >
-                        <div className="fixed" >
-                          <FilterState
-                            list={filterState}
-                            onChangeCheckBox={(e, id) => {
-                              handleChooseState(e, id);
-                            }}
-                            key={filterState}
-                          />
-                        </div>
-                      </DropdownMenu>
-                    </InputGroupButtonDropdown>
-                  </InputGroup>
-                  
-                </Row>
-              </Col>
-              </div>
-              <Col md={10} align="right">
-                <Button variant="contained" className="add-major-custom" color="primary" onClick={handleClickOpen}>Add service</Button>
-              </Col>
-                  </Row>
+              <div className="header-form">
+                <Row>
+                  <div className="header-body-filter">
+                    <Col md={7}>
+                      <Row className="fixed">
+                        <InputGroup>
+                          <InputGroupButtonDropdown
+                            addonType="append"
+                            isOpen={dropdownOpen}
+                            toggle={toggleDropDown}
+                            className="border border-gray-css"
+                          >
+                            <DropdownToggle className="dropdown-filter-css" caret> Filter&nbsp;</DropdownToggle>                      <DropdownMenu >
+                              <div className="fixed" >
+                                <FilterState
+                                  list={filterState}
+                                  onChangeCheckBox={(e, id) => {
+                                    handleChooseState(e, id);
+                                  }}
+                                  key={filterState}
+                                />
+                              </div>
+                            </DropdownMenu>
+                          </InputGroupButtonDropdown>
+                        </InputGroup>
+
+                      </Row>
+                    </Col>
                   </div>
+                  {/* <Col md={10} align="right">
+                <Button variant="contained" className="add-major-custom" color="primary" onClick={handleClickOpen}>Add service</Button>
+              </Col> */}
+                </Row>
+              </div>
               <Card.Body className="table">
                 <Table className="table">
                   <thead>
@@ -488,7 +490,7 @@ console.log("field", FieldSelectID)
                     {useListserviceShowPage.map((e, index) => {
                       return (
                         <tr key={index}>
-                         <TableCell>
+                          <TableCell>
                             <Grid container>
                               {/* <Grid item lg={2}>
                                 <Avatar src={e.ImageUrl} className={classes.avatar}>
@@ -503,7 +505,7 @@ console.log("field", FieldSelectID)
                               </Grid>
                             </Grid>
                           </TableCell>
-                        
+
                           <td>
                             {e.Description}
                           </td>
@@ -518,12 +520,12 @@ console.log("field", FieldSelectID)
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 1 && 'rgb(34, 176, 34)') 
-                                  ||
+                                  ((e.Status === 1 && 'rgb(34, 176, 34)')
+                                    ||
                                     (e.Status === 0 && 'rgb(50, 102, 100)')
-                                    || 
+                                    ||
                                     (e.Status === 2 && 'red')
-                                    || 
+                                    ||
                                     (e.Status === 3 && '#1f0202'))
                               }}
                             >{displayStateName(e.Status)}</Typography>
@@ -550,58 +552,6 @@ console.log("field", FieldSelectID)
                                 <i className="far fa-image"></i>
                               </Button>
                             </OverlayTrigger>
-
-                            {/* <OverlayTrigger
-                              overlay={
-                                <Tooltip id="tooltip-436082023">
-                                  Edit Post..
-                                </Tooltip>
-                              }
-                              placement="right"
-                            >
-                              <Button
-                                // onClick={() => handleUpdate(e.data)}
-                                // onGridReady={onGridReady}
-
-                                onClick={() => {
-                                  // setserviceEdit(e.Id);
-                                  getserviceByID(e.Id);
-                                  setserviceModalEdit(true);
-                                }}
-
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="success"
-                              >
-                                <i className="fas fa-edit"></i>
-                              </Button>
-                            </OverlayTrigger>
-
-
-                            <OverlayTrigger
-                              onClick={(e) => e.preventDefault()}
-
-                              overlay={
-                                <Tooltip id="tooltip-334669391">
-                                  Remove Post..
-                                </Tooltip>
-                              }
-                              placement="right\"
-                            >
-                              <Button
-                                onClick={() => {
-                                  setserviceDelete(e.Id);
-                                  setserviceModalDelete(true);
-                                }}
-
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="danger"
-                              >
-                                <i className="fas fa-times"></i>
-                              </Button>
-                            </OverlayTrigger> */}
-
                           </td>
                         </tr>
                       );
@@ -619,8 +569,6 @@ console.log("field", FieldSelectID)
                         <PaginationLink
                           className="page"
                           previous
-                          //disable={numberPage === 1 ? "true" : "false"}
-
                           onClick={() => {
                             if (numberPage - 1 > 0) {
                               onClickPage(numberPage - 1);
@@ -682,7 +630,6 @@ console.log("field", FieldSelectID)
                         <PaginationLink
                           className="page"
                           next
-                          //disable={numberPage === totalNumberPage ? true : false}
                           onClick={() => {
                             if (numberPage + 1 <= totalNumberPage) {
                               onClickPage(numberPage + 1);
@@ -701,55 +648,6 @@ console.log("field", FieldSelectID)
 
         </Row>
       </Container>
-
-      {/* <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
-        <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleCreate)}
-          toggle={toggleCreate}
-        >
-          <ModalTitle>Do you want to create new service</ModalTitle>
-        </ModalHeader>
-        <ModalBody>
-          <Form onSubmit={(e) => {
-            handleSubmit(e);
-            setserviceModalCreate(false);
-          }}
-          >
-            <FormGroup className="mb-2">
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="text"
-                name="Name"
-                id="service_Name"
-                // onChange={service_Name}
-                placeholder="Name" />
-            </FormGroup>
-            <FormGroup className="mb-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                name="description"
-                placeholder="Description"
-                as="textarea"
-                rows={3}
-              />
-            </FormGroup>
-
-            <FormGroup className="mb-3">
-              <Form.Label>Picture</Form.Label>
-              <Form.Control type="file" />
-            </FormGroup>
-            <Button color="danger"
-            >
-              Create
-            </Button>
-            <Button color="secondary" onClick={toggleCreate}>
-              Cancel
-            </Button>
-          </Form>
-        </ModalBody>
-      </Modal> */}
-
       <Modal isOpen={modalserviceDelete} toggle={toggleserviceDelete}>
         <ModalHeader
           style={{ color: "#B22222" }}
@@ -799,7 +697,7 @@ console.log("field", FieldSelectID)
                 selection
                 value={fieldSelect}
                 onChange={handleOnchangeSelectedAsset}
-                options={listField}/>
+                options={listField} />
             </FormGroup>
 
             <FormGroup className="mb-2">
@@ -852,48 +750,41 @@ console.log("field", FieldSelectID)
           style={{ color: "#B22222" }}
           close={closeBtn(toggleDetails)}
         >
-          Detailed service information
+          <h3>INFORMATION</h3>
         </ModalHeader>
-        <ModalBody>
+        <ModalBody className="Modal-body-view-all-service">
           <Row>
             <Col></Col>
-            <Col md={3}>Name</Col>
-            <Col md={8}>
+            <Col className="view-item-size-main" md={3}>Name:</Col>
+            <Col className="view-item-size" md={8}>
               {selectservice !== undefined ? selectservice.ServiceName : ""}
             </Col>
           </Row>
           <Row>
             <Col></Col>
-            <Col md={3}>Company</Col>
-            <Col md={8}>
+            <Col className="view-item-size-main" md={3}>Company:</Col>
+            <Col className="view-item-size" md={8}>
               {selectservice !== undefined ? displayCompanyName(selectservice.CompanyId) : ""}
             </Col>
           </Row>
           <Row>
             <Col></Col>
-            <Col md={3}>Description</Col>
-            <Col md={8}>
+            <Col className="view-item-size-main" md={3}>Description:</Col>
+            <Col className="view-item-size" md={8}>
               {selectservice !== undefined ? selectservice.Description : ""}
             </Col>
           </Row>
           <Row>
             <Col></Col>
-            <Col md={3}>Price</Col>
-            <Col md={8}>
+            <Col className="view-item-size-main" md={3}>Price:</Col>
+            <Col className="view-item-size" md={8}>
               {selectservice !== undefined ? selectservice.Price : ""}
             </Col>
           </Row>
           <Row>
             <Col></Col>
-            <Col md={3}>Picture</Col>
-            <Col md={8}>
-              {selectservice !== undefined ? <img className="text-left-topic" src={selectservice.ImageUrl} /> : ""}
-            </Col>
-          </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>State</Col>
-            <Col md={8}>{selectservice !== undefined ? displayStateName(selectservice.Status) : ""}</Col>
+            <Col className="view-item-size-main" md={3}>State:</Col>
+            <Col className="view-item-size" md={8}>{selectservice !== undefined ? displayStateName(selectservice.Status) : ""}</Col>
           </Row>
         </ModalBody>
       </Modal>

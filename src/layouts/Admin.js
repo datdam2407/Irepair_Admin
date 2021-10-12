@@ -24,7 +24,7 @@ function Admin() {
 //       history.push("/");
 //     }
 // }, []);
-  const [sidebarImage, setSidebarImage] = React.useState(image3);
+  const [sidebarImage, setSidebarImage] = React.useState(image1);
   const [sidebarBackground, setSidebarBackground] = React.useState("black");
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {

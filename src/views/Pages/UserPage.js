@@ -34,9 +34,9 @@ function UserPage() {
                       <Row>
                         <Col className="pr-1" md="5">
                           <Form.Group>
-                            <label>Company (disabled)</label>
+                            <label>ID (disabled)</label>
                             <Form.Control
-                              defaultValue="Creative Code Inc."
+                              value={localStorage.getItem("IDADMIN")}
                               disabled
                               placeholder="Company"
                               type="text"
@@ -47,7 +47,7 @@ function UserPage() {
                           <Form.Group>
                             <label>Username</label>
                             <Form.Control
-                              defaultValue="michael23"
+                              value= {localStorage.getItem("NAME")}
                               placeholder="Username"
                               type="text"
                             ></Form.Control>
@@ -69,33 +69,11 @@ function UserPage() {
                         </Col>
                       </Row>
                       <Row>
-                        <Col className="pr-1" md="6">
-                          <Form.Group>
-                            <label>First Name</label>
-                            <Form.Control
-                              defaultValue="Mike"
-                              placeholder="Company"
-                              type="text"
-                            ></Form.Control>
-                          </Form.Group>
-                        </Col>
-                        <Col className="pl-1" md="6">
-                          <Form.Group>
-                            <label>Last Name</label>
-                            <Form.Control
-                              defaultValue="Andrew"
-                              placeholder="Last Name"
-                              type="text"
-                            ></Form.Control>
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                      <Row>
                         <Col md="12">
                           <Form.Group>
                             <label>Address</label>
                             <Form.Control
-                              defaultValue="Bld Mihail Kogalniceanu"
+                               value={localStorage.getItem("ADDRESS")} 
                               placeholder="Home Address"
                               type="text"
                             ></Form.Control>
@@ -107,8 +85,8 @@ function UserPage() {
                           <Form.Group>
                             <label>City</label>
                             <Form.Control
-                              defaultValue="Mike"
-                              placeholder="City"
+                              defaultValue="Ho CHi Minh city"
+                              placeholder=""
                               type="text"
                             ></Form.Control>
                           </Form.Group>
@@ -117,21 +95,13 @@ function UserPage() {
                           <Form.Group>
                             <label>Country</label>
                             <Form.Control
-                              defaultValue="Andrew"
-                              placeholder="Country"
+                              defaultValue="District 12"
+                              placeholder="District 12"
                               type="text"
                             ></Form.Control>
                           </Form.Group>
                         </Col>
-                        <Col className="pl-1" md="4">
-                          <Form.Group>
-                            <label>Postal Code</label>
-                            <Form.Control
-                              placeholder="ZIP Code"
-                              type="number"
-                            ></Form.Control>
-                          </Form.Group>
-                        </Col>
+                     
                       </Row>
                       <Row>
                         <Col md="12">
@@ -139,7 +109,7 @@ function UserPage() {
                             <label>About Me</label>
                             <Form.Control
                               cols="80"
-                              defaultValue="Mike"
+                              defaultValue="Sevenn"
                               placeholder="Here can be your description"
                               rows="4"
                             ></Form.Control>
@@ -178,9 +148,9 @@ function UserPage() {
                           className="avatar border-gray"
                           src={require("assets/img/new_logo.png").default}
                         ></img>
-                        <Card.Title as="h5">Tania Keatley</Card.Title>
+                        <Card.Title as="h5">{localStorage.getItem("email")}</Card.Title>
                       </a>
-                      <p className="card-description">michael24</p>
+                      <p className="card-description">{localStorage.getItem("NAME")}</p>
                     </div>
                     <p className="card-description text-center">
                       Hey there! As you can see, <br></br>
