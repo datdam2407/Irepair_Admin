@@ -127,8 +127,8 @@ function AdminNavbar() {
                     href="#pablo"
                     
                     onClick={(e) => 
-                      // window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/user-page"}
-                      window.location.href = "http://localhost:3000/admin/user-page"}
+                      window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/user-page"}
+                      // window.location.href = "http://localhost:3000/admin/user-page"}
                   >
                     <i className="nc-icon nc-settings-90"></i>
                     Setting
