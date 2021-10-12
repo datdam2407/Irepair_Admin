@@ -54,8 +54,10 @@ import { makeStyles } from '@material-ui/core/styles';
 export default function ManageCompany() {
   //Filter
   const listStates = [
-   
+    "New",
     "Approved",
+
+    "Blocked",
     "Deleted",
   ];
   const [filterState, setListFilterState] = useState(listStates);
@@ -252,7 +254,7 @@ export default function ManageCompany() {
         Address: address,
         Description: description,
         Email: email,
-        Status: 3,
+        Status: 1,
         Hotline: hotline,
         ImageUrl: picture,
         Uid: 1,
@@ -278,8 +280,8 @@ export default function ManageCompany() {
   // custom state
   function displayStateName(type) {
     const stateValue = {
-      1: "Deleted",
-      3: "Approved",
+      3: "Deleted",
+      1: "Approved",
     
     };
     return stateValue[type] ? stateValue[type] : "";
@@ -430,8 +432,8 @@ export default function ManageCompany() {
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 1 && 'red')||
-                                  (e.Status === 3 && 'green')
+                                  ((e.Status === 1 && 'green')||
+                                  (e.Status === 3 && 'red')
                                   )
                               }}
                             >{displayStateName(e.Status)}</Typography>
