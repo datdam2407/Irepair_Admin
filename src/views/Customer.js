@@ -35,9 +35,6 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import deleteIcon from "assets/img/remove.png";
-import editIcon from "assets/img/edit.png";
-import { Link } from "react-router-dom";
 import { del, post, get, getWithToken } from "../../src/service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -231,7 +228,7 @@ export default function Customer() {
                   <th className="description">Created Date</th>
                   <th className="description">FullName</th>
                   <th className="description">Uid</th>
-                  <th className="description">Views</th>
+                  {/* <th className="description">Views</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -298,9 +295,7 @@ export default function Customer() {
                       <td>
                         {e.Email}
                       </td>
-                      {/* <td>
-                        {e.Username}
-                      </td> */}
+                  
                       <td >{moment(e.CreateDate).format("MM-DD-YYYY")}
                       </td>
                       <td>

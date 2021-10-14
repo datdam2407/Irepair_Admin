@@ -19,6 +19,7 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
+import { del, post, get, put, getWithToken, putWithToken, getWithTokenParams, postWithToken } from "../service/ReadAPI";
 
 function Dashboard() {
 //   let history = useHistory();
@@ -29,6 +30,10 @@ function Dashboard() {
 //     }
 // }, []);
 
+const [companyListID, setCompanyList] = useState([]);
+const [serviceList, setServiceList] = useState([]);
+const [RPList, setRepairmanList] = useState([]);
+const [OrderList, setOrderList] = useState([]);
 
   const carouselItems = [
     {
@@ -69,90 +74,170 @@ function Dashboard() {
       caption: "",
     },
   ];
+  useEffect(() => {
+    getWithToken("/api/v1.0/services?Status=1" ,localStorage.getItem("token")).then(
+      (res) => {
+        setServiceList(res.data);
+      }
+    )
+    getWithToken("/api/v1.0/order" ,localStorage.getItem("token")).then(
+      (res) => {
+        setOrderList(res.data);
+      }
+    )
+    getWithToken("/api/v1.0/repairmans?Status=1" ,localStorage.getItem("token")).then(
+      (res) => {
+        setRepairmanList(res.data);
+      }
+    )
+
+    getWithToken("/api/v1.0/companies?Status=1", localStorage.getItem("token")).then(
+      (res) => {
+        if (res && res.status === 200) {
+          setCompanyList(res.data);
+          // res.data;
+          // console.log(res.data);
+          console.log("aaaaa", companyListID.length);
+        }
+      });
+  }, []);
+
 
   return (
     <>
       <Container fluid>
         <Row>
-          <Col lg="3" sm="6">
+          <Col lg="2" sm="6">
             <Card className="card-stats">
               <Card.Body>
                 <Row>
                   <Col xs="5">
                     <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-chart text-warning"></i>
+                      <i className="nc-icon nc-istanbul text-warning"></i>
                     </div>
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">Number</p>
-                      <Card.Title as="h4">150GB</Card.Title>
+                      <p className="card-category">Company</p>
+                      <Card.Title as="h4">{companyListID.length}</Card.Title>
                     </div>
                   </Col>
                 </Row>
               </Card.Body>
               <Card.Footer>
                 <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-redo mr-1"></i>
-                  Update Now
+                <div className="numbers">
+                <i className="fas fa-check"></i> 
+                  Updated
                 </div>
               </Card.Footer>
             </Card>
           </Col>
-          <Col lg="3" sm="6">
+          <Col lg="2" sm="6">
             <Card className="card-stats">
               <Card.Body>
                 <Row>
                   <Col xs="5">
                     <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-light-3 text-success"></i>
+                      <i className="nc-icon nc-settings-gear-64 text-success"></i>
                     </div>
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">Revenue</p>
-                      <Card.Title as="h4">$ 1,345</Card.Title>
+                      <p className="card-category">Service</p>
+                      <Card.Title as="h4">{serviceList.length}</Card.Title>
                     </div>
                   </Col>
                 </Row>
               </Card.Body>
               <Card.Footer>
                 <hr></hr>
-                <div className="stats">
+                <div className="numbers">
                   <i className="far fa-calendar-alt mr-1"></i>
                   Last day
                 </div>
               </Card.Footer>
             </Card>
           </Col>
-          <Col lg="3" sm="6">
+          <Col lg="2" sm="6">
             <Card className="card-stats">
               <Card.Body>
                 <Row>
                   <Col xs="5">
                     <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-vector text-danger"></i>
+                      <i className="nc-icon nc-single-02 text-warning"></i>
                     </div>
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">Errors</p>
-                      <Card.Title as="h4">23</Card.Title>
+                      <p className="card-category">RepairMan</p>
+                      <Card.Title as="h4">{RPList.length}</Card.Title>
                     </div>
                   </Col>
                 </Row>
               </Card.Body>
               <Card.Footer>
                 <hr></hr>
-                <div className="stats">
+                <div className="numbers">
                   <i className="far fa-clock-o mr-1"></i>
                   In the last hour
                 </div>
               </Card.Footer>
             </Card>
           </Col>
-          <Col lg="3" sm="6">
+          <Col lg="2" sm="6">
+            <Card className="card-stats">
+              <Card.Body>
+                <Row>
+                  <Col xs="5">
+                    <div className="icon-big text-center icon-warning">
+                      <i className="nc-icon nc-delivery-fast text-danger"></i>
+                    </div>
+                  </Col>
+                  <Col xs="7">
+                    <div className="numbers">
+                      <p className="card-category">Order</p>
+                      <Card.Title as="h4">{OrderList.length}</Card.Title>
+                    </div>
+                  </Col>
+                </Row>
+              </Card.Body>
+              <Card.Footer>
+                <hr></hr>
+                <div className="numbers">
+                  <i className="far fa-clock-o mr-1"></i>
+                  In the last hour
+                </div>
+              </Card.Footer>
+            </Card>
+          </Col>
+          <Col lg="2" sm="6">
+            <Card className="card-stats">
+              <Card.Body>
+                <Row>
+                  <Col xs="5">
+                    <div className="icon-big text-center icon-warning">
+                      <i className="nc-icon nc-money-coins text-primary"></i>
+                    </div>
+                  </Col>
+                  <Col xs="7">
+                    <div className="numbers">
+                      <p className="card-category">Revenue</p>
+                      <Card.Title as="h4">45M</Card.Title>
+                    </div>
+                  </Col>
+                </Row>
+              </Card.Body>
+              <Card.Footer>
+                <hr></hr>
+                <div className="numbers">
+                <i className="fas fa-check"></i> 
+                  Updated
+                </div>
+              </Card.Footer>
+            </Card>
+          </Col>
+          <Col lg="2" sm="6">
             <Card className="card-stats">
               <Card.Body>
                 <Row>
@@ -171,9 +256,9 @@ function Dashboard() {
               </Card.Body>
               <Card.Footer>
                 <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-redo mr-1"></i>
-                  Update now
+                <div className="numbers">
+                <i className="fas fa-check"></i> 
+                   Following       
                 </div>
               </Card.Footer>
             </Card>
@@ -319,7 +404,7 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
         <Col md="5">
             <Card>
               <Card.Header>
@@ -364,7 +449,7 @@ function Dashboard() {
               </Card.Footer>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
         
       </Container>
     </>

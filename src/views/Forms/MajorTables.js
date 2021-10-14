@@ -295,10 +295,10 @@ function MajorTables() {
       fetch(url, {
         method: "post", body: JSON.stringify(formData),
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-type": "application/json",
         },
-      }).then(resp => resp.json())
+      },).then(resp => resp.json())
         .then(resp => {
           handleClose()
           getMajorList()
@@ -493,7 +493,10 @@ function MajorTables() {
                               <Typography color="black" fontSize="0.80rem">{e.Description}</Typography>
                               {/* <Typography color="textSecondary" variant="body2">{row.company}</Typography> */}
                             </TableCell>
-                            <TableCell>
+                            <TableCell  onClick={() => {
+                                    // setMajorEdit(e.Id);
+                                    getMajorByID(e.Id);
+                                    setMajorModalApprove(true)}}>
                               <Typography
                                 className={classes.Status}
                                 style={{
@@ -558,7 +561,7 @@ function MajorTables() {
                                 </Button>
                               </OverlayTrigger>
 
-                              <OverlayTrigger
+                              {/* <OverlayTrigger
                                 overlay={
                                   <Tooltip id="tooltip-436082023">
                                     <br />
@@ -575,7 +578,6 @@ function MajorTables() {
 
                                   onClick={() => {
                                     // setMajorEdit(e.Id);
-                                    getMajorByID(e.Id);
                                     setMajorModalApprove(true);
                                   }}
 
@@ -584,12 +586,12 @@ function MajorTables() {
                                   variant="success"
                                 >
                                   {checkDisableImage(e.state) ? (
-                                    <i className="fas fa-check"></i>
+                                    <i className="fas fa-undo"></i>
                                   ) : (
-                                    <i className="fas fa-check"></i>
+                                    <i className="fas fa-undo"></i>
                                   )}
                                 </Button>
-                              </OverlayTrigger>
+                              </OverlayTrigger> */}
 
                               <OverlayTrigger
                                 onClick={(e) => e.preventDefault()}
@@ -837,7 +839,7 @@ function MajorTables() {
         >
           Are you sure?
         </ModalHeader>
-        <ModalBody>Do you want to Appprove this major</ModalBody>
+        <ModalBody>Do you want to appprove this major</ModalBody>
         <ModalFooter>
           <Button
             color="danger"

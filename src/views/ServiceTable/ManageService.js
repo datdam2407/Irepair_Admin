@@ -415,8 +415,8 @@ function ManageSevice() {
     const stateValue = {
       1: "Approved",
       0: "New",
-      2: "Blocked",
-      3: "Deleted"
+      2: "Deleted",
+      3: "Updating"
     };
     return stateValue[type] ? stateValue[type] : "";
   }

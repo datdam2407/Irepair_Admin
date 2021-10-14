@@ -35,9 +35,6 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import deleteIcon from "assets/img/remove.png";
-import editIcon from "assets/img/edit.png";
-import { Link } from "react-router-dom";
 import { del, post, get, getWithToken } from "../../src/service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -63,22 +60,22 @@ export default function Order() {
   const [customer_Name, setcustomer_Name] = useState("");
   const [address, setaddress] = useState("");
 
-  const [AvatarCus, setAvatarCus] = useState("");
-  const [CreateDate, setCreateDate] = useState("");
-  const [Email, setEmail] = useState("");
-  const [FullName, setFullName] = useState("");
-  const [PhoneNumber, setPhoneNumber] = useState("");
-  const [Username, setUsername] = useState("");
-
-
   const [useListCustomerShow, setUseListCustomerShow] = useState([]);
   const [useListCustomerShowPage, setUseListCustomerShowPage] = useState([]);
   const [customerList, setCustomerList] = useState([]);
+  const [serviceList, setServiceList] = useState([]);
   const [customerListID, setCustomerListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
 
   useEffect(() => {
+    getWithToken("/api/v1.0/services", localStorage.getItem("token")).then(
+      (res) => {
+        var tempS = res.data;
+        console.log(res.data);
+        setServiceList(tempS);
+
+      })
     getWithToken("/api/v1.0/order", localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
@@ -142,6 +139,7 @@ export default function Order() {
     }
   }));
   const classes = useStyles();
+
   function getCustomerListID() {
     get("/api/v1.0/customer/get-by-id" + CustomerEdit).then((res) => {
       var temp = res.data;
@@ -191,6 +189,34 @@ export default function Order() {
     };
     return stateValue[type] ? stateValue[type] : "";
   }
+  function displayRepairName(type) {
+    const stateValue = {
+      "9e2b3583-c775-4273-aa7f-41ef03498d93": "Dat Dam",
+
+      "7c172d79-7c5d-4ed5-8e71-26ba2e7bf1a3": "nguyen thuan",
+      "84066527-2ba2-421a-8637-35d765b153e1": "Tâm Đăng",
+      "b123ea59-f40d-495d-b4c8-3be7c96200ad": "Nguyễn Thuần",
+      "50d2c8b8-2a11-4802-9592-4f76e92aed12": "Pham Tan Phat (K14 HCM)",
+      "90b961b3-6c48-4bed-9169-cbbbc978cfee": "Đỗ Dương Tâm Đăng - K14 HCM",
+
+    };
+    return stateValue[type] ? stateValue[type] : "";
+  }
+
+  function displayServiceName(type) {
+    const stateValue = {
+      "3b910bd2-8046-47bf-ab8e-00145f6d9ffb": "Sửa chữa lốc máy",
+      "6aeac270-3ce6-4693-b9af-07e8575e72e6": "Kiểm tra dàn lạnh",
+      "42931fd3-b056-4210-8467-0818059b8157": "Sửa Quần",
+      "4a0839a2-a1dd-4411-a387-0a898d71a38a": "Sửa Laptop",
+      "03372569-1d24-4af6-ac50-0c0ec5827191": "Sửa Laptop",
+      "b68e53f9-d13d-4631-b749-22f50a1e2ad3": "Đo và bơm gas máy lạnhh",
+      "616a22f4-05c8-4617-86bf-255292bdafad": "Tủ Đông",
+
+    };
+    return stateValue[type] ? stateValue[type] : "";
+  }
+
 
   const closeBtn = (x) => (
     <button
@@ -221,17 +247,19 @@ export default function Order() {
             <Table className="table-hover table-striped">
               <thead>
                 <tr>
-                  <th className="description">Image</th>
                   <th className="description">Customer</th>
-                  <th className="description">Feedback</th>
-                  {/* <th className="description">Username</th> */}
-                  <th className="description">Total</th>
                   <th className="description">Address </th>
-                  <th className="description">Create </th>
-                  <th className="description">Point</th>
-                  <th className="description">Payment</th>
                   <th className="description">Repairman</th>
+
                   <th className="description">Service</th>
+                  {/* <th className="description">Username</th> */}
+                  
+                  <th className="description">Created Date </th>
+                  <th className="description">Payment Date</th>
+                  <th className="description">Total</th>
+
+                  <th className="description">Point</th>
+                  <th className="description">Feedback</th>
                   <th className="description">Views</th>
                 </tr>
               </thead>
@@ -239,86 +267,39 @@ export default function Order() {
                 {useListCustomerShowPage.map((e, index) => {
                   return (
                     <tr key={index}>
-                      <td>
-                        <img src={e.Avatar}/>
-                      </td>
-                     <TableCell>
-                            <Grid container>
-                              <Tooltip html={(
-                                <div style={{ width: 700, height: 300 }}>
-                                  <strong>
-                                    <ModalHeader
-                                      style={{ color: "yellow" }}
-                                    >
-                                      Detailed User Information
-                                    </ModalHeader>
-                                    <ModalBody>
-                                      <Row>
-                                        <Col md={2}> Full Name:</Col>
-                                        <Col className="view-item-size" md={3}> {e.FullName}</Col>
-                                      </Row>
-                                      <Row>
-                                        <Col md={2}>Create Date:</Col>
-                                        <Col className="view-item-size" md={3}>
-                                          {e.CreateDate}
-                                        </Col>
-                                      </Row>
-                                      <Row>
-                                        <Col md={2}>Email:</Col>
-                                        <Col className="view-item-size" md={3}>
-                                          {e.Email}
-                                        </Col>
-                                      </Row>
-                                      <Row>
-                                        <Col md={3} ><img className="text-left-topic-toolpi" src={e.Avatar} /></Col>
-                                      </Row>
 
-                                    </ModalBody>
-                                  </strong>
-                                </div>
-                              )}
-                              >
-                                <Grid item lg={2}>
-                                  <Avatar src={e.Avatar} className={classes.avatar}>
-                                  </Avatar>
-                                </Grid>
-                              </Tooltip>
-                              <Grid item lg={10}>
-                                <Typography className={classes.name}>{e.FullName}</Typography>
-                                <Typography color="textSecondary" variant="body2">{e.CustomerId}
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </TableCell>
-              
-              
+                      <TableCell>
+                        <Grid container>
+                          <Grid item lg={10}>
+                            <Typography className={classes.name}>{displayRepairName(e.CustomerId)}</Typography>
+                            <Typography color="black" variant="body2">{(e.CustomerId)}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </TableCell>
                       <td>
-                        {e.FeedbackMessage}
+                        {e.CustomerAddress}
+                      </td>
+                      <td>
+                        {displayRepairName(e.RepairmanId)}
+                      </td>
+                      <td>
+                        {displayServiceName(e.ServiceId)}
+                      </td>
+                      <td >{moment(e.CreateTime).format("MM-DD-YYYY")}
+                      </td>
+                      <td>
+                      {moment(e.PaymentTime).format("MM-DD-YYYY")}
                       </td>
                       <td>
                         {e.Total}
                       </td>
-                      <td>
-                        {e.CustomerAddress}
+                      <td className="point-customer">
+                        {e.FeedbackPoint}✩
                       </td>
-                      {/* <td>
-                        {e.Username}
-                      </td> */}
-                      <td >{moment(e.CreateTime).format("MM-DD-YYYY")}
+                      <td className="point-customer">
+                        {e.FeedbackMessage}
                       </td>
-                      <td>
-                        {e.FeedbackPoint}
-                      </td>
-                      <td>
-                        {e.PaymentTime}
-                      </td>
-                      <td>
-                        {e.RepairmanId}
-                      </td>
-                      <td>
-                        {e.ServiceId}
-                      </td>
-
                       <td>
                         <OverlayTrigger
                           onClick={(e) => e.preventDefault()}
@@ -331,8 +312,8 @@ export default function Order() {
                         >
                           <Button
                             onClick={() => {
-                              setModalStatus(true);
-                              setSelectservice(e);
+                              // setModalStatus(true);
+                              // setSelectservice(e);
                             }}
                             className="btn-link btn-icon"
                             type="button"
@@ -539,10 +520,10 @@ export default function Order() {
           style={{ color: "#B22222" }}
           close={closeBtn(toggleDetails)}
         >
-         <h3> Detailed Field Information </h3>
+          <h3> Detailed Field Information </h3>
         </ModalHeader>
         <ModalBody>
-       
+
           <Row>
             <Col></Col>
             <Col className="view-item-size-main" md={3}>  FullName</Col>
@@ -565,7 +546,7 @@ export default function Order() {
               {Selectservice !== undefined ? Selectservice.CreateDate : ""}
             </Col>
           </Row>
-          
+
           <Row>
             <Col></Col>
             <Col className="view-item-size-main" md={3}> Phone</Col>

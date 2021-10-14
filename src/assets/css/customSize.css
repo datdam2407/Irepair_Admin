@@ -162,7 +162,11 @@ font-size: larger;}
 .view-item-size{
     font-size: 17px;
 } 
-
+.point-customer{
+    font-size: 15px;
+    font-weight: 900;
+    color: rgb(145 105 11);
+}
 .view-item-size-main{
     font-size: 17px;
     font-weight: bold;

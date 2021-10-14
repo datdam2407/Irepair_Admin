@@ -245,19 +245,17 @@ export default function ManageCompany() {
     });
   }
   // update form 
-  async function handleEditSubmit(e) {
-    await putWithToken(
+  async function handleSubmit() {
+    await postWithToken(
       `/api/v1.0/companies`,
       {
-        Id: companyID,
         CompanyName: name,
         Address: address,
         Description: description,
         Email: email,
         Status: 1,
         Hotline: hotline,
-        ImageUrl: picture,
-        Uid: 1,
+        ImageUrl: "none",
       },
       localStorage.getItem("token")
     )
@@ -281,6 +279,7 @@ export default function ManageCompany() {
   function displayStateName(type) {
     const stateValue = {
       3: "Deleted",
+      0: "New",
       1: "Approved",
     
     };
@@ -289,7 +288,7 @@ export default function ManageCompany() {
   console.log("cpName", name)
   function handleEditSubmit2(e) {
     putWithToken(
-      "/api/v1.0/companies",
+      `/api/v1.0/companies?companyId=${CompanyDelete}`,
       {
         id: null,
         companyName: name,
@@ -422,17 +421,18 @@ export default function ManageCompany() {
                         <td>
                           {e.Hotline}
                         </td>
-                        {/* <td>
-                          {e.Picture}
-                        </td> */}
+                       
                         <td>
 
-                          <TableCell>
+                          <TableCell  onClick={() => {
+                                setCompanyDelete(e.Id);
+                                setCompanyModalApprove(true)}}>
                             <Typography
                               className={classes.Status}
                               style={{
                                 backgroundColor:
                                   ((e.Status === 1 && 'green')||
+                                  (e.Status === 0 && '#119fb3')||
                                   (e.Status === 3 && 'red')
                                   )
                               }}
@@ -441,36 +441,6 @@ export default function ManageCompany() {
 
                         </td>
                         <td>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-436082023">
-                                APPROVE..
-                              </Tooltip>
-                            }
-                            placement="right"
-                          >
-
-                            <Button
-                              // onClick={() => handleUpdate(e.data)}
-                              // onGridReady={onGridReady}
-
-                              onClick={() => {
-                                // setMajorEdit(e.Id);
-                                getCompanyByID(e.Id);
-                                setCompanyModalApprove(true);
-                              }}
-
-                              className="btn-link btn-icon"
-                              type="button"
-                              variant="success"
-                            >
-                              {checkDisableImage(e.state) ? (
-                                <i className="fas fa-check"></i>
-                              ) : (
-                                <i className="fas fa-check"></i>
-                              )}
-                            </Button>
-                          </OverlayTrigger>
 
                           <OverlayTrigger
                             onClick={(e) => e.preventDefault()}
@@ -656,13 +626,13 @@ export default function ManageCompany() {
                 onChange={e => setHotline(e.target.value)}
               />
             </Form.Group>
-            <Form.Group className="mb-3">
+            {/* <Form.Group className="mb-3">
               <Form.Label>Image</Form.Label>
               <Form.Control type="text" value={picture}
                 onChange={e => setImage(e.target.value)}
 
               />
-            </Form.Group>
+            </Form.Group> */}
             {/* <Form.Group className="mb-3">
               <Form.Label>Status</Form.Label>
               <Form.Control type="text" value={statusCP} name="Status"/>

@@ -612,8 +612,10 @@ function MajorFields() {
                             {/* <Typography color="textSecondary" variant="body2">{row.company}</Typography> */}
                           </TableCell>
 
-                          <TableCell>
-                            <Typography
+                          <TableCell    onClick={() => {
+                                  getMajorFieldsByID(e.Id);
+                                  setMajorModalApprove(true)}}>
+                            <Typography 
                               className={classes.Status}
                               style={{
                                 backgroundColor:
@@ -623,7 +625,7 @@ function MajorFields() {
                                     ||
                                     (e.Status === 2 && 'red'))
                               }}
-                            >{displayStateName(e.Status)}</Typography>
+                            >{displayStateName(e.Status)} </Typography>
                           </TableCell>
                           <td className="td-actions">
                             <OverlayTrigger
@@ -679,7 +681,7 @@ function MajorFields() {
                             </OverlayTrigger>
 
 
-                            <OverlayTrigger
+                            {/* <OverlayTrigger
                               overlay={
                                 <Tooltip id="tooltip-436082023">
                                   <br />
@@ -696,7 +698,6 @@ function MajorFields() {
 
                                 onClick={() => {
                                   // setMajorEdit(e.Id);
-                                  getMajorFieldsByID(e.Id);
                                   setMajorModalApprove(true);
                                 }}
 
@@ -705,13 +706,13 @@ function MajorFields() {
                                 variant="success"
                               >
                                 {checkDisableImage(e.state) ? (
-                                  <i className="fas fa-check"></i>
+                                  <i className="fas fa-undo"></i>
                                 ) : (
-                                  <i className="fas fa-check"></i>
+                                  <i className="fas fa-undo"></i>
                                 )}
                               </Button>
-                            </OverlayTrigger>
-
+                            </OverlayTrigger> */}
+                  
 
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
