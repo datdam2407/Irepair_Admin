@@ -266,9 +266,6 @@ const [majorApprove, setMajorApprove] = useState(null);
   }
   console.log("field", FieldSelectID)
 
-
-  
-
   // update
   async function handleEditSubmit2() {
     await putWithToken(
@@ -287,7 +284,6 @@ const [majorApprove, setMajorApprove] = useState(null);
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/service";
-
         }
       })
       .catch((err) => {
@@ -736,7 +732,7 @@ const [majorApprove, setMajorApprove] = useState(null);
         >
           Are you sure?
         </ModalHeader>
-        <ModalBody>Do you want to Appprove this major</ModalBody>
+        <ModalBody>Do you want to Appprove this service</ModalBody>
         <ModalFooter>
           <Button
             color="danger"

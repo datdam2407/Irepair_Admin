@@ -38,7 +38,7 @@ import {
 import deleteIcon from "assets/img/remove.png";
 import editIcon from "assets/img/edit.png";
 import { Link } from "react-router-dom";
-import { del, post, get, getWithToken } from "../../src/service/ReadAPI";
+import { del, putWithToken , get, getWithToken } from "../../src/service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 
 export default function Repairman() {
@@ -58,6 +58,7 @@ export default function Repairman() {
     const [modalStatus, setModalStatus] = useState(false);
     const toggleDetails = () => setModalStatus(!modalStatus);
     const [Selectservice, setSelectservice] = useState();
+    const [CompanyDelete, setCompanyDelete] = useState(null);
 
 
     const [customer_Name, setcustomer_Name] = useState("");
@@ -69,6 +70,9 @@ export default function Repairman() {
     const [FullName, setFullName] = useState("");
     const [PhoneNumber, setPhoneNumber] = useState("");
     const [Username, setUsername] = useState("");
+
+    const [modalApprove, setModalApprove] = useState(false);
+  const toggleApprove = () => setModalApprove(!modalApprove)
 
 
     const [useListCustomerShow, setUseListCustomerShow] = useState([]);
@@ -102,7 +106,29 @@ export default function Repairman() {
         };
         return stateValue[type] ? stateValue[type] : "";
     }
-
+    async function handleEditSubmit2() {
+        await putWithToken(
+          `/api/v1.0/repairmans?repairmanId=${CompanyDelete}`,
+          {
+            id: "String",
+            ServiceName: "String",
+            description: "String",
+            FieldId: "String",
+            companyId: "String",
+            Price: 0,
+            ImageUrl: "String",
+            status: 0,
+          },localStorage.getItem("token")
+        )
+          .then((res) => {
+            if (res.status === 200) {
+              window.location = "/admin/repairman";
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     console.log("lisstID", companyList)
     useEffect(() => {
         getWithToken("/api/v1.0/repairmans", localStorage.getItem("token")).then(
@@ -180,8 +206,9 @@ export default function Repairman() {
     // custom state
     function displayStateName(type) {
         const stateValue = {
-            1: "Active",
-            0: "Inactive",
+            2: "Deleted",
+            1: "Approved",
+            0: "New",
         };
         return stateValue[type] ? stateValue[type] : "";
     }
@@ -213,6 +240,7 @@ export default function Repairman() {
                                     <th className="description">FullName</th>
                                     <th className="description">Company</th>
                                     <th className="description">Status</th>
+                                    <th className="viewAll">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -248,8 +276,6 @@ export default function Repairman() {
                                             }}>
                                                 {e.Email}
                                             </td>
-
-
                                             <td onClick={() => {
                                                 setModalStatus(true);
                                                 setSelectservice(e);
@@ -283,7 +309,30 @@ export default function Repairman() {
                                                     >{displayStateName(e.Status)}</Typography>
                                                 </TableCell>
                                             </td>
-                                            <td></td>
+                                            <td className="td-actions">
+                                                <OverlayTrigger
+                                                    onClick={(e) => e.preventDefault()}
+                                                    overlay={
+                                                        <Tooltip id="tooltip-960683717">
+                                                            Approved Service..
+                                                        </Tooltip>
+                                                    }
+                                                    placement="right"
+                                                >
+                                                    <Button
+                                                        onClick={() => {
+                                                            setModalApprove(true);
+                                                            setCompanyDelete(e.Id);
+                                                            // setSelectservice(e);
+                                                        }}
+                                                        className="btn-link btn-icon"
+                                                        type="button"
+                                                        variant="success"
+                                                    >
+                                                        <i className="fas fa-check"></i>
+                                                    </Button>
+                                                </OverlayTrigger>
+                                            </td>
                                         </tr>
                                     );
                                 })}
@@ -446,6 +495,33 @@ export default function Repairman() {
                     </Button>
                 </ModalFooter>
             </Modal>
+
+
+            <Modal isOpen={modalApprove} toggle={toggleApprove}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleApprove)}
+          toggle={toggleApprove}
+        >
+          Are you sure?
+        </ModalHeader>
+        <ModalBody>Do you want to Appprove this repairman</ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              // deleteMajorFieldsByID();
+              handleEditSubmit2();
+              setModalApprove(false);
+            }}
+          >
+            Approved
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleApprove}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
 
             <Modal isOpen={modalDelete} toggle={toggleDelete}>
                 <ModalHeader
