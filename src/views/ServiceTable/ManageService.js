@@ -33,7 +33,7 @@ import {
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
 
-import { del, put, get, getWithParams, getWithToken, getWithTokenParams } from "../../service/ReadAPI";
+import { del, put, get, getWithParams, getWithToken, getWithTokenParams, putWithToken } from "../../service/ReadAPI";
 import FilterState from "../MajorFields/FilterState";
 
 // import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -79,7 +79,10 @@ function ManageSevice() {
   const [modalStatus, setModalStatus] = useState(false);
   const toggleDetails = () => setModalStatus(!modalStatus);
   const [selectservice, setSelectservice] = useState();
-
+//
+const [majorApprove, setMajorApprove] = useState(null);
+  const [modalApprove, setModalApprove] = useState(false);
+  const toggleApprove = () => setModalApprove(!modalApprove)
 
   //service List
   const [useListserviceShow, setUseListserviceShow] = useState([]);
@@ -116,6 +119,8 @@ function ManageSevice() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [stateListFilter, setstateListFilter] = useState([]);
+  const [CompanyDelete, setCompanyDelete] = useState(null);
+
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
 
@@ -260,7 +265,35 @@ function ManageSevice() {
     setGridApi(params)
   }
   console.log("field", FieldSelectID)
+
+
+  
+
   // update
+  async function handleEditSubmit2() {
+    await putWithToken(
+      `/api/v1.0/services?serviceId=${CompanyDelete}`,
+      {
+        id: "String",
+        ServiceName: "String",
+        description: "String",
+        FieldId: "String",
+        companyId: "String",
+        Price: 0,
+        ImageUrl: "String",
+        status: 0,
+      },localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/service";
+
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   async function handleEditSubmit(e) {
     await put(
       `/api/v1.0/services`,
@@ -535,7 +568,30 @@ function ManageSevice() {
                               onClick={(e) => e.preventDefault()}
                               overlay={
                                 <Tooltip id="tooltip-960683717">
-                                  View Post..
+                                  Approved Service..
+                                </Tooltip>
+                              }
+                              placement="right"
+                            >
+                              <Button
+                                onClick={() => {
+                                  setModalApprove(true);
+                                  setCompanyDelete(e.Id);
+                                  // setSelectservice(e);
+                                }}
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="success"
+                              >
+                                <i className="fas fa-check"></i>
+                              </Button>
+                            </OverlayTrigger>
+
+                            <OverlayTrigger
+                              onClick={(e) => e.preventDefault()}
+                              overlay={
+                                <Tooltip id="tooltip-960683717">
+                                  View Service..
                                 </Tooltip>
                               }
                               placement="right"
@@ -648,6 +704,60 @@ function ManageSevice() {
 
         </Row>
       </Container>
+      {/* <Modal isOpen={modalMajorFieldDelete} toggle={toggleMajorDelete}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleMajorDelete)}
+          toggle={toggleMajorDelete}
+        >
+          Are you sure?
+        </ModalHeader>
+        <ModalBody>Do you want to delete this major</ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              deleteMajorFieldsByID();
+              setMajorModalFieldDelete(false);
+            }}
+          >
+            Delete
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleMajorDelete}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal> */}
+      <Modal isOpen={modalApprove} toggle={toggleApprove}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleApprove)}
+          toggle={toggleApprove}
+        >
+          Are you sure?
+        </ModalHeader>
+        <ModalBody>Do you want to Appprove this major</ModalBody>
+        <ModalFooter>
+          <Button
+            color="danger"
+            onClick={() => {
+              // deleteMajorFieldsByID();
+              handleEditSubmit2();
+              setModalApprove(false);
+            }}
+          >
+            Approved
+          </Button>{" "}
+          <Button color="secondary" onClick={toggleApprove}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+
+
+
+
       <Modal isOpen={modalserviceDelete} toggle={toggleserviceDelete}>
         <ModalHeader
           style={{ color: "#B22222" }}

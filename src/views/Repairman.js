@@ -276,7 +276,8 @@ export default function Repairman() {
                                                             backgroundColor:
                                                                 ((e.Status === 1 && 'rgb(34, 176, 34)')
                                                                     ||
-                                                                    (e.Status === 0 && 'red'))
+                                                                    (e.Status === 2 && 'red') ||
+                                                                    (e.Status === 0 && 'rgb(50, 102, 100)'))
 
                                                         }}
                                                     >{displayStateName(e.Status)}</Typography>
