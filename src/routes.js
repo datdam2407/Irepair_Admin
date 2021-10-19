@@ -119,6 +119,14 @@ var routes = [
 
     component: Repairman,
   },
+  
+  {
+    path: "/service",
+    layout: "/admin",
+    name: " Service Table",
+    icon: "nc-icon nc-paper-2",
+    component: ManageService,
+  },
   {
     path: "/major",
     layout: "/admin",
@@ -135,13 +143,6 @@ var routes = [
     component: MajorFields,
   },
 
-  {
-    path: "/service",
-    layout: "/admin",
-    name: " Service Table",
-    icon: "nc-icon nc-paper-2",
-    component: ManageService,
-  },
 
   // {
   //   collapse: true,

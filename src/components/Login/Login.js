@@ -23,7 +23,7 @@ function Login() {
   const history = useHistory();
   useEffect(() => {
     if (loading) {
-      return;
+      history.replace("/login");;
     }
     if (user)
      history.replace("/admin/dashboard");
