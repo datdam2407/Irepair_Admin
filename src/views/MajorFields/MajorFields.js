@@ -52,6 +52,10 @@ import {
   Tooltip,
 } from 'react-tippy';
 import 'react-tippy/dist/tippy.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 function MajorFields() {
   //delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
@@ -84,6 +88,8 @@ function MajorFields() {
   const [modalStatus, setModalStatus] = useState(false);
   const toggleDetails = () => setModalStatus(!modalStatus);
   const [selectMajor, setSelectMajor] = useState();
+
+  const [searchName, setSearchName] = useState("");
 
   //Filter
   const listStates = [
@@ -427,7 +433,7 @@ function MajorFields() {
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/fields";
-
+          alert("Delete Successfully")
         }
       }).catch((err) => {
         console.log(err);
@@ -497,7 +503,33 @@ function MajorFields() {
   //   }
   // }
 
-
+  function onSubmitSearch(e) {
+    e.preventDefault();
+    if (searchName !== "") {
+      getWithToken(
+        `/api/v1.0/major-fields?Name=` + searchName,
+        localStorage.getItem("token")
+      ).then((res) => {
+        var temp = res.data;
+        setMajorList(temp);
+        setNumberPage(1);
+        setUseListMajorShow(temp);
+        setUseListMajorShowPage(temp.slice(0, 6));
+        setTotalNumberPage(Math.ceil(temp.length / 6));
+      });
+    } else if (searchName == "") {
+      getWithToken("/api/v1.0/major-fields", localStorage.getItem("token")).then(
+        (res) => {
+          if (res && res.status === 200) {
+            var temp2 = res.data;
+            setMajorList(temp2);
+            setUseListMajorShow(temp2);
+            setUseListMajorShowPage(temp2.slice(numberPage * 6 - 6, numberPage * 6));
+            setTotalNumberPage(Math.ceil(temp2.length / 6));
+          }
+        })
+    }
+  }
   return (
     <>
       <Container fluid>
@@ -533,6 +565,20 @@ function MajorFields() {
                       </Row>
                     </Col>
                   </div>
+                  <Col md={2}>
+                    <Form
+                      onClick={(e) => {
+                        onSubmitSearch(e);
+                      }}
+                    >
+                      <InputGroup className="fixed">
+                        <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..."></Input>
+                        <Button className="dropdown-filter-css" >
+                          <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
+                        </Button>
+                      </InputGroup>
+                    </Form>
+                  </Col>
                   <Col>
                     <Col align="right">
                       <Button variant="contained" className="add-major-custom" onClick={() => { setMajorModalCreate(true); }}>Add MajorField</Button>
@@ -612,10 +658,11 @@ function MajorFields() {
                             {/* <Typography color="textSecondary" variant="body2">{row.company}</Typography> */}
                           </TableCell>
 
-                          <TableCell    onClick={() => {
-                                  getMajorFieldsByID(e.Id);
-                                  setMajorModalApprove(true)}}>
-                            <Typography 
+                          <TableCell onClick={() => {
+                            getMajorFieldsByID(e.Id);
+                            setMajorModalApprove(true)
+                          }}>
+                            <Typography
                               className={classes.Status}
                               style={{
                                 backgroundColor:
@@ -712,7 +759,7 @@ function MajorFields() {
                                 )}
                               </Button>
                             </OverlayTrigger> */}
-                  
+
 
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
@@ -1030,38 +1077,38 @@ function MajorFields() {
         >
           <h3> INFORMATION </h3>
         </ModalHeader>
-        <ModalBody className="Modal-body-view-all">
-        <Row>
-         <Col md={8} >
-         <Row>
-            <Col className="view-item-size-main" md={4}> Major:</Col>
-            <Col className="view-item-size" md={7}>
-              {selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
-            </Col>
-          </Row>
+        <ModalBody className="Modal-body-view-all-major-field">
           <Row>
-            <Col className="view-item-size-main" md={4}>Field:</Col>
-            <Col className="view-item-size" md={7}>
-              {selectMajor !== undefined ? selectMajor.Name : ""}
+            <Col md={8} >
+              <Row>
+                <Col className="view-item-size-main" md={4}> Major:</Col>
+                <Col className="view-item-size" md={7}>
+                  {selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
+                </Col>
+              </Row>
+              <Row>
+                <Col className="view-item-size-main" md={4}>Field:</Col>
+                <Col className="view-item-size" md={7}>
+                  {selectMajor !== undefined ? selectMajor.Name : ""}
+                </Col>
+              </Row>
+
+
+              <Row>
+                <Col className="view-item-size-main" md={4}>State:</Col>
+                <Col className="view-item-size" md={7}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
+              </Row>
+              <Row>
+                <Col className="view-item-size-main" md={4}>Description:</Col>
+                <Col className="view-item-size" md={7}>
+                  {selectMajor !== undefined ? selectMajor.Description : ""}
+                </Col>
+              </Row>
             </Col>
-          </Row>
-        
-        
-          <Row>
-            <Col className="view-item-size-main" md={4}>State:</Col>
-            <Col className="view-item-size" md={7}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
-          </Row>
-          <Row>
-            <Col className="view-item-size-main" md={4}>Description:</Col>
-            <Col className="view-item-size" md={7}>
-              {selectMajor !== undefined ? selectMajor.Description : ""}
-            </Col>
-          </Row>
-         </Col>
             <Col className="view-item-size">
               {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
             </Col>
-         </Row>
+          </Row>
         </ModalBody>
       </Modal>
 

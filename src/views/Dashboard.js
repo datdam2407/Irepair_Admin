@@ -19,13 +19,13 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { del, post, get, put, getWithToken, putWithToken, getWithTokenParams, postWithToken } from "../service/ReadAPI";
+import { getWithToken } from "../service/ReadAPI";
 
 function Dashboard() {
 //   let history = useHistory();
 
 // useEffect(() => {
-//     if (localStorage.getItem("isLogin") === null) {
+//     if (localStorage.getItem("token") === null) {
 //       history.push("/");
 //     }
 // }, []);
@@ -75,6 +75,7 @@ const [OrderList, setOrderList] = useState([]);
     },
   ];
   useEffect(() => {
+    
     getWithToken("/api/v1.0/services?Status=1" ,localStorage.getItem("token")).then(
       (res) => {
         setServiceList(res.data);

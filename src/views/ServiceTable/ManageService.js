@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faCaretDown,
+  faCaretUp,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Modal,
   ModalHeader,
@@ -112,8 +117,8 @@ const [majorApprove, setMajorApprove] = useState(null);
   const listStates = [
     "New",
     "Approved",
-    "Blocked",
     "Deleted",
+    "Updating",
   ];
   const [filterState, setListFilterState] = useState(listStates);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -123,6 +128,9 @@ const [majorApprove, setMajorApprove] = useState(null);
 
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
+
+
+  const [searchName, setSearchName] = useState("");
 
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -226,44 +234,6 @@ const [majorApprove, setMajorApprove] = useState(null);
   }, []);
 
 
-  const initialValue = { name: "", description: "", imageUrl: "", status: "1" }
-
-  const [gridApi, setGridApi] = useState(null)
-  const [tableData, setTableData] = useState(null)
-  const [open, setOpen] = React.useState(false);
-  const [formData, setFormData] = useState(initialValue)
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setFormData(initialValue)
-  };
-  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/services"
-  const columnDefs = [
-    { headerName: "ID", field: "Id", },
-    { headerName: "ServiceName", field: "servicename", },
-    { headerName: "Description", field: "description", },
-    { headerName: "Price", field: "price", },
-    { headerName: "FieldId", field: "fieldid", },
-    { headerName: "CompanyId", field: "companyid", },
-    { headerName: "ImageUrl", field: "imageUrl" },
-    {
-      headerName: "Actions", field: "Id", cellRendererFramework: (params) => <div>
-        <Button variant="outlined" color="primary" onClick={() => handleUpdate(params.data)}>Update</Button>
-        <Button variant="outlined" color="secondary" onClick={() => handleDelete(params.value)}>Delete</Button>
-      </div>
-    }
-  ]
-  const onChange = (e) => {
-    const { value, id } = e.target
-    // console.log(value,id)
-    setFormData({ ...formData, [id]: value })
-  }
-  const onGridReady = (params) => {
-    setGridApi(params)
-  }
   console.log("field", FieldSelectID)
 
   // update
@@ -316,49 +286,6 @@ const [majorApprove, setMajorApprove] = useState(null);
   }
 
   // setting update row data to form data and opening pop up window
-  const handleUpdate = (oldData) => {
-    setFormData(oldData)
-    console.log(oldData)
-    handleClickOpen()
-  }
-  const handleFormSubmit = () => {
-    if (formData.id) {
-      //updating a user 
-      const confirm = window.confirm("Are you sure, you want to update this row ?")
-      confirm && fetch(url + `/${formData.id}`, {
-        method: "put", body: JSON.stringify(formData),
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
-          "Content-type": "application/json"
-        }
-      }).then(resp => resp.json())
-        .then(resp => {
-          handleClose()
-          getserviceList()
-
-        })
-    } else {
-      // adding new user
-      fetch(url, {
-        method: "post", body: JSON.stringify(formData),
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzNjQwNTkzLCJleHAiOjE2MzM3MjY5OTMsImlhdCI6MTYzMzY0MDU5M30.PuqWp4m97btZUPEpI4TSqrWGrJX_Etq360G5E_OKjI4`,
-          "Content-type": "application/json"
-        }
-      }).then(resp => resp.json())
-        .then(resp => {
-          handleClose()
-          getserviceList()
-        })
-    }
-  }
-
-  const defaultColDef = {
-    sortable: true,
-    flex: 1, filter: true,
-    floatingFilter: true
-  }
-
 
 
   // Load service by ID
@@ -461,6 +388,34 @@ const [majorApprove, setMajorApprove] = useState(null);
     return stateValue[type] ? stateValue[type] : "";
   }
 
+  function onSubmitSearch(e) {
+    e.preventDefault();
+    if (searchName !== "") {
+      getWithToken(
+        `/api/v1.0/services?Name=` + searchName,
+        
+        localStorage.getItem("token")
+      ).then((res) => {
+        var temp = res.data;
+        setserviceList(temp);
+        setNumberPage(1);
+        setUseListserviceShow(temp);
+      setUseListserviceShowPage(temp.slice(0, 8));
+      setTotalNumberPage(Math.ceil(temp.length / 8));
+      
+      });
+    } else if(searchName == "") {
+      getWithToken("/api/v1.0/services", localStorage.getItem("token")).then(
+        (res) => {
+          if (res && res.status === 200) {
+            var temp2 = res.data;
+            setserviceList(temp2);
+            setUseListserviceShow(temp2);
+            setUseListserviceShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
+            setTotalNumberPage(Math.ceil(temp2.length / 8));
+    }})}
+  }
+
   return (
     <>
       <Container fluid>
@@ -496,6 +451,20 @@ const [majorApprove, setMajorApprove] = useState(null);
                       </Row>
                     </Col>
                   </div>
+                  <Col md={2}>
+                    <Form
+                      onClick={(e) => {
+                        onSubmitSearch(e);
+                      }}
+                    >
+                      <InputGroup className="fixed">
+                        <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..."></Input>
+                        <Button className="dropdown-filter-css" >
+                          <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
+                        </Button>
+                      </InputGroup>
+                    </Form>
+                  </Col>
                   {/* <Col md={10} align="right">
                 <Button variant="contained" className="add-major-custom" color="primary" onClick={handleClickOpen}>Add service</Button>
               </Col> */}
@@ -895,9 +864,7 @@ const [majorApprove, setMajorApprove] = useState(null);
         </ModalBody>
       </Modal>
 
-      <FormDialog open={open} handleClose={handleClose}
-        data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
-
+   
     </>
   );
 }

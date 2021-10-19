@@ -32,6 +32,7 @@ export default function FormDialog({open,handleClose,data,onChange,handleFormSub
             Cancel
           </Button>
           <Button  color="primary" onClick={()=>handleFormSubmit()} variant="contained">
+            
             {Id?"Update":"Submit"}
           </Button>
         </DialogActions>

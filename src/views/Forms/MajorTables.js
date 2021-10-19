@@ -9,12 +9,10 @@ import {
   InputGroup,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
   InputGroupButtonDropdown,
   PaginationItem,
   Input,
   PaginationLink,
-  FormGroup,
 } from "reactstrap";
 import {
   Tooltip,
@@ -34,7 +32,7 @@ import {
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
 import FilterState from "../MajorFields/FilterState"
-import { del, put, get, getWithParams, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
+import { del, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
 // import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -48,11 +46,12 @@ import {
   Avatar,
   Grid,
   Typography,
-  TablePagination,
-  TableFooter
 } from '@material-ui/core';
 import FormDialog from './Dialog';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
 function MajorTables() {
   //delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
@@ -62,7 +61,7 @@ function MajorTables() {
   const [ServiceEdit, setServiceEdit] = useState(null);
   // const [modalEdit, setServiceModalEdit] = useState(false);
   // const toggleEdit = () => setServiceModalEdit(!modalEdit);
-
+  const [searchName, setSearchName] = useState("");
   //modal create
   const [modalCreate, setMajorModalCreate] = useState(false);
   const toggleCreate = () => setMajorModalCreate(!modalCreate)
@@ -380,7 +379,34 @@ function MajorTables() {
     };
     return stateValue[type] ? stateValue[type] : "";
   }
-
+  function onSubmitSearch(e) {
+    e.preventDefault();
+    if (searchName !== "") {
+      getWithToken(
+        `/api/v1.0/majors?Name=` + searchName,
+        localStorage.getItem("token")
+      ).then((res) => {
+        var temp = res.data;
+        setMajorList(temp);
+        setNumberPage(1);
+        setUseListMajorShow(temp);
+        setUseListMajorShowPage(temp.slice(0, 7));
+        setTotalNumberPage(Math.ceil(temp.length / 7));
+      });
+    } else if (searchName == "") {
+      getWithToken("/api/v1.0/majors", localStorage.getItem("token")).then(
+        (res) => {
+          if (res && res.status === 200) {
+            var temp2 = res.data;
+            setMajorList(temp2);
+            setUseListMajorShow(temp2);
+            setUseListMajorShowPage(temp2.slice(numberPage * 7 - 7, numberPage * 7));
+            setTotalNumberPage(Math.ceil(temp2.length / 7));
+          }
+        })
+    }
+  }
+  
   return (
     <>
       <Container fluid>
@@ -415,6 +441,20 @@ function MajorTables() {
                       </Row>
                     </Col>
                   </div>
+                  <Col md={2}>
+                    <Form
+                      onClick={(e) => {
+                        onSubmitSearch(e);
+                      }}
+                    >
+                      <InputGroup className="fixed">
+                        <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..." ></Input>
+                        <Button className="dropdown-filter-css" >
+                          <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
+                        </Button>
+                      </InputGroup>
+                    </Form>
+                  </Col>
                   <Col align="right">
                     <Button className="add-major-custom" variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
                   </Col>

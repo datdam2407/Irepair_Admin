@@ -5,7 +5,7 @@ import { auth, signInWithGoogle } from "../../Firebase/firebaseConfig";
 import { FcGoogle } from "react-icons/fc";
 import "./login.css";
 import "firebase/firestore";
-import loginMan from "../../assets/img/man.png";
+import loginMan from "../../assets/img/worker-picture.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
@@ -23,7 +23,7 @@ function Login() {
   const history = useHistory();
   useEffect(() => {
     if (loading) {
-      history.replace("/login");;
+      return;
     }
     if (user)
      history.replace("/admin/dashboard");

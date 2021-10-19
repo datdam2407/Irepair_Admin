@@ -10,20 +10,20 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 // dinamically create dashboard routes
 import routes from "routes.js";
 
-import image1 from "assets/img/full-screen-image-1.jpg";
+import image1 from "assets/img/full-screen-image-5.jpg";
 import image2 from "assets/img/full-screen-image-2.jpg";
 import image3 from "assets/img/full-screen-image-3.jpg";
 import image4 from "assets/img/full-screen-image-4.jpg";
 
 function Admin() {
 
-    let history = useHistory();
+    // let history = useHistory();
 
-useEffect(() => {
-    if (localStorage.getItem("token") == null) {
-      history.replace("/login");;
-    }
-}, []);
+// useEffect(() => {
+//     if (localStorage.getItem("token") === null) {
+//       history.push("/");
+//     }
+// }, []);
   const [sidebarImage, setSidebarImage] = React.useState(image1);
   const [sidebarBackground, setSidebarBackground] = React.useState("black");
   const getRoutes = (routes) => {

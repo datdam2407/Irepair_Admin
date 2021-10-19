@@ -88,23 +88,22 @@ function AdminNavbar() {
                   <div className="photoCustomer">
                     <img
                       alt="..."
-                      src={require("assets/img/new_logo.png").default}
+                      src={localStorage.getItem("photo")}
                     ></img>
                   </div>
                   </Col>
-                  <Col>
+                 
+                  </Row>
                   <div className="info-customer">
                     <a
                       data-toggle="collapse"
                       href="#pablo"
                     >
                       <span>
-                        Dam Dat <b className="caret"></b>
+                        {localStorage.getItem("NAME")}  <b className="caret"></b>
                       </span>
                     </a>
                   </div>
-                  </Col>
-                  </Row>
                 </Dropdown.Toggle>
                 <Dropdown.Menu
                   alignRight

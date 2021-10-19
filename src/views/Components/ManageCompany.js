@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faCaretDown,
+  faCaretUp,
+} from "@fortawesome/free-solid-svg-icons";
 // react-bootstrap components
 import {
   Button,
@@ -56,15 +61,15 @@ export default function ManageCompany() {
   const listStates = [
     "New",
     "Approved",
-
     "Blocked",
     "Deleted",
   ];
   const [filterState, setListFilterState] = useState(listStates);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
+  const [searchName, setSearchName] = useState("");
   const [stateListFilter, setstateListFilter] = useState([]);
-
+  const [useList, setUseList] = useState([]);
 
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
@@ -138,12 +143,6 @@ export default function ManageCompany() {
     getCompanyList(newListState);
   }
 
-  //check image
-  function checkDisableImage(state) {
-    const list = [1, 3];
-    if (list.includes(state)) return true;
-    else return false;
-  }
 
   const [CompanyDelete, setCompanyDelete] = useState(null);
   const [modalDelete, setCompanyModalDelete] = useState(false);
@@ -158,16 +157,13 @@ export default function ManageCompany() {
 
   //Approved Company 
   //Approved
-  const [CompanyApprove, setCompanyApprove] = useState(null);
   const [modalApprove, setCompanyModalApprove] = useState(false);
   const toggleApprove = () => setCompanyModalApprove(!modalApprove)
 
-  const [useList, setUseList] = useState([]);
 
   const [useListCompanyShow, setUseListCompanyShow] = useState([]);
   const [useListCompanyShowPage, setUseListCompanyShowPage] = useState([]);
   const [companyList, setCompanyList] = useState([]);
-  const [companyListID, setCompanyListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
 
@@ -177,47 +173,9 @@ export default function ManageCompany() {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [hotline, setHotline] = useState("");
-  const [statusCP, setCPStatus] = useState("");
-  const [isOnl, setIsOnline] = useState("");
-  const [companyID, setCompanyID] = useState("");
 
-  async function getCompanyByID(Id) {
-    getWithToken(`/api/v1.0/companies/${Id}`, localStorage.getItem("token")).then((res) => {
-      setCompanyID(Id);
-      setName(res.data.companyName);
-      setAddress(res.data.address);
-      setDescription(res.data.description);
-      setEmail(res.data.email);
-      setHotline(res.data.hotline);
-      setImage(res.data.imageUrl);
-      setCPStatus(res.data.status);
-      // setIsDeleted(res.data.is_Delete);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
-  async function handleEditSubmit(e) {
-    await putWithToken(
-      `/api/v1.0/major-fields`,
-      {
-        id: majorID,
-        name: name,
-        description: description,
-        majorId: MajorSelectID,
-        imageUrl: picture,
-        status: 1,
-      },
-      localStorage.getItem("token")
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/fields";
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+
+
   useEffect(() => {
     getCompanyList();
     getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then(
@@ -238,42 +196,18 @@ export default function ManageCompany() {
       var temp = res.data.filter((x) => x.state !== "Completed");
       setCompanyList(temp);
       setUseListCompanyShow(temp);
-      setUseListCompanyShowPage(temp.slice(numberPage * 15 - 15, numberPage * 15));
-      setTotalNumberPage(Math.ceil(temp.length / 15));
+      setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
+      setTotalNumberPage(Math.ceil(temp.length / 8));
     }).catch((err) => {
       console.log(err);
     });
   }
-  // update form 
-  async function handleSubmit() {
-    await postWithToken(
-      `/api/v1.0/companies`,
-      {
-        CompanyName: name,
-        Address: address,
-        Description: description,
-        Email: email,
-        Status: 1,
-        Hotline: hotline,
-        ImageUrl: "none",
-      },
-      localStorage.getItem("token")
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/company";
 
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListCompanyShowPage(useListCompanyShow.slice(number * 15 - 15, number * 15));
-    setTotalNumberPage(Math.ceil(useListCompanyShow.length / 15));
+    setUseListCompanyShowPage(useListCompanyShow.slice(number * 8 - 8, number * 8));
+    setTotalNumberPage(Math.ceil(useListCompanyShow.length / 8));
   }
   // custom state
   function displayStateName(type) {
@@ -281,7 +215,7 @@ export default function ManageCompany() {
       3: "Deleted",
       0: "New",
       1: "Approved",
-    
+
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -305,6 +239,7 @@ export default function ManageCompany() {
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/Company";
+          alert("Approved Successfully")
         }
       })
       .catch((err) => {
@@ -317,6 +252,8 @@ export default function ManageCompany() {
     ).then((res) => {
       if (res.status === 200) {
         window.location = "/admin/Company";
+        alert("Deleted Successfully")
+
       }
     })
       .catch((err) => {
@@ -334,6 +271,34 @@ export default function ManageCompany() {
       X
     </button>
   );
+  function onSubmitSearch(e) {
+    e.preventDefault();
+  
+    if (searchName !== "") {
+      getWithToken(
+        `/api/v1.0/companies?Name=` + searchName,
+        
+        localStorage.getItem("token")
+      ).then((res) => {
+        var temp = res.data;
+        setCompanyList(temp);
+        setNumberPage(1);
+      setUseListCompanyShow(temp);
+      setUseListCompanyShowPage(temp.slice(0, 8));
+      setTotalNumberPage(Math.ceil(temp.length / 8));
+      });
+    } else if(searchName == "") {
+      getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then(
+        (res) => {
+          if (res && res.status === 200) {
+            var temp2 = res.data;
+            setCompanyList(temp2);
+      setUseListCompanyShow(temp2);
+      setUseListCompanyShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
+      setTotalNumberPage(Math.ceil(temp2.length / 8));
+    }})}
+  }
+
   return (
     <>
       <Container fluid>
@@ -368,14 +333,26 @@ export default function ManageCompany() {
                       </InputGroup>
                     </Row>
                   </Col>
+                 
                 </div>
+                <Col md={2}>
+                    <Form
+                      onClick={(e) => {
+                        onSubmitSearch(e);
+                      }}
+                    >
+                      <InputGroup className="fixed">
+                        <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..." ></Input>
+                        <Button className="dropdown-filter-css" >
+                          <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
+                        </Button>
+                      </InputGroup>
+                    </Form>
+                  </Col>
                 <Col>
                   <Col align="right">
                     <Button
                       onClick={() => {
-                        // setCompanyEdit(e.Id);
-                        // getCompanyListID();
-                        // handleSubmit(e);
                         setCompanyModalCreate(true);
                       }}>
                       Create new Company
@@ -421,19 +398,20 @@ export default function ManageCompany() {
                         <td>
                           {e.Hotline}
                         </td>
-                       
+
                         <td>
 
-                          <TableCell  onClick={() => {
-                                setCompanyDelete(e.Id);
-                                setCompanyModalApprove(true)}}>
+                          <TableCell onClick={() => {
+                            setCompanyDelete(e.Id);
+                            setCompanyModalApprove(true)
+                          }}>
                             <Typography
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 1 && 'green')||
-                                  (e.Status === 0 && '#119fb3')||
-                                  (e.Status === 3 && 'red')
+                                  ((e.Status === 1 && 'green') ||
+                                    (e.Status === 0 && '#119fb3') ||
+                                    (e.Status === 3 && 'red')
                                   )
                               }}
                             >{displayStateName(e.Status)}</Typography>
@@ -442,6 +420,29 @@ export default function ManageCompany() {
                         </td>
                         <td>
 
+                          <OverlayTrigger
+                            onClick={(e) => e.preventDefault()}
+
+                            overlay={
+                              <Tooltip id="tooltip-334669391">
+                                Approved Company..
+                              </Tooltip>
+                            }
+                            placement="right\"
+                          >
+                            <Button
+                              onClick={() => {
+                                setCompanyDelete(e.Id);
+                                setCompanyModalApprove(true);
+                              }}
+
+                              className="btn-link btn-icon"
+                              type="button"
+                              variant="success"
+                            >
+                              <i className="fas fa-check"></i>
+                            </Button>
+                          </OverlayTrigger>
                           <OverlayTrigger
                             onClick={(e) => e.preventDefault()}
 
@@ -757,6 +758,7 @@ export default function ManageCompany() {
             onClick={() => {
               handleCompanyDetele();
               setCompanyModalDelete(false);
+              setCompanyModalSuccess(true);
 
             }}
           >

@@ -444,9 +444,8 @@
 
     //  MAIN PANEL
 
-
 .main-panel{
-    background: rgba(102, 51, 241, 0.15);
+    background: #3a7393;
     position: relative;
     float: right;
     width: $sidebar-width;
@@ -457,7 +456,7 @@
     }
 
     .footer{
-        border-top: 1px solid #e7e7e7;
+        border-top: 1px solid #26648af5;
     }
 
     .navbar{

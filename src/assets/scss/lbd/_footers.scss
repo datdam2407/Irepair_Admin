@@ -1,5 +1,5 @@
 .footer{
-    background-color: $white-color;
+    background-color: #26648af5;
     width: 100%;
 
     .footer-menu{
@@ -13,7 +13,7 @@
         font-weight: normal;
 
         a:not(.btn){
-            color: $dark-gray;
+            color: #FFFFFF;
             display: block;
             margin-bottom: 3px;
             &:hover,
@@ -43,7 +43,7 @@
        }
     }
     .copyright{
-        color: $default-states-color;
+        color: #fff;
         padding: 10px 15px;
         margin: 10px 3px;
         line-height: 20px;
