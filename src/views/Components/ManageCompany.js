@@ -117,6 +117,7 @@ export default function ManageCompany() {
       width: '71px',
       fontSize: '0.76rem',
       color: 'white',
+      textAlign :'center',
       backgroundColor: 'red',
       borderRadius: 8,
       padding: '3px 10px',

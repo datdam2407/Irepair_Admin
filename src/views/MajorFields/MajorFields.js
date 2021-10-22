@@ -143,6 +143,7 @@ function MajorFields() {
       color: 'white',
       backgroundColor: 'green',
       borderRadius: 8,
+      textAlign :'center',
       padding: '3px 10px',
       display: 'inline-block'
     }

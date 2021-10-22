@@ -199,3 +199,8 @@ font-size: larger;}
     .image-css-col{
         width: 100px;
     }
+    .input-type-css{
+        border:solid white;
+        text-align: right;       
+        padding-right: 45px; 
+    }

@@ -236,6 +236,7 @@ export default function Repairman() {
             fontWeight: '700',
             width: '71px',
             fontSize: '0.76rem',
+            textAlign :'center',
             color: 'white',
             backgroundColor: 'green',
             borderRadius: 8,
@@ -424,7 +425,7 @@ export default function Repairman() {
                                                             ((e.Status === 1 && 'rgb(34, 176, 34)')
                                                                 ||
                                                                 (e.Status === 3 && 'red') ||
-                                                                (e.Status === 0 && 'rgb(50, 102, 100)'))
+                                                                (e.Status === 0 && 'rgb(50, 102, 100)' ))
 
                                                     }}
                                                 >{displayStateName(e.Status)}</Typography>

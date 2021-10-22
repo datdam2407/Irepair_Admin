@@ -23,6 +23,7 @@ import {
   Input,
   FormGroup,
 } from "reactstrap";
+import NumberFormat from 'react-number-format';
 // react-bootstrap components
 import {
   Button,
@@ -176,6 +177,7 @@ const [majorApprove, setMajorApprove] = useState(null);
       color: 'white',
       backgroundColor: 'green',
       borderRadius: 8,
+      textAlign :'center',
       padding: '3px 10px',
       display: 'inline-block'
     }
@@ -479,7 +481,7 @@ const [majorApprove, setMajorApprove] = useState(null);
                       <th className="description" >Service Name</th>
                       <th className="description">Description</th>
                       <th className="description">Company</th>
-                      <th className="description">Price</th>
+                      <th className="description-price">Price</th>
                       <th className="description">Status</th>
                       <th className="viewAll">Actions</th>
                     </tr>
@@ -511,7 +513,12 @@ const [majorApprove, setMajorApprove] = useState(null);
                             {displayCompanyName(e.CompanyId)}
                           </td>
                           <td>
-                            {e.Price}
+                          <NumberFormat className="input-type-css"
+                          thousandsGroupStyle="thousand"
+                          value= {e.Price}
+                          decimalSeparator="."
+                          thousandSeparator={true}
+                          disabled/>
                           </td>
                           <TableCell>
                             <Typography

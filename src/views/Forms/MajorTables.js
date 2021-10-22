@@ -154,6 +154,7 @@ function MajorTables() {
     },
     Status: {
       fontWeight: '700',
+      textAlign :'center',
       width: '71px',
       fontSize: '0.76rem',
       color: 'white',
