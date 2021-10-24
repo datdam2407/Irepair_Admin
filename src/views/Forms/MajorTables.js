@@ -32,7 +32,7 @@ import {
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
 import FilterState from "../MajorFields/FilterState"
-import { del, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
+import { del, getWithTokenParams, getWithToken, putWithToken, postWithToken } from "../../service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 // import 'ag-grid-community/dist/styles/ag-grid.css';
 // import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
@@ -247,6 +247,28 @@ function MajorTables() {
         console.log(err);
       });
   }
+  async function handleCreate(e) {
+    await postWithToken(
+      `/api/v1.0/majors`,
+      {
+        id: null,
+        name: name,
+        description: description,
+        imageUrl: picture,
+        status: 1,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/major";
+          alert("Add Successfully")
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   async function handleEditSubmit(e) {
     await putWithToken(
       `/api/v1.0/majors`,
@@ -304,6 +326,29 @@ function MajorTables() {
           getMajorList()
         })
     }
+  }//upload image
+  const [loading, setLoading] = useState(false)
+
+  const uploadImage = async e => {
+    const files = e.target.files
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'reactSWD')
+    setLoading(true)
+    const res = await fetch(
+      ' https://api.cloudinary.com/v1_1/fpt-claudary/image/upload',
+      {
+        method: 'POST',
+        body: data
+      }
+    )
+    const file = await res.json()
+    setImage(file.secure_url)
+    setLoading(false)
+  }
+  function onFileChange(event) {
+    var blob = event.target.files[0].slice(0, event.target.files[0].size, 'image/png'); 
+    const newFile = new File([blob], this.dat.imageName, {type: 'image/png'})
   }
 
   const defaultColDef = {
@@ -457,7 +502,7 @@ function MajorTables() {
                     </Form>
                   </Col>
                   <Col align="right">
-                    <Button className="add-major-custom" variant="contained" color="primary" onClick={handleClickOpen}>Add Major</Button>
+                    <Button className="add-major-custom" variant="contained" color="primary" onClick={() => { setMajorModalCreate(true); }}>Add Major</Button>
                   </Col>
                 </Row>
               </div>
@@ -585,11 +630,7 @@ function MajorTables() {
                                 placement="right"
                               >
                                 <Button
-                                  // onClick={() => handleUpdate(e.data)}
-                                  // onGridReady={onGridReady}
-
                                   onClick={() => {
-                                    // setMajorEdit(e.Id);
                                     getMajorByID(e.Id);
                                     setMajorModalEdit(true);
                                   }}
@@ -601,38 +642,6 @@ function MajorTables() {
                                   <i className="fas fa-edit"></i>
                                 </Button>
                               </OverlayTrigger>
-
-                              {/* <OverlayTrigger
-                                overlay={
-                                  <Tooltip id="tooltip-436082023">
-                                    <br />
-                                    <br />
-                                    APPROVE..
-                                  </Tooltip>
-                                }
-                                placement="right"
-                              >
-
-                                <Button
-                                  // onClick={() => handleUpdate(e.data)}
-                                  // onGridReady={onGridReady}
-
-                                  onClick={() => {
-                                    // setMajorEdit(e.Id);
-                                    setMajorModalApprove(true);
-                                  }}
-
-                                  className="btn-link btn-icon"
-                                  type="button"
-                                  variant="success"
-                                >
-                                  {checkDisableImage(e.state) ? (
-                                    <i className="fas fa-undo"></i>
-                                  ) : (
-                                    <i className="fas fa-undo"></i>
-                                  )}
-                                </Button>
-                              </OverlayTrigger> */}
 
                               <OverlayTrigger
                                 onClick={(e) => e.preventDefault()}
@@ -657,10 +666,8 @@ function MajorTables() {
                                   <i className="fas fa-times"></i>
                                 </Button>
                               </OverlayTrigger>
-
                             </td>
                           </tr>
-
                         );
                       })}
                     </TableBody>
@@ -785,6 +792,85 @@ function MajorTables() {
         </ModalFooter>
       </Modal>
 
+      <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleCreate)}
+          toggle={toggleCreate}
+        >
+          <ModalTitle>Do you want to create new major ?</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <Form>
+            <Form.Group className="mb-2">
+              <Form.Label>Major name</Form.Label>
+              <Form.Control type="text" placeholder="Major name" value={name}
+                onChange={e => setName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Description"
+                as="textarea"
+                value={description}
+                onChange={e => setDescription(e.target.value)}
+                rows={3}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Picture</Form.Label>
+              <Form.Control type="file" onFileChange={picture}
+                onChange={uploadImage}
+              />
+              {loading ? (
+                <h3>Loading...</h3>
+              ) : (
+                <img src={picture} style={{ width: '300px' }} />
+              )}
+            </Form.Group>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={() => { // handleServiceDetele();
+            handleCreate();
+            setMajorModalCreate(false);
+          }}
+          >
+            Save
+          </Button>
+          <Button color="secondary" onClick={toggleCreate}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={modalStatus} toggle={toggleDetails}>
+        <ModalHeader
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleDetails)}
+          toggle={toggleDetails}>
+          <h3>INFORMATION</h3>
+        </ModalHeader>
+        <ModalBody>
+          <div className="img-container">
+          {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
+          </div>
+        </ModalBody>
+        <ModalBody>
+          <b>Name:</b> <a className="name"> {selectMajor !== undefined ? selectMajor.Name : ""}</a>
+          <br />
+          <b>Description:</b>  <a className="name">{selectMajor !== undefined ? selectMajor.Description : ""}</a>
+
+          <br />
+          <b>Status</b><a className="name"> {selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</a>
+          <br />
+        </ModalBody>
+        
+      </Modal>
+
+
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
@@ -814,9 +900,14 @@ function MajorTables() {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
-              <Form.Control type="text" value={picture}
-                onChange={e => setImage(e.target.value)}
+              <Form.Control type="file" onFileChange={picture}
+                onChange={uploadImage}
               />
+              {loading ? (
+                <h3>Loading...</h3>
+              ) : (
+                <img src={picture} style={{ width: '300px' }} />
+              )}
             </Form.Group>
           </Form>
         </ModalBody>
@@ -833,41 +924,7 @@ function MajorTables() {
           </Button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalStatus} toggle={toggleDetails}>
-        <ModalHeader
-          toggle={toggleDetails}
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleDetails)}
-        >
-          <h3> INFORMATION </h3>
-        </ModalHeader>
-        <ModalBody>
-          <Row>
-          <Col md={8}>
-          <Row>
-            <Col className="view-item-size-main" md={4}>Major:</Col>
-            <Col className="view-item-size" md={7}>
-              {selectMajor !== undefined ? selectMajor.Name : ""}
-            </Col>
-          </Row>
-          <Row>
-            <Col className="view-item-size-main" md={4}>Description:</Col>
-            <Col className="view-item-size" md={7}>
-              {selectMajor !== undefined ? selectMajor.Description : ""}
-            </Col>
-          </Row>
-        
-          <Row>
-            <Col className="view-item-size-main" md={4}>State:</Col>
-            <Col className="view-item-size" md={7}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
-          </Row>
-          </Col>
-            <Col className="view-item-size" >
-              {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
-          </Col>
-          </Row>
-        </ModalBody>
-      </Modal>
+     
 
       <FormDialog open={open} handleClose={handleClose}
         data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />

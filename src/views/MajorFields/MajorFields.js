@@ -143,7 +143,7 @@ function MajorFields() {
       color: 'white',
       backgroundColor: 'green',
       borderRadius: 8,
-      textAlign :'center',
+      textAlign: 'center',
       padding: '3px 10px',
       display: 'inline-block'
     }
@@ -197,6 +197,35 @@ function MajorFields() {
     setOpen(false);
     setFormData(initialValue)
   };
+  //upload image
+  const [loading, setLoading] = useState(false)
+
+  const uploadImage = async e => {
+    const files = e.target.files
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'reactSWD')
+    setLoading(true)
+    const res = await fetch(
+      ' https://api.cloudinary.com/v1_1/fpt-claudary/image/upload',
+      {
+        method: 'POST',
+        body: data
+      }
+    )
+    const file = await res.json()
+    setImage(file.secure_url)
+    setLoading(false)
+  }
+  function onFileChange(event) {
+    //console.log(event.target.files[0].name)
+    var blob = event.target.files[0].slice(0, event.target.files[0].size, 'image/png');
+
+    const newFile = new File([blob], this.dat.imageName, { type: 'image/png' })
+    //console.log(newFile)
+  }
+
+
   const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/major-fields"
   const columnDefs = [
     { headerName: "ID", field: "Id", },
@@ -982,9 +1011,14 @@ function MajorFields() {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
-              <Form.Control type="text" value={picture}
-                onChange={e => setImage(e.target.value)}
+              <Form.Control type="file" onFileChange={picture}
+                onChange={uploadImage}
               />
+              {loading ? (
+                <h3>Loading...</h3>
+              ) : (
+                <img src={picture} style={{ width: '300px' }} />
+              )}
             </Form.Group>
           </Form>
         </ModalBody>
@@ -1012,7 +1046,7 @@ function MajorFields() {
         </ModalHeader>
         <ModalBody>
           <Form>
-
+            {/* <Form.Group className="mb-2"> */}
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
               <Form.Control type="text" placeholder="Major name" value={name}
@@ -1021,9 +1055,6 @@ function MajorFields() {
             </Form.Group>
             <Form.Group className="mb-2">
               <Form.Label>Major</Form.Label>
-              {/* <Form.Control disabled type="text" placeholder="Major" value={major}
-                onChange={e => setMajor(e.target.value)}
-              /> */}
               <FormGroup className="mb-2">
                 <Dropdown
                   fluid
@@ -1048,13 +1079,20 @@ function MajorFields() {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
-              <Form.Control type="file" value={picture}
-
-                onChange={e => setImage(e.target.value)}
+              <Form.Control type="file"
+                onChange={uploadImage}
               />
+              {loading ? (
+                <h3>Loading...</h3>
+              ) : (
+                <img src={picture} style={{ width: '300px' }} />
+              )}
             </Form.Group>
           </Form>
         </ModalBody>
+
+
+
         <ModalFooter>
           <Button color="danger" onClick={() => { // handleServiceDetele();
             handleCreateSubmit();
@@ -1071,48 +1109,31 @@ function MajorFields() {
 
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
-          toggle={toggleDetails}
           style={{ color: "#B22222" }}
           close={closeBtn(toggleDetails)}
-          className="view-item-size"
-        >
-          <h3> INFORMATION </h3>
+          toggle={toggleDetails}>
+          <h3>INFORMATION</h3>
         </ModalHeader>
-        <ModalBody className="Modal-body-view-all-major-field">
-          <Row>
-            <Col md={8} >
-              <Row>
-                <Col className="view-item-size-main" md={4}> Major:</Col>
-                <Col className="view-item-size" md={7}>
-                  {selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
-                </Col>
-              </Row>
-              <Row>
-                <Col className="view-item-size-main" md={4}>Field:</Col>
-                <Col className="view-item-size" md={7}>
-                  {selectMajor !== undefined ? selectMajor.Name : ""}
-                </Col>
-              </Row>
-
-
-              <Row>
-                <Col className="view-item-size-main" md={4}>State:</Col>
-                <Col className="view-item-size" md={7}>{selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</Col>
-              </Row>
-              <Row>
-                <Col className="view-item-size-main" md={4}>Description:</Col>
-                <Col className="view-item-size" md={7}>
-                  {selectMajor !== undefined ? selectMajor.Description : ""}
-                </Col>
-              </Row>
-            </Col>
-            <Col className="view-item-size">
-              {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
-            </Col>
-          </Row>
+        <ModalBody>
+          <div className="img-container">
+            {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
+          </div>
         </ModalBody>
-      </Modal>
+        <ModalBody>
+          <b>Major:</b> <a className="name">{selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
+          </a>
+          <br />
+          <b>Field:</b>  <a className="name">  {selectMajor !== undefined ? selectMajor.Name : ""}</a>
+          <br />
+          <b>Description:</b>  <a className="name">    {selectMajor !== undefined ? selectMajor.Description : ""}
+          </a>
+          <br />
+          <b>Status</b><a className="name"> {selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}
+          </a>
+          <br />
+        </ModalBody>
 
+      </Modal>
       <FormDialog open={open} handleClose={handleClose}
         data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
 
