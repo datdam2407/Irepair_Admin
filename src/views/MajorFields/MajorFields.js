@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Dropdown } from 'semantic-ui-react'
-import 'semantic-ui-css/semantic.min.css';
+import { Dropdown } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 import {
   Modal,
   ModalHeader,
@@ -31,9 +31,17 @@ import {
   OverlayTrigger,
   ModalTitle,
 } from "react-bootstrap";
-import "../../assets/css/customSize.css"
-import { del, put, get, postWithToken, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
-import { makeStyles } from '@material-ui/core/styles';
+import "../../assets/css/customSize.css";
+import {
+  del,
+  put,
+  get,
+  postWithToken,
+  getWithTokenParams,
+  getWithToken,
+  putWithToken,
+} from "../../service/ReadAPI";
+import { makeStyles } from "@material-ui/core/styles";
 
 import {
   TableBody,
@@ -45,44 +53,41 @@ import {
   Avatar,
   Grid,
   Typography,
-} from '@material-ui/core';
-import FormDialog from './DialogFields';
+} from "@material-ui/core";
+import FormDialog from "./DialogFields";
 import FilterState from "./FilterState";
-import {
-  Tooltip,
-} from 'react-tippy';
-import 'react-tippy/dist/tippy.css'
+import { Tooltip } from "react-tippy";
+import "react-tippy/dist/tippy.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 function MajorFields() {
-  //delete modal  
+  //delete modal
   const [ServiceDelete, setServiceDelete] = useState(null);
   const [modalDelete, setServiceModalDelete] = useState(false);
   const toggleDelete = () => setServiceModalDelete(!modalDelete);
-  //edit modal  
+  //edit modal
   const [ServiceEdit, setServiceEdit] = useState(null);
   // const [modalEdit, setServiceModalEdit] = useState(false);
   // const toggleEdit = () => setServiceModalEdit(!modalEdit);
 
   //modal create
   const [modalCreate, setMajorModalCreate] = useState(false);
-  const toggleCreate = () => setMajorModalCreate(!modalCreate)
+  const toggleCreate = () => setMajorModalCreate(!modalCreate);
 
   // const[MajorNameByFieldID, setMajorName] = useState("");
   //Edit Major
   const [MajorEdit, setMajorEdit] = useState(null);
   const [modalEdit, setMajorModalEdit] = useState(false);
-  const toggleEdit = () => setMajorModalEdit(!modalEdit)
+  const toggleEdit = () => setMajorModalEdit(!modalEdit);
   //Approved
   const [majorApprove, setMajorApprove] = useState(null);
   const [modalApprove, setMajorModalApprove] = useState(false);
-  const toggleApprove = () => setMajorModalApprove(!modalApprove)
+  const toggleApprove = () => setMajorModalApprove(!modalApprove);
   //Delete Major
   const [MajorDelete, setMajorFieldDelete] = useState(null);
   const [modalMajorFieldDelete, setMajorModalFieldDelete] = useState(false);
-  const toggleMajorDelete = () => setMajorModalFieldDelete(!modalMajorFieldDelete)
+  const toggleMajorDelete = () =>
+    setMajorModalFieldDelete(!modalMajorFieldDelete);
 
   //view modal
   const [modalStatus, setModalStatus] = useState(false);
@@ -92,11 +97,7 @@ function MajorFields() {
   const [searchName, setSearchName] = useState("");
 
   //Filter
-  const listStates = [
-    "Inactive",
-    "Active",
-
-  ];
+  const listStates = ["Inactive", "Active"];
 
   // custom table
   const useStyles = makeStyles((theme) => ({
@@ -105,48 +106,46 @@ function MajorFields() {
     },
     tableContainer: {
       borderRadius: 15,
-      margin: '10px 10px',
-      maxWidth: ' 100%'
+      margin: "10px 10px",
+      maxWidth: " 100%",
     },
     tableHeaderCell: {
-      color: 'burlywood',
-      fontWeight: 'bold',
+      color: "burlywood",
+      fontWeight: "bold",
       backgroundColor: theme.palette.primary.dark,
       color: theme.palette.getContrastText(theme.palette.primary.dark),
-      backgroundColor: 'gray',
-      fontWeight: '700',
-
+      backgroundColor: "gray",
+      fontWeight: "700",
     },
     thmajorheaderform: {
-      fontWeight: 'bold',
-      fontWeight: '700',
+      fontWeight: "bold",
+      fontWeight: "700",
       color: theme.palette.getContrastText(theme.palette.primary.dark),
     },
 
     avatar: {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: "#FFFFFF",
       // color: theme.palette.getContrastText(theme.palette.primary.light),
-      fontSize: '200px',
-      right: '10px',
-      overflow: 'unset',
-      borderRadius: '32%',
-
+      fontSize: "200px",
+      right: "10px",
+      overflow: "unset",
+      borderRadius: "32%",
     },
     name: {
-      fontWeight: 'bold',
-      color: theme.palette.secondary.dark
+      fontWeight: "bold",
+      color: theme.palette.secondary.dark,
     },
     Status: {
-      fontWeight: '700',
-      width: '71px',
-      fontSize: '0.76rem',
-      color: 'white',
-      backgroundColor: 'green',
+      fontWeight: "700",
+      width: "71px",
+      fontSize: "0.76rem",
+      color: "white",
+      backgroundColor: "green",
       borderRadius: 8,
-      textAlign: 'center',
-      padding: '3px 10px',
-      display: 'inline-block'
-    }
+      textAlign: "center",
+      padding: "3px 10px",
+      display: "inline-block",
+    },
   }));
   const classes = useStyles();
 
@@ -154,7 +153,6 @@ function MajorFields() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [stateListFilter, setstateListFilter] = useState([]);
-
 
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
@@ -174,80 +172,98 @@ function MajorFields() {
   const [majorID, setMajorfieldID] = useState("");
   const [major, setMajor] = useState("");
 
-  //select major 
+  //select major
   const [ID, setMajorID] = useState("");
-  const [majorSelect, setMajorSelect] = useState("")
+  const [majorSelect, setMajorSelect] = useState("");
   const [data1, setData1] = useState({ array: [] });
-  const [MajorSelectID, setMajorSelectID] = useState(ID)
+  const [MajorSelectID, setMajorSelectID] = useState(ID);
   const [listSelectMajor, setListMajor] = useState([]);
 
+  const initialValue = { name: "", description: "", imageUrl: "", status: "1" };
 
-
-  const initialValue = { name: "", description: "", imageUrl: "", status: "1" }
-
-  const [gridApi, setGridApi] = useState(null)
-  const [tableData, setTableData] = useState(null)
+  const [gridApi, setGridApi] = useState(null);
+  const [tableData, setTableData] = useState(null);
   const [open, setOpen] = React.useState(false);
-  const [formData, setFormData] = useState(initialValue)
+  const [formData, setFormData] = useState(initialValue);
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setFormData(initialValue)
+    setFormData(initialValue);
   };
   //upload image
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const uploadImage = async e => {
-    const files = e.target.files
-    const data = new FormData()
-    data.append('file', files[0])
-    data.append('upload_preset', 'reactSWD')
-    setLoading(true)
+  const uploadImage = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "reactSWD");
+    setLoading(true);
     const res = await fetch(
-      ' https://api.cloudinary.com/v1_1/fpt-claudary/image/upload',
+      " https://api.cloudinary.com/v1_1/fpt-claudary/image/upload",
       {
-        method: 'POST',
-        body: data
+        method: "POST",
+        body: data,
       }
-    )
-    const file = await res.json()
-    setImage(file.secure_url)
-    setLoading(false)
-  }
+    );
+    const file = await res.json();
+    setImage(file.secure_url);
+    setLoading(false);
+  };
   function onFileChange(event) {
     //console.log(event.target.files[0].name)
-    var blob = event.target.files[0].slice(0, event.target.files[0].size, 'image/png');
+    var blob = event.target.files[0].slice(
+      0,
+      event.target.files[0].size,
+      "image/png"
+    );
 
-    const newFile = new File([blob], this.dat.imageName, { type: 'image/png' })
+    const newFile = new File([blob], this.dat.imageName, { type: "image/png" });
     //console.log(newFile)
   }
 
-
-  const url = "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/major-fields"
+  const url =
+    "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/major-fields";
   const columnDefs = [
-    { headerName: "ID", field: "Id", },
-    { headerName: "Name", field: "name", },
-    { headerName: "Description", field: "description", },
-    { headerName: "Major", field: "majorId", },
+    { headerName: "ID", field: "Id" },
+    { headerName: "Name", field: "name" },
+    { headerName: "Description", field: "description" },
+    { headerName: "Major", field: "majorId" },
     { headerName: "imageUrl", field: "imageUrl" },
     {
-      headerName: "Actions", field: "Id", cellRendererFramework: (params) => <div>
-        <Button variant="outlined" color="primary" onClick={() => handleUpdate(params.data)}>Update</Button>
-        <Button variant="outlined" color="secondary" onClick={() => handleDelete(params.value)}>Delete</Button>
-      </div>
-    }
-  ]
+      headerName: "Actions",
+      field: "Id",
+      cellRendererFramework: (params) => (
+        <div>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => handleUpdate(params.data)}
+          >
+            Update
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => handleDelete(params.value)}
+          >
+            Delete
+          </Button>
+        </div>
+      ),
+    },
+  ];
   const onChange = (e) => {
-    const { value, id } = e.target
+    const { value, id } = e.target;
     // console.log(value,id)
-    setFormData({ ...formData, [id]: value })
-  }
+    setFormData({ ...formData, [id]: value });
+  };
   const onGridReady = (params) => {
-    setGridApi(params)
-  }
+    setGridApi(params);
+  };
 
   //filter
   async function handleChooseState(e, id) {
@@ -338,10 +354,10 @@ function MajorFields() {
   }
   // setting update row data to form data and opening pop up window
   const handleUpdate = (oldData) => {
-    setFormData(oldData)
-    console.log(oldData)
-    handleClickOpen()
-  }
+    setFormData(oldData);
+    console.log(oldData);
+    handleClickOpen();
+  };
   function checkDisableImage(state) {
     const list = [1, 3];
     if (list.includes(state)) return true;
@@ -349,39 +365,47 @@ function MajorFields() {
   }
   const handleFormSubmit = () => {
     if (formData.id) {
-      //updating a user 
-      const confirm = window.confirm("Are you sure, you want to update this row ?")
-      confirm && fetch(url + `/${formData.id}`, {
-        method: "put", body: JSON.stringify(formData), headers: {
-          'content-type': "application/json"
-        }
-      }).then(resp => resp.json())
-        .then(resp => {
-          handleClose()
-          getMajorFieldsList()
-
+      //updating a user
+      const confirm = window.confirm(
+        "Are you sure, you want to update this row ?"
+      );
+      confirm &&
+        fetch(url + `/${formData.id}`, {
+          method: "put",
+          body: JSON.stringify(formData),
+          headers: {
+            "content-type": "application/json",
+          },
         })
+          .then((resp) => resp.json())
+          .then((resp) => {
+            handleClose();
+            getMajorFieldsList();
+          });
     } else {
       // adding new user
       fetch(url, {
-        method: "post", body: JSON.stringify(formData),
+        method: "post",
+        body: JSON.stringify(formData),
         headers: {
           Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzODY4MzQ0LCJleHAiOjE2MzM5NTQ3NDQsImlhdCI6MTYzMzg2ODM0NH0.UGHIVGarMnVEevVMIKNw-2Qd0lcJV7eAEuL_XwOgDfw`,
-          "Content-type": "application/json"
-        }
-      }).then(resp => resp.json())
-        .then(resp => {
-          handleClose()
-          getMajorFieldsList()
-        })
+          "Content-type": "application/json",
+        },
+      })
+        .then((resp) => resp.json())
+        .then((resp) => {
+          handleClose();
+          getMajorFieldsList();
+        });
     }
-  }
+  };
 
   const defaultColDef = {
     sortable: true,
-    flex: 1, filter: true,
-    floatingFilter: true
-  }
+    flex: 1,
+    filter: true,
+    floatingFilter: true,
+  };
   function displayMajorName(type) {
     const nameMajor = {
       "a037b04c-51b3-4650-b369-0ea7ee869821": "Điện Tử",
@@ -402,70 +426,74 @@ function MajorFields() {
     setMajorSelect(e.target.MajorID);
     setMajorSelectID(value.value);
   }
-  console.log("aaaa", MajorSelectID)
+  console.log("aaaa", MajorSelectID);
   // console.log("majornam", MajorNameByFieldID)
   useEffect(() => {
     let params = {};
     let currentField = {};
     let MajorID = "";
     // let MajorNameByFieldID = "";
-    getWithToken(
-      `/api/v1.0/majors`, localStorage.getItem("token")
+    getWithToken(`/api/v1.0/majors`, localStorage.getItem("token"))
+      .then((res) => {
+        MajorID = res.data.Id;
+        // MajorNameByFieldID = res.data.name
+        console.log(res.data);
+        currentField["text"] = `${res.data.Name}`;
+        currentField["value"] = res.data.Id;
+        currentField["key"] = res.data.Id;
+        setMajorID(MajorID);
+        // setMajorName(MajorNameByFieldID);
+      })
+      .then(() => {});
+
+    params["Status"] = [1].reduce((f, s) => `${f},${s}`);
+    getWithTokenParams(
+      "/api/v1.0/majors",
+      params,
+      localStorage.getItem("token")
     ).then((res) => {
-      MajorID = res.data.Id
-      // MajorNameByFieldID = res.data.name
-      console.log(res.data)
-      currentField['text'] = `${res.data.Name}`;
-      currentField['value'] = res.data.Id;
-      currentField['key'] = res.data.Id;
-      setMajorID(MajorID);
-      // setMajorName(MajorNameByFieldID);
-
-    }).then(() => {
-    });
-
-    params['Status'] = [1].reduce((f, s) => `${f},${s}`);
-    getWithTokenParams("/api/v1.0/majors", params, localStorage.getItem("token")
-    ).then(res => {
       setData1(res.data);
-      const newlistMajor = res.data.reduce((list, item) => [...list,
-      {
-        text: `${item.Name}`,
-        value: item.Id,
-        key: item.Id
-      }], [])
-      setListMajor(
-        [currentField, ...newlistMajor],
+      const newlistMajor = res.data.reduce(
+        (list, item) => [
+          ...list,
+          {
+            text: `${item.Name}`,
+            value: item.Id,
+            key: item.Id,
+          },
+        ],
+        []
       );
-    })
+      setListMajor([currentField, ...newlistMajor]);
+    });
   }, []);
 
-
   function getMajorFieldsByID(Id) {
-
-    getWithToken(`/api/v1.0/major-fields/${Id}`, localStorage.getItem("token")).then((res) => {
-      setMajorfieldID(Id);
-      setName(res.data.value.name);
-      setDescription(res.data.value.description);
-      setMajor(res.data.value.majorId);
-      setImage(res.data.value.imageUrl);
-      setStatus(res.data.value.status);
-    }).catch((err) => {
-      console.log(err);
-    });
+    getWithToken(`/api/v1.0/major-fields/${Id}`, localStorage.getItem("token"))
+      .then((res) => {
+        setMajorfieldID(Id);
+        setName(res.data.value.name);
+        setDescription(res.data.value.description);
+        setMajor(res.data.value.majorId);
+        setImage(res.data.value.imageUrl);
+        setStatus(res.data.value.status);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   // /api/v1.0/major/{id}
   //delete fc
   function deleteMajorFieldsByID() {
-    del(`/api/v1.0/major-fields/${MajorDelete}`, localStorage.getItem("token")
-    )
+    del(`/api/v1.0/major-fields/${MajorDelete}`, localStorage.getItem("token"))
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/fields";
-          alert("Delete Successfully")
+          alert("Delete Successfully");
         }
-      }).catch((err) => {
+      })
+      .catch((err) => {
         console.log(err);
       });
   }
@@ -477,16 +505,22 @@ function MajorFields() {
     let params = {};
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithTokenParams(`/api/v1.0/major-fields`, params, localStorage.getItem("token")).then((res) => {
-      var temp = res.data.filter((x) => x.state !== "Completed");
-      setMajorList(temp);
-      setUseListMajorShow(temp);
-      setUseListMajorShowPage(temp.slice(numberPage * 6 - 6, numberPage * 6));
-      setTotalNumberPage(Math.ceil(temp.length / 6));
-      setCount(count);
-    }).catch((err) => {
-      console.log(err);
-    });
+    getWithTokenParams(
+      `/api/v1.0/major-fields`,
+      params,
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        var temp = res.data.filter((x) => x.state !== "Completed");
+        setMajorList(temp);
+        setUseListMajorShow(temp);
+        setUseListMajorShowPage(temp.slice(numberPage * 6 - 6, numberPage * 6));
+        setTotalNumberPage(Math.ceil(temp.length / 6));
+        setCount(count);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   //Paging
   function onClickPage(number) {
@@ -504,7 +538,7 @@ function MajorFields() {
       X
     </button>
   );
-  // Custom state 
+  // Custom state
   function displayStateName(type) {
     const stateValue = {
       0: "Inactive",
@@ -518,7 +552,7 @@ function MajorFields() {
   //   if (target.files[0]){
   //     const image = (e.target.files[0]);
   //     const uploadTask = storage.ref(`image/${image.name}`).put(image)
-  //     uploadTask.on('change_stage', 
+  //     uploadTask.on('change_stage',
   //     (snapshot) => {
   //       console.log(snapshot)
   //     },
@@ -548,16 +582,20 @@ function MajorFields() {
         setTotalNumberPage(Math.ceil(temp.length / 6));
       });
     } else if (searchName == "") {
-      getWithToken("/api/v1.0/major-fields", localStorage.getItem("token")).then(
-        (res) => {
-          if (res && res.status === 200) {
-            var temp2 = res.data;
-            setMajorList(temp2);
-            setUseListMajorShow(temp2);
-            setUseListMajorShowPage(temp2.slice(numberPage * 6 - 6, numberPage * 6));
-            setTotalNumberPage(Math.ceil(temp2.length / 6));
-          }
-        })
+      getWithToken(
+        "/api/v1.0/major-fields",
+        localStorage.getItem("token")
+      ).then((res) => {
+        if (res && res.status === 200) {
+          var temp2 = res.data;
+          setMajorList(temp2);
+          setUseListMajorShow(temp2);
+          setUseListMajorShowPage(
+            temp2.slice(numberPage * 6 - 6, numberPage * 6)
+          );
+          setTotalNumberPage(Math.ceil(temp2.length / 6));
+        }
+      });
     }
   }
   return (
@@ -578,7 +616,14 @@ function MajorFields() {
                             toggle={toggleDropDown}
                             className="border border-gray-css"
                           >
-                            <DropdownToggle className="dropdown-filter-css" caret> Filter&nbsp;</DropdownToggle>                            <DropdownMenu>
+                            <DropdownToggle
+                              className="dropdown-filter-css"
+                              caret
+                            >
+                              {" "}
+                              Filter&nbsp;
+                            </DropdownToggle>{" "}
+                            <DropdownMenu>
                               <div className="fixed">
                                 <FilterState
                                   list={filterState}
@@ -591,7 +636,6 @@ function MajorFields() {
                             </DropdownMenu>
                           </InputGroupButtonDropdown>
                         </InputGroup>
-
                       </Row>
                     </Col>
                   </div>
@@ -602,8 +646,11 @@ function MajorFields() {
                       }}
                     >
                       <InputGroup className="fixed">
-                        <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..."></Input>
-                        <Button className="dropdown-filter-css" >
+                        <Input
+                          onChange={(e) => setSearchName(e.target.value)}
+                          placeholder="Search name..."
+                        ></Input>
+                        <Button className="dropdown-filter-css">
                           <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
                         </Button>
                       </InputGroup>
@@ -611,7 +658,15 @@ function MajorFields() {
                   </Col>
                   <Col>
                     <Col align="right">
-                      <Button variant="contained" className="add-major-custom" onClick={() => { setMajorModalCreate(true); }}>Add MajorField</Button>
+                      <Button
+                        variant="contained"
+                        className="add-major-custom"
+                        onClick={() => {
+                          setMajorModalCreate(true);
+                        }}
+                      >
+                        Add MajorField
+                      </Button>
                     </Col>
                   </Col>
                 </Row>
@@ -620,8 +675,8 @@ function MajorFields() {
                 <Table className="table">
                   <thead>
                     <tr>
-                      <th className="description" >Major Field</th>
-                      <th className="description" >Major</th>
+                      <th className="description">Major Field</th>
+                      <th className="description">Major</th>
                       <th className="description">Description</th>
                       <th className="description">Status</th>
                       <th className="viewAll">Actions</th>
@@ -632,77 +687,90 @@ function MajorFields() {
                     {useListMajorShowPage.map((e, index) => {
                       return (
                         <tr key={index}>
-
                           <TableCell>
                             <Grid container>
-                              <Tooltip html={(
-                                <div style={{ width: 700, height: 300 }}>
-                                  <strong>
-                                    <ModalHeader
-                                      style={{ color: "yellow" }}
-                                    >
-                                      Detailed Major Information
-                                    </ModalHeader>
-                                    <ModalBody >
-                                      <Row>
-                                        <Col md={2}> Major Name:</Col>
-                                        <Col md={3}> {e.Name}</Col>
-                                      </Row>
-                                      <Row>
-                                        <Col md={2}>Description:</Col>
-                                        <Col md={3}>
-                                          {e.Description}
-                                        </Col>
-                                      </Row>
-                                      <Row>
-                                        <Col md={3} ><img className="text-left-topic-toolpi" src={e.ImageUrl} /></Col>
-                                      </Row>
-
-                                    </ModalBody>
-                                  </strong>
-                                </div>
-                              )}
+                              <Tooltip
+                                html={
+                                  <div style={{ width: 700, height: 300 }}>
+                                    <strong>
+                                      <ModalHeader style={{ color: "yellow" }}>
+                                        Detailed Major Information
+                                      </ModalHeader>
+                                      <ModalBody>
+                                        <Row>
+                                          <Col md={2}> Major Name:</Col>
+                                          <Col md={3}> {e.Name}</Col>
+                                        </Row>
+                                        <Row>
+                                          <Col md={2}>Description:</Col>
+                                          <Col md={3}>{e.Description}</Col>
+                                        </Row>
+                                        <Row>
+                                          <Col md={3}>
+                                            <img
+                                              className="text-left-topic-toolpi"
+                                              src={e.ImageUrl}
+                                            />
+                                          </Col>
+                                        </Row>
+                                      </ModalBody>
+                                    </strong>
+                                  </div>
+                                }
                               >
                                 <Grid item lg={2}>
-                                  <Avatar src={e.ImageUrl} className={classes.avatar}>
+                                  <Avatar
+                                    src={e.ImageUrl}
+                                    className={classes.avatar}
+                                  >
                                     <img src="string" />
-
                                   </Avatar>
                                 </Grid>
                               </Tooltip>
                               <Grid item lg={10}>
-                                <Typography className={classes.name}>{e.Name}</Typography>
-                                <Typography color="textSecondary" variant="body2">{e.Id}
+                                <Typography className={classes.name}>
+                                  {e.Name}
+                                </Typography>
+                                <Typography
+                                  color="textSecondary"
+                                  variant="body2"
+                                >
+                                  {e.Id}
                                 </Typography>
                               </Grid>
                             </Grid>
                           </TableCell>
 
                           <TableCell>
-                            <Typography color="black" fontSize="0.80rem" >{displayMajorName(e.MajorId)}
+                            <Typography color="black" fontSize="0.80rem">
+                              {displayMajorName(e.MajorId)}
                               {/* <Typography color="black" fontSize="0.80rem" >{MajorNameByFieldID} */}
                             </Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography color="black" fontSize="0.80rem">{e.Description}</Typography>
+                            <Typography color="black" fontSize="0.80rem">
+                              {e.Description}
+                            </Typography>
                             {/* <Typography color="textSecondary" variant="body2">{row.company}</Typography> */}
                           </TableCell>
 
-                          <TableCell onClick={() => {
-                            getMajorFieldsByID(e.Id);
-                            setMajorModalApprove(true)
-                          }}>
+                          <TableCell
+                            onClick={() => {
+                              getMajorFieldsByID(e.Id);
+                              setMajorModalApprove(true);
+                            }}
+                          >
                             <Typography
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 1 && 'rgb(34 176 34)')
-                                    ||
-                                    (e.Status === 0 && 'red')
-                                    ||
-                                    (e.Status === 2 && 'red'))
+                                  (e.Status === 1 && "rgb(34 176 34)") ||
+                                  (e.Status === 0 && "red") ||
+                                  (e.Status === 2 && "red"),
                               }}
-                            >{displayStateName(e.Status)} </Typography>
+                            >
+                              {displayStateName(e.Status)}{" "}
+                            </Typography>
                           </TableCell>
                           <td className="td-actions">
                             <OverlayTrigger
@@ -748,7 +816,6 @@ function MajorFields() {
                                   getMajorFieldsByID(e.Id);
                                   setMajorModalEdit(true);
                                 }}
-
                                 className="btn-link btn-icon"
                                 type="button"
                                 variant="success"
@@ -756,7 +823,6 @@ function MajorFields() {
                                 <i className="fas fa-edit"></i>
                               </Button>
                             </OverlayTrigger>
-
 
                             {/* <OverlayTrigger
                               overlay={
@@ -790,10 +856,8 @@ function MajorFields() {
                               </Button>
                             </OverlayTrigger> */}
 
-
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
-
                               overlay={
                                 <Tooltip id="tooltip-334669391">
                                   Remove Post..
@@ -806,7 +870,6 @@ function MajorFields() {
                                   setMajorFieldDelete(e.Id);
                                   setMajorModalFieldDelete(true);
                                 }}
-
                                 className="btn-link btn-icon"
                                 type="button"
                                 variant="danger"
@@ -814,7 +877,6 @@ function MajorFields() {
                                 <i className="fas fa-times"></i>
                               </Button>
                             </OverlayTrigger>
-
                           </td>
                         </tr>
                       );
@@ -911,7 +973,6 @@ function MajorFields() {
               </Card.Body>
             </Card>
           </Col>
-
         </Row>
       </Container>
 
@@ -975,11 +1036,13 @@ function MajorFields() {
         </ModalHeader>
         <ModalBody>
           <Form>
-
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
-              <Form.Control type="text" placeholder="Major name" value={name}
-                onChange={e => setName(e.target.value)}
+              <Form.Control
+                type="text"
+                placeholder="Major name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-2">
@@ -995,7 +1058,8 @@ function MajorFields() {
                   // value={majorSelect}
                   value={majorSelect}
                   onChange={handleOnchangeSelectdmajor}
-                  options={listSelectMajor} />
+                  options={listSelectMajor}
+                />
               </FormGroup>
             </Form.Group>
             <Form.Group className="mb-2">
@@ -1005,28 +1069,33 @@ function MajorFields() {
                 placeholder="Description"
                 as="textarea"
                 value={description}
-                onChange={e => setDescription(e.target.value)}
+                onChange={(e) => setDescription(e.target.value)}
                 rows={3}
               />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Picture</Form.Label>
-              <Form.Control type="file" onFileChange={picture}
+              <Form.Control
+                type="file"
+                onFileChange={picture}
                 onChange={uploadImage}
               />
               {loading ? (
                 <h3>Loading...</h3>
               ) : (
-                <img src={picture} style={{ width: '300px' }} />
+                <img src={picture} style={{ width: "300px" }} />
               )}
             </Form.Group>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={() => { // handleServiceDetele();
-            handleEditSubmit();
-            setMajorModalEdit(false);
-          }}
+          <Button
+            color="danger"
+            onClick={() => {
+              // handleServiceDetele();
+              handleEditSubmit();
+              setMajorModalEdit(false);
+            }}
           >
             Edit
           </Button>
@@ -1036,7 +1105,7 @@ function MajorFields() {
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
+      <Modal isOpen={modalCreate} toggle={toggleCreate} centered size="lg">
         <ModalHeader
           style={{ color: "#B22222" }}
           close={closeBtn(toggleCreate)}
@@ -1046,58 +1115,72 @@ function MajorFields() {
         </ModalHeader>
         <ModalBody>
           <Form>
-            {/* <Form.Group className="mb-2"> */}
-            <Form.Group className="mb-2">
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="text" placeholder="Major name" value={name}
-                onChange={e => setName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Major</Form.Label>
-              <FormGroup className="mb-2">
-                <Dropdown
-                  fluid
-                  search
-                  selection
-                  // value={majorSelect}
-                  value={majorSelect}
-                  onChange={handleOnchangeSelectdmajor}
-                  options={listSelectMajor} />
-              </FormGroup>
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Description"
-                as="textarea"
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                rows={3}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Picture</Form.Label>
-              <Form.Control type="file"
-                onChange={uploadImage}
-              />
-              {loading ? (
-                <h3>Loading...</h3>
-              ) : (
-                <img src={picture} style={{ width: '300px' }} />
-              )}
-            </Form.Group>
+            <Grid
+              container
+              rowSpacing={4}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              {/* <Form.Group className="mb-2"> */}
+              <Grid item xs={6}>
+                <Form.Group className="mb-2">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Major name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label>Major</Form.Label>
+                  <FormGroup className="mb-2">
+                    <Dropdown
+                      fluid
+                      search
+                      selection
+                      // value={majorSelect}
+                      value={majorSelect}
+                      onChange={handleOnchangeSelectdmajor}
+                      options={listSelectMajor}
+                    />
+                  </FormGroup>
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Description"
+                    as="textarea"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                  />
+                </Form.Group>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Form.Group className="mb-2 ml-5">
+                  <Form.Label>Picture</Form.Label>
+                  <Form.Control type="file" onChange={uploadImage} />
+                  {loading ? (
+                    <h3>Loading...</h3>
+                  ) : (
+                    <img src={picture} style={{ width: "300px" }} />
+                  )}
+                </Form.Group>
+              </Grid>
+            </Grid>
           </Form>
         </ModalBody>
 
-
-
         <ModalFooter>
-          <Button color="danger" onClick={() => { // handleServiceDetele();
-            handleCreateSubmit();
-            setMajorModalCreate(false);
-          }}
+          <Button
+            color="danger"
+            onClick={() => {
+              // handleServiceDetele();
+              handleCreateSubmit();
+              setMajorModalCreate(false);
+            }}
           >
             Save
           </Button>
@@ -1111,32 +1194,56 @@ function MajorFields() {
         <ModalHeader
           style={{ color: "#B22222" }}
           close={closeBtn(toggleDetails)}
-          toggle={toggleDetails}>
+          toggle={toggleDetails}
+        >
           <h3>INFORMATION</h3>
         </ModalHeader>
         <ModalBody>
           <div className="img-container">
-            {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
+            {selectMajor !== undefined ? (
+              <img className="text-left-topic" src={selectMajor.ImageUrl} />
+            ) : (
+              ""
+            )}
           </div>
         </ModalBody>
         <ModalBody>
-          <b>Major:</b> <a className="name">{selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
+          <b>Major:</b>{" "}
+          <a className="name">
+            {selectMajor !== undefined
+              ? displayMajorName(selectMajor.MajorId)
+              : ""}
           </a>
           <br />
-          <b>Field:</b>  <a className="name">  {selectMajor !== undefined ? selectMajor.Name : ""}</a>
-          <br />
-          <b>Description:</b>  <a className="name">    {selectMajor !== undefined ? selectMajor.Description : ""}
+          <b>Field:</b>{" "}
+          <a className="name">
+            {" "}
+            {selectMajor !== undefined ? selectMajor.Name : ""}
           </a>
           <br />
-          <b>Status</b><a className="name"> {selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}
+          <b>Description:</b>{" "}
+          <a className="name">
+            {" "}
+            {selectMajor !== undefined ? selectMajor.Description : ""}
+          </a>
+          <br />
+          <b>Status</b>
+          <a className="name">
+            {" "}
+            {selectMajor !== undefined
+              ? displayStateName(selectMajor.Status)
+              : ""}
           </a>
           <br />
         </ModalBody>
-
       </Modal>
-      <FormDialog open={open} handleClose={handleClose}
-        data={formData} onChange={onChange} handleFormSubmit={handleFormSubmit} />
-
+      <FormDialog
+        open={open}
+        handleClose={handleClose}
+        data={formData}
+        onChange={onChange}
+        handleFormSubmit={handleFormSubmit}
+      />
     </>
   );
 }

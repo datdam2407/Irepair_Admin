@@ -578,8 +578,7 @@ export default function ManageCompany() {
           <ModalTitle>Do you want to create new company</ModalTitle>
         </ModalHeader>
         <ModalBody>
-          <Form
-          >
+          <Form >
             <Form.Group className="mb-2">
               <Form.Label>Name</Form.Label>
               <Form.Control type="text"
