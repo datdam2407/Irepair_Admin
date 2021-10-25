@@ -117,7 +117,7 @@ export default function ManageCompany() {
       width: '71px',
       fontSize: '0.76rem',
       color: 'white',
-      textAlign :'center',
+      textAlign: 'center',
       backgroundColor: 'red',
       borderRadius: 8,
       padding: '3px 10px',
@@ -175,7 +175,10 @@ export default function ManageCompany() {
   const [email, setEmail] = useState("");
   const [hotline, setHotline] = useState("");
 
+  //sort
 
+  const [sortedField, setSortedField] = useState("Id");
+  const [ascending, setAscending] = useState(true);
 
   useEffect(() => {
     getCompanyList();
@@ -188,20 +191,42 @@ export default function ManageCompany() {
         }
       });
   }, []);
-
+  //sort
+  function sort(field, status, items) {
+    items.sort((a, b) => {
+      if (a[field] < b[field]) {
+        if (status) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      if (a[field] > b[field]) {
+        if (status) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+      return 0;
+    });
+  }
   function getCompanyList(stateList) {
     let params = {};
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithTokenParams("/api/v1.0/companies", params, localStorage.getItem("token")).then((res) => {
-      var temp = res.data.filter((x) => x.state !== "Completed");
-      setCompanyList(temp);
-      setUseListCompanyShow(temp);
-      setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
-      setTotalNumberPage(Math.ceil(temp.length / 8));
-    }).catch((err) => {
-      console.log(err);
-    });
+    if (sortedField !== null) {
+
+      getWithTokenParams("/api/v1.0/companies", params, localStorage.getItem("token")).then((res) => {
+        var temp = res.data.filter((x) => x.state !== "Completed");
+        setCompanyList(temp);
+        setUseListCompanyShow(temp);
+        setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
+        setTotalNumberPage(Math.ceil(temp.length / 8));
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
   }
 
   //Paging
@@ -274,30 +299,33 @@ export default function ManageCompany() {
   );
   function onSubmitSearch(e) {
     e.preventDefault();
-  
+
     if (searchName !== "") {
       getWithToken(
         `/api/v1.0/companies?Name=` + searchName,
-        
+
         localStorage.getItem("token")
       ).then((res) => {
         var temp = res.data;
         setCompanyList(temp);
+        sort(sortedField, ascending, temp);
         setNumberPage(1);
-      setUseListCompanyShow(temp);
-      setUseListCompanyShowPage(temp.slice(0, 8));
-      setTotalNumberPage(Math.ceil(temp.length / 8));
+        setUseListCompanyShow(temp);
+        setUseListCompanyShowPage(temp.slice(0, 8));
+        setTotalNumberPage(Math.ceil(temp.length / 8));
       });
-    } else if(searchName == "") {
+    } else if (searchName == "") {
       getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then(
         (res) => {
           if (res && res.status === 200) {
             var temp2 = res.data;
             setCompanyList(temp2);
-      setUseListCompanyShow(temp2);
-      setUseListCompanyShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
-      setTotalNumberPage(Math.ceil(temp2.length / 8));
-    }})}
+            setUseListCompanyShow(temp2);
+            setUseListCompanyShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
+            setTotalNumberPage(Math.ceil(temp2.length / 8));
+          }
+        })
+    }
   }
 
   return (
@@ -334,22 +362,22 @@ export default function ManageCompany() {
                       </InputGroup>
                     </Row>
                   </Col>
-                 
+
                 </div>
                 <Col md={2}>
-                    <Form
-                      onClick={(e) => {
-                        onSubmitSearch(e);
-                      }}
-                    >
-                      <InputGroup className="fixed">
-                        <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..." ></Input>
-                        <Button className="dropdown-filter-css" >
-                          <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
-                        </Button>
-                      </InputGroup>
-                    </Form>
-                  </Col>
+                  <Form
+                    onClick={(e) => {
+                      onSubmitSearch(e);
+                    }}
+                  >
+                    <InputGroup className="fixed">
+                      <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..." ></Input>
+                      <Button className="dropdown-filter-css" >
+                        <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
+                      </Button>
+                    </InputGroup>
+                  </Form>
+                </Col>
                 <Col>
                   <Col align="right">
                     <Button
@@ -366,14 +394,132 @@ export default function ManageCompany() {
               <Table className="table">
                 <thead>
                   <tr>
-                    {/* <th className="description">ID</th> */}
-                    <th className="description">Name</th>
-                    <th className="description">Address</th>
-                    <th className="description">Description</th>
-                    <th className="description">Email</th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "CompanyName" && ascending) {
+                          setSortedField("CompanyName");
+                          setAscending(false);
+                          sort("CompanyName", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("CompanyName");
+                          setAscending(true);
+                          sort("CompanyName", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Name{" "}
+                      {sortedField === "CompanyName" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "Address" && ascending) {
+                          setSortedField("Address");
+                          setAscending(false);
+                          sort("Address", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("Address");
+                          setAscending(true);
+                          sort("Address", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Address{" "}
+                      {sortedField === "Address" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "Description" && ascending) {
+                          setSortedField("Description");
+                          setAscending(false);
+                          sort("Description", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("Description");
+                          setAscending(true);
+                          sort("Description", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Description{" "}
+                      {sortedField === "Description" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "Email" && ascending) {
+                          setSortedField("Email");
+                          setAscending(false);
+                          sort("Email", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("Email");
+                          setAscending(true);
+                          sort("Email", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Email{" "}
+                      {sortedField === "Email" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
                     <th className="description">Hotline</th>
-                    {/* <th className="description">Picture</th> */}
-                    <th className="description">State</th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "Status" && ascending) {
+                          setSortedField("Status");
+                          setAscending(false);
+                          sort("Status", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("Status");
+                          setAscending(true);
+                          sort("Status", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Status{" "}
+                      {sortedField === "Status" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
                     <th className="description">Actions</th>
                   </tr>
                 </thead>
@@ -382,7 +528,7 @@ export default function ManageCompany() {
                     return (
                       <tr className="" key={index}>
                         {/* <td>
-                            {e.Id}
+                        <img src={e.ImageUrl}/>
                           </td> */}
                         <td className="nameSize">
                           {e.CompanyName}

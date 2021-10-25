@@ -200,9 +200,12 @@ font-size: larger;}
         width: 100px;
     }
     .input-type-css{
-        border:solid white;
-        text-align: right;       
-        padding-right: 45px; 
+        border:solid #ffffff00;
+        
+    }
+    .input-type-css-order{
+        border:solid #ffffff00;
+        text-align: center;       
     }
     b{
         font-weight: 900;
@@ -221,7 +224,11 @@ font-size: larger;}
         margin-left: 110px;
     }
 
-
+    .avatar-repairman{
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
 
 
 

@@ -141,14 +141,6 @@ export default function Customer() {
     }
   }));
   const classes = useStyles();
-  function getCustomerListID() {
-    get("/api/v1.0/customer/get-by-id" + CustomerEdit).then((res) => {
-      var temp = res.data;
-      setCustomerListID(temp);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
 
   //Paging
   function onClickPage(number) {
@@ -156,32 +148,7 @@ export default function Customer() {
     setUseListCustomerShowPage(useListCustomerShow.slice(number * 10 - 10, number * 10));
     setTotalNumberPage(Math.ceil(useListCustomerShow.length / 10));
   }
-  // create form 
-  function handleSubmit(e) {
-    e.preventDefault();
-    setButton(true);
-    post(
-      "/api/v1.0/customer/create",
-      {
-        customer_Name: e.target.customer_Name.value,
-        address: e.target.address.value,
-        description: e.target.description.value,
-        email: e.target.email.value,
-        hotline: e.target.hotline.value,
-        is_Online: 1,
-        is_Delete: 0,
-        picture: e.target.picture.value,
-      },
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/Customer";
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-  }
+
   // custom state
   function displayStateName(type) {
     const stateValue = {
@@ -205,16 +172,7 @@ export default function Customer() {
       <Col md="12">
         <Card className="strpied-tabled-with-hover">
           <Card.Header>
-            {/* <Button
 
-                  onClick={() => {
-                    // setCustomerEdit(e.Id);
-                    // getCustomerListID();
-                    // handleSubmit(e);
-                    setCustomerModalCreate(true);
-                  }}>
-                  Create new Customer
-                </Button> */}
           </Card.Header>
           <Card.Body className="table-full-width table-responsive px-0">
             <Table className="table-hover table-striped">

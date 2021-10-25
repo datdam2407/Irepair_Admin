@@ -5,46 +5,43 @@ import {
   Button,
   Card,
   Form,
-  Container,
   Row,
   Col,
   ModalTitle,
   Table,
-  OverlayTrigger,
-  Tooltip,
 } from "react-bootstrap";
 import {
   Modal,
   ModalHeader,
-  Media,
   ModalBody,
   ModalFooter,
   Pagination,
   PaginationItem,
   PaginationLink,
+  InputGroup,
+  Input,
 } from "reactstrap";
+import NumberFormat from 'react-number-format';
+
 import moment from "moment";
 import {
-  TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Avatar,
   Grid,
   Typography,
 } from '@material-ui/core';
-import { del, post, get, getWithToken } from "../../src/service/ReadAPI";
+import { post, getWithToken } from "../../src/service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faCaretDown,
+  faCaretUp,
+} from "@fortawesome/free-solid-svg-icons";
 export default function Order() {
 
-  const [CustomerDelete, setCustomerDelete] = useState(null);
   const [modalDelete, setCustomerModalDelete] = useState(false);
   const toggleDelete = () => setCustomerModalDelete(!modalDelete);
   //edit
-  const [CustomerEdit, setCustomerEdit] = useState(null);
   const [modalEdit, setCustomerModalEdit] = useState(false);
   const toggleEdit = () => setCustomerModalEdit(!modalEdit)
 
@@ -57,6 +54,18 @@ export default function Order() {
   const [Selectservice, setSelectservice] = useState();
 
 
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen1, setDropdownOpen1] = useState(false);
+  const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
+  const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
+  //sort
+
+  const [sortedField, setSortedField] = useState("Id");
+  const [ascending, setAscending] = useState(true);
+  const [searchName, setSearchName] = useState("");
+
+
   const [customer_Name, setcustomer_Name] = useState("");
   const [address, setaddress] = useState("");
 
@@ -64,7 +73,6 @@ export default function Order() {
   const [useListCustomerShowPage, setUseListCustomerShowPage] = useState([]);
   const [customerList, setCustomerList] = useState([]);
   const [serviceList, setServiceList] = useState([]);
-  const [customerListID, setCustomerListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
 
@@ -87,6 +95,36 @@ export default function Order() {
         }
       });
   }, []);
+
+  //search fc
+  function onSubmitSearch(e) {
+    e.preventDefault();
+    if (searchName !== "") {
+      getWithToken(
+        `/api/v1.0/repairmans?Name=` + searchName,
+        localStorage.getItem("token")
+      ).then((res) => {
+        var temp = res.data;
+        setCustomerList(temp);
+        sort(sortedField, ascending, temp);
+        setNumberPage(1);
+        setUseListCustomerShow(temp);
+        setUseListCustomerShowPage(temp.slice(0, 8));
+        setTotalNumberPage(Math.ceil(temp.length / 8));
+      });
+    } else if (searchName == "") {
+      getWithToken("/api/v1.0/order", localStorage.getItem("token")).then(
+        (res) => {
+          if (res && res.status === 200) {
+            var temp2 = res.data;
+            setCustomerList(temp2);
+            setUseListCustomerShow(temp2);
+            setUseListCustomerShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
+            setTotalNumberPage(Math.ceil(temp2.length / 8));
+          }
+        })
+    }
+  }
 
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -140,15 +178,27 @@ export default function Order() {
   }));
   const classes = useStyles();
 
-  function getCustomerListID() {
-    get("/api/v1.0/customer/get-by-id" + CustomerEdit).then((res) => {
-      var temp = res.data;
-      setCustomerListID(temp);
-    }).catch((err) => {
-      console.log(err);
+
+  //sort
+  function sort(field, status, items) {
+    items.sort((a, b) => {
+      if (a[field] < b[field]) {
+        if (status) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      if (a[field] > b[field]) {
+        if (status) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+      return 0;
     });
   }
-
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
@@ -196,9 +246,10 @@ export default function Order() {
       "7c172d79-7c5d-4ed5-8e71-26ba2e7bf1a3": "nguyen thuan",
       "84066527-2ba2-421a-8637-35d765b153e1": "Tâm Đăng",
       "b123ea59-f40d-495d-b4c8-3be7c96200ad": "Nguyễn Thuần",
-      "50d2c8b8-2a11-4802-9592-4f76e92aed12": "Pham Tan Phat (K14 HCM)",
-      "90b961b3-6c48-4bed-9169-cbbbc978cfee": "Đỗ Dương Tâm Đăng - K14 HCM",
-
+      "50d2c8b8-2a11-4802-9592-4f76e92aed12": "Pham Tan Phat",
+      "90b961b3-6c48-4bed-9169-cbbbc978cfee": "Đỗ Dương Tâm Đăng",
+      "8f9cd415-da56-44af-8116-6ccbe3e3b037": "Phạm Hữu Nghĩa",
+      "00c4858a-f32a-4218-9266-641088f1e373": "Đỗ Dương Tâm Đăng",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -212,6 +263,13 @@ export default function Order() {
       "03372569-1d24-4af6-ac50-0c0ec5827191": "Sửa Laptop",
       "b68e53f9-d13d-4631-b749-22f50a1e2ad3": "Đo và bơm gas máy lạnhh",
       "616a22f4-05c8-4617-86bf-255292bdafad": "Tủ Đông",
+      "dd47f3bf-9a93-422c-baa8-ad659d6334ba": "Vá vết xước thân xe",
+      "4a46e366-774b-428b-bb19-8104c0544f87": "Vá vết xước thân xe",
+      "d865633f-de3f-4b16-889d-4285739d6da5": "Thay Nhớt",
+      "0533e4c5-68db-43df-833c-557fd3d4dca7": "Thay Nhớt",
+      "9c86debe-48cd-4ef9-9afd-6a73db4b3129": "Đo và cân chỉnh áp suất lốp",
+      "02d59c6b-8e61-48cc-a01d-2eb7da6350d8": "Đo và cân chỉnh áp suất lốp",
+
 
     };
     return stateValue[type] ? stateValue[type] : "";
@@ -231,36 +289,161 @@ export default function Order() {
     <>
       <Col md="12">
         <Card className="strpied-tabled-with-hover">
-          <Card.Header>
-            {/* <Button
-
-                  onClick={() => {
-                    // setCustomerEdit(e.Id);
-                    // getCustomerListID();
-                    // handleSubmit(e);
-                    setCustomerModalCreate(true);
-                  }}>
-                  Create new Customer
-                </Button> */}
-          </Card.Header>
+          {/* <div className="header-form">
+            <Row>
+              <Col md={2}>
+                <Form
+                  onClick={(e) => {
+                    onSubmitSearch(e);
+                  }}
+                >
+                  <InputGroup className="fixed">
+                    <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..."></Input>
+                    <Button className="dropdown-filter-css" >
+                      <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
+                    </Button>
+                  </InputGroup>
+                </Form>
+              </Col>
+            </Row>
+          </div> */}
           <Card.Body className="table-full-width table-responsive px-0">
             <Table className="table-hover table-striped">
               <thead>
                 <tr>
-                  <th className="description">Customer</th>
-                  <th className="description">Address </th>
-                  <th className="description">Repairman</th>
+                  <th
+                    className="description"
+                    onClick={() => {
+                      if (sortedField === "Id" && ascending) {
+                        setSortedField("Id");
+                        setAscending(false);
+                        sort("Id", false, useListCustomerShowPage);
+                      } else {
+                        setSortedField("Id");
+                        setAscending(true);
+                        sort("Id", true, useListCustomerShowPage);
+                      }
+                    }}
+                  >
+                    Customer{" "}
+                    {sortedField === "Id" ? (
+                      ascending === true ? (
+                        <FontAwesomeIcon icon={faCaretUp} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )
+                    ) : (
+                      <FontAwesomeIcon icon={faCaretDown} />
+                    )}
+                  </th>
+                  <th
+                    className="description"
+                    onClick={() => {
+                      if (sortedField === "CustomerAddress" && ascending) {
+                        setSortedField("CustomerAddress");
+                        setAscending(false);
+                        sort("CustomerAddress", false, useListCustomerShowPage);
+                      } else {
+                        setSortedField("CustomerAddress");
+                        setAscending(true);
+                        sort("CustomerAddress", true, useListCustomerShowPage);
+                      }
+                    }}
+                  >
+                    Address{" "}
+                    {sortedField === "CustomerAddress" ? (
+                      ascending === true ? (
+                        <FontAwesomeIcon icon={faCaretUp} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )
+                    ) : (
+                      <FontAwesomeIcon icon={faCaretDown} />
+                    )}
+                  </th>
+                  <th
+                    className="description"
+                    onClick={() => {
+                      if (sortedField === "RepairmanId" && ascending) {
+                        setSortedField("RepairmanId");
+                        setAscending(false);
+                        sort("RepairmanId", false, useListCustomerShowPage);
+                      } else {
+                        setSortedField("RepairmanId");
+                        setAscending(true);
+                        sort("RepairmanId", true, useListCustomerShowPage);
+                      }
+                    }}
+                  >
+                    Repairman{" "}
+                    {sortedField === "RepairmanId" ? (
+                      ascending === true ? (
+                        <FontAwesomeIcon icon={faCaretUp} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )
+                    ) : (
+                      <FontAwesomeIcon icon={faCaretDown} />
+                    )}
+                  </th>
 
-                  <th className="description">Service</th>
+                  <th
+                    className="description"
+                    onClick={() => {
+                      if (sortedField === "ServiceId" && ascending) {
+                        setSortedField("ServiceId");
+                        setAscending(false);
+                        sort("ServiceId", false, useListCustomerShowPage);
+                      } else {
+                        setSortedField("ServiceId");
+                        setAscending(true);
+                        sort("ServiceId", true, useListCustomerShowPage);
+                      }
+                    }}
+                  >
+                    Service{" "}
+                    {sortedField === "ServiceId" ? (
+                      ascending === true ? (
+                        <FontAwesomeIcon icon={faCaretUp} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )
+                    ) : (
+                      <FontAwesomeIcon icon={faCaretDown} />
+                    )}
+                  </th>
                   {/* <th className="description">Username</th> */}
-                  
-                  <th className="description">Created Date </th>
+
+                  {/* <th className="description">Created Date </th> */}
                   <th className="description">Payment Date</th>
-                  <th className="description">Total</th>
+                  <th
+                    className="description-price"
+                    onClick={() => {
+                      if (sortedField === "Total" && ascending) {
+                        setSortedField("Total");
+                        setAscending(false);
+                        sort("Total", false, useListCustomerShowPage);
+                      } else {
+                        setSortedField("Total");
+                        setAscending(true);
+                        sort("Total", true, useListCustomerShowPage);
+                      }
+                    }}
+                  >
+                    Total{" "}
+                    {sortedField === "Total" ? (
+                      ascending === true ? (
+                        <FontAwesomeIcon icon={faCaretUp} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )
+                    ) : (
+                      <FontAwesomeIcon icon={faCaretDown} />
+                    )}
+                  </th>
 
                   <th className="description">Point</th>
-                  <th className="description">Feedback</th>
-                  <th className="description">Views</th>
+                  {/* <th className="description">Feedback</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -286,21 +469,26 @@ export default function Order() {
                       <td>
                         {displayServiceName(e.ServiceId)}
                       </td>
-                      <td >{moment(e.CreateTime).format("MM-DD-YYYY")}
+                      {/* <td >{moment(e.CreateTime).format("MM-DD-YYYY")}
+                      </td> */}
+                      <td>
+                        {moment(e.PaymentTime).format("MM-DD-YYYY")}
                       </td>
                       <td>
-                      {moment(e.PaymentTime).format("MM-DD-YYYY")}
-                      </td>
-                      <td>
-                        {e.Total}
+                      <NumberFormat className="input-type-css-order"
+                          thousandsGroupStyle="thousand"
+                          value= {e.Total}
+                          decimalSeparator="."
+                          thousandSeparator={true}
+                          disabled/>
                       </td>
                       <td className="point-customer">
                         {e.FeedbackPoint}✩
                       </td>
-                      <td className="point-customer">
+                      {/* <td className="point-customer">
                         {e.FeedbackMessage}
-                      </td>
-                      <td>
+                      </td> */}
+                      {/* <td>
                         <OverlayTrigger
                           onClick={(e) => e.preventDefault()}
                           overlay={
@@ -323,7 +511,7 @@ export default function Order() {
                           </Button>
                         </OverlayTrigger>
 
-                      </td>
+                      </td> */}
 
                     </tr>
                   );

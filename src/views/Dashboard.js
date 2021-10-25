@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-// react component used to create charts
-import ChartistGraph from "react-chartist";
-// react components used to create a SVG / Vector map
 import { VectorMap } from "react-jvectormap";
-import {
-  BrowserRouter as Router,
-  useHistory,
-} from "react-router-dom";
-import {
-  UncontrolledCarousel,
-} from "reactstrap";
 // react-bootstrap components
 import {
   Card,
@@ -34,6 +24,7 @@ const [companyListID, setCompanyList] = useState([]);
 const [serviceList, setServiceList] = useState([]);
 const [RPList, setRepairmanList] = useState([]);
 const [OrderList, setOrderList] = useState([]);
+const [totalPrice, setPrice] = useState(0);
 
   const carouselItems = [
     {
@@ -83,7 +74,15 @@ const [OrderList, setOrderList] = useState([]);
     )
     getWithToken("/api/v1.0/order" ,localStorage.getItem("token")).then(
       (res) => {
+        let totalPrice = 0;
+        {OrderList.map((e, index) => {
+          totalPrice += e.Total;
+        })}
         setOrderList(res.data);
+    
+        setPrice(totalPrice)
+        console.log("aaaaLenght" , OrderList.length)
+        console.log("aaaatotalPrice" , totalPrice)
       }
     )
     getWithToken("/api/v1.0/repairmans?Status=1" ,localStorage.getItem("token")).then(
@@ -96,9 +95,7 @@ const [OrderList, setOrderList] = useState([]);
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
-          // res.data;
-          // console.log(res.data);
-          console.log("aaaaa", companyListID.length);
+          // console.log("aaaaa", companyListID.length);
         }
       });
   }, []);
@@ -224,7 +221,9 @@ const [OrderList, setOrderList] = useState([]);
                   <Col xs="7">
                     <div className="numbers">
                       <p className="card-category">Revenue</p>
-                      <Card.Title as="h4">45M</Card.Title>
+                          
+                      <Card.Title as="h4">{totalPrice}đ</Card.Title>
+                   
                     </div>
                   </Col>
                 </Row>
@@ -405,53 +404,6 @@ const [OrderList, setOrderList] = useState([]);
             </Card>
           </Col>
         </Row>
-        {/* <Row>
-        <Col md="5">
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">Hot Service</Card.Title>
-                <p className="card-category">All products including Taxes</p>
-                <Card.Body>
-              <UncontrolledCarousel
-                items={carouselItems}
-                indicators={false}
-                autoPlay={false}
-              />
-              </Card.Body>
-              </Card.Header>               
-              <Card.Footer>
-                <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-check"></i>
-                  Data information certified
-                </div>
-              </Card.Footer>
-            </Card>
-          </Col>
-          <Col md="7">
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">Covid News</Card.Title>
-                <p className="card-category">24 Hours performance</p>
-              </Card.Header>
-              <Card.Body>
-              <UncontrolledCarousel
-                items={covid19Items}
-                indicators={false}
-                autoPlay={false}
-              />
-              </Card.Body>
-              <Card.Footer>
-                <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-check"></i>
-                  Data information certified
-                </div>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row> */}
-        
       </Container>
     </>
   );
