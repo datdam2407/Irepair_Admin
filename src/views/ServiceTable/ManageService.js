@@ -157,7 +157,7 @@ function ManageSevice() {
     },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark
+   color: '#1d98e0f7'
     },
     Status: {
       fontWeight: '700',
@@ -275,8 +275,8 @@ function ManageSevice() {
         var temp = res.data.filter((x) => x.state !== "Completed");
         setserviceList(temp);
         setUseListserviceShow(temp);
-        setUseListserviceShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
-        setTotalNumberPage(Math.ceil(temp.length / 8));
+        setUseListserviceShowPage(temp.slice(numberPage * 10 - 10, numberPage * 10));
+        setTotalNumberPage(Math.ceil(temp.length / 10));
         setCount(count);
       }).catch((err) => {
         console.log(err);
@@ -286,8 +286,8 @@ function ManageSevice() {
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListserviceShowPage(useListserviceShow.slice(number * 8 - 8, number * 8));
-    setTotalNumberPage(Math.ceil(useListserviceShow.length / 8));
+    setUseListserviceShowPage(useListserviceShow.slice(number * 10 - 10, number * 10));
+    setTotalNumberPage(Math.ceil(useListserviceShow.length / 10));
   }
 
   const closeBtn = (x) => (
@@ -346,8 +346,8 @@ function ManageSevice() {
         sort(sortedField, ascending, temp);
         setNumberPage(1);
         setUseListserviceShow(temp);
-        setUseListserviceShowPage(temp.slice(0, 8));
-        setTotalNumberPage(Math.ceil(temp.length / 8));
+        setUseListserviceShowPage(temp.slice(0, 10));
+        setTotalNumberPage(Math.ceil(temp.length / 10));
 
       });
     } else if (searchName == "") {
@@ -357,8 +357,8 @@ function ManageSevice() {
             var temp2 = res.data;
             setserviceList(temp2);
             setUseListserviceShow(temp2);
-            setUseListserviceShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
-            setTotalNumberPage(Math.ceil(temp2.length / 8));
+            setUseListserviceShowPage(temp2.slice(numberPage * 10 - 10, numberPage * 10));
+            setTotalNumberPage(Math.ceil(temp2.length / 10));
           }
         })
     }
@@ -586,7 +586,7 @@ function ManageSevice() {
                               }}
                             >{displayStateName(e.Status)}</Typography>
                           </TableCell>
-                          <td className="td-actions">
+                          <td className="td-actions" >
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
                               overlay={
@@ -744,7 +744,7 @@ function ManageSevice() {
           >
             Approved
           </Button>{" "}
-          <Button color="secondary" onClick={toggleApprove}>
+          <Button className="Cancel-button" onClick={toggleApprove}>
             Cancel
           </Button>
         </ModalFooter>
@@ -767,7 +767,7 @@ function ManageSevice() {
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleserviceDelete}>
+          <Button className="Cancel-button" onClick={toggleserviceDelete}>
             Cancel
           </Button>
         </ModalFooter>
@@ -837,7 +837,7 @@ function ManageSevice() {
           >
             Edit
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
+          <Button className="Cancel-button" onClick={toggleEdit}>
             Cancel
           </Button>
         </ModalFooter>

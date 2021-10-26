@@ -37,7 +37,7 @@ import {
 } from '@material-ui/core';
 import { del, post, get, getWithToken } from "../../src/service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
-
+import "../assets/css/customSize.css"
 export default function Customer() {
 
   const [CustomerDelete, setCustomerDelete] = useState(null);
@@ -126,7 +126,7 @@ export default function Customer() {
     },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark,
+   color: '#1d98e0f7',
 
     },
     Status: {
@@ -161,7 +161,7 @@ export default function Customer() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#B22222" , backgroundColor:"white"}}
       onClick={x}
     >
       X
@@ -194,8 +194,8 @@ export default function Customer() {
                   return (
                     <tr key={index}>
                       
-                      <td>
-                        <img src={e.Avatar}/>
+                      <td >
+                        <img className="avatar-repairman" src={e.Avatar}/>
                       </td>
                      <TableCell>
                             <Grid container>
@@ -385,8 +385,6 @@ export default function Customer() {
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleEdit)}
-          toggle={toggleEdit}
         >
           <ModalTitle>Do you want to edit Customer</ModalTitle>
         </ModalHeader>
@@ -445,7 +443,7 @@ export default function Customer() {
           >
             Edit
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
+          <Button className="Cancel-button" onClick={toggleEdit}>
             Cancel
           </Button>
         </ModalFooter>
@@ -454,8 +452,7 @@ export default function Customer() {
       <Modal isOpen={modalDelete} toggle={toggleDelete}>
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleDelete)}
-          toggle={toggleDelete}
+
         >
           Are you sure?
         </ModalHeader>
@@ -470,7 +467,7 @@ export default function Customer() {
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleDelete}>
+          <Button className="Cancel-button" onClick={toggleDelete}>
             Cancel
           </Button>
         </ModalFooter>

@@ -137,7 +137,7 @@ function MajorTables() {
     },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark,
+   color: '#1d98e0f7',
 
     },
     Status: {
@@ -317,7 +317,7 @@ function MajorTables() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#B22222" , backgroundColor:"white"}}
       onClick={x}
     >
       X
@@ -756,7 +756,7 @@ function MajorTables() {
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleMajorDelete}>
+          <Button className="Cancel-button" onClick={toggleMajorDelete}>
             Cancel
           </Button>
         </ModalFooter>
@@ -824,7 +824,7 @@ function MajorTables() {
           >
             Update
           </Button>
-          <Button color="secondary" onClick={()=> {cancelRepairmanByID()}}>
+          <Button className="Cancel-button" onClick={()=> {cancelRepairmanByID()}}>
             Cancel
           </Button>
         </ModalFooter>
@@ -896,7 +896,7 @@ function MajorTables() {
           >
             Save
           </Button>
-          <Button color="secondary" onClick={toggleCreate}>
+          <Button className="Cancel-button" onClick={toggleCreate}>
             Cancel
           </Button>
         </ModalFooter>
@@ -944,7 +944,7 @@ function MajorTables() {
           >
             Approved
           </Button>{" "}
-          <Button color="secondary" onClick={toggleApprove}>
+          <Button className="Cancel-button" onClick={toggleApprove}>
             Cancel
           </Button>
         </ModalFooter>

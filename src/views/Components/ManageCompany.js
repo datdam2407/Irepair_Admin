@@ -109,7 +109,7 @@ export default function ManageCompany() {
     },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark,
+   color: '#1d98e0f7',
 
     },
     Status: {
@@ -291,7 +291,7 @@ export default function ManageCompany() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#B22222" , backgroundColor:"white"}}
       onClick={x}
     >
       X
@@ -546,7 +546,6 @@ export default function ManageCompany() {
                           {e.Hotline}
                         </td>
 
-                        <td>
 
                           <TableCell onClick={() => {
                             setCompanyDelete(e.Id);
@@ -564,7 +563,6 @@ export default function ManageCompany() {
                             >{displayStateName(e.Status)}</Typography>
                           </TableCell>
 
-                        </td>
                         <td>
 
                           <OverlayTrigger
@@ -718,8 +716,7 @@ export default function ManageCompany() {
       <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleCreate)}
-          toggle={toggleCreate}
+
         >
           <ModalTitle>Do you want to create new company</ModalTitle>
         </ModalHeader>
@@ -795,7 +792,7 @@ export default function ManageCompany() {
           >
             Save
           </Button>
-          <Button color="secondary" onClick={toggleCreate}>
+          <Button className="Cancel-button" onClick={toggleCreate}>
             Cancel
           </Button>
         </ModalFooter>
@@ -804,8 +801,7 @@ export default function ManageCompany() {
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleEdit)}
-          toggle={toggleEdit}
+
         >
           <ModalTitle>Do you want to edit Company</ModalTitle>
         </ModalHeader>
@@ -884,7 +880,7 @@ export default function ManageCompany() {
           >
             Edit
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
+          <Button className="Cancel-button" onClick={toggleEdit}>
             Cancel
           </Button>
         </ModalFooter>
@@ -893,8 +889,7 @@ export default function ManageCompany() {
       <Modal isOpen={modalDelete} toggle={toggleDelete}>
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleDelete)}
-          toggle={toggleDelete}
+
         >
           Are you sure?
         </ModalHeader>
@@ -911,7 +906,7 @@ export default function ManageCompany() {
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleDelete}>
+          <Button className="Cancel-button" onClick={toggleDelete}>
             Cancel
           </Button>
         </ModalFooter>
@@ -919,8 +914,7 @@ export default function ManageCompany() {
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleApprove)}
-          toggle={toggleApprove}
+
         >
           Are you sure?
         </ModalHeader>
@@ -936,7 +930,7 @@ export default function ManageCompany() {
           >
             Approved
           </Button>{" "}
-          <Button color="secondary" onClick={toggleApprove}>
+          <Button className="Cancel-button" onClick={toggleApprove}>
             Cancel
           </Button>
         </ModalFooter>

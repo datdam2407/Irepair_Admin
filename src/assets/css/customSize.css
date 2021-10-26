@@ -209,7 +209,7 @@ font-size: larger;}
     }
     b{
         font-weight: 900;
-        font-size: 22px;
+        /* font-size: 22px; */
         color: rgb(117, 5, 5);
     }
     a.name{
@@ -231,5 +231,13 @@ font-size: larger;}
     }
 
 
-
+.Cancel-button{
+    background-color: brown;
+    color: blanchedalmond;
+}
+    
+.Cancel-button:hover{
+    background-color: brown;
+    color: black;
+}
     

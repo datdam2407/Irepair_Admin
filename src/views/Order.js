@@ -162,7 +162,7 @@ export default function Order() {
     },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark,
+   color: '#1d98e0f7',
 
     },
     Status: {
@@ -670,7 +670,7 @@ export default function Order() {
           >
             Edit
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
+          <Button className="Cancel-button" onClick={toggleEdit}>
             Cancel
           </Button>
         </ModalFooter>
@@ -695,7 +695,7 @@ export default function Order() {
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleDelete}>
+          <Button className="Cancel-button" onClick={toggleDelete}>
             Cancel
           </Button>
         </ModalFooter>

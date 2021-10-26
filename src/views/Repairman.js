@@ -160,8 +160,8 @@ export default function Repairman() {
                     setRepairmanList(res.data.RepairmanId)
                     setRepairmanList(temp);
                     setUseListRepairmanShow(temp);
-                    setUseListRepairmanShowPage(temp.slice(numberPage * 10 - 10, numberPage * 10));
-                    setTotalNumberPage(Math.ceil(temp.length / 10));
+                    setUseListRepairmanShowPage(temp.slice(numberPage * 6 - 6, numberPage * 6));
+                    setTotalNumberPage(Math.ceil(temp.length / 6));
                 }
             });
     }, []);
@@ -193,8 +193,8 @@ export default function Repairman() {
                 var temp2 = res.data.filter((x) => x.state !== "Completed");
                 setRepairmanList(temp2);
                 setUseListRepairmanShow(temp2);
-                setUseListRepairmanShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
-                setTotalNumberPage(Math.ceil(temp2.length / 8));
+                setUseListRepairmanShowPage(temp2.slice(numberPage * 6 - 6, numberPage * 6));
+                setTotalNumberPage(Math.ceil(temp2.length / 6));
                 setCount(count);
             }).catch((err) => {
                 console.log(err);
@@ -237,7 +237,7 @@ export default function Repairman() {
         },
         name: {
             fontWeight: 'bold',
-            color: theme.palette.secondary.dark,
+         color: '#1d98e0f7',
 
         },
         Status: {
@@ -257,8 +257,8 @@ export default function Repairman() {
     //Paging
     function onClickPage(number) {
         setNumberPage(number);
-        setUseListRepairmanShowPage(useListRepairmanShow.slice(number * 10 - 10, number * 10));
-        setTotalNumberPage(Math.ceil(useListRepairmanShow.length / 10));
+        setUseListRepairmanShowPage(useListRepairmanShow.slice(number * 6 - 6, number * 6));
+        setTotalNumberPage(Math.ceil(useListRepairmanShow.length / 6));
     }
     // custom state
     function displayStateName(type) {
@@ -282,8 +282,8 @@ export default function Repairman() {
                 sort(sortedField, ascending, temp);
                 setNumberPage(1);
                 setUseListRepairmanShow(temp);
-                setUseListRepairmanShowPage(temp.slice(0, 8));
-                setTotalNumberPage(Math.ceil(temp.length / 8));
+                setUseListRepairmanShowPage(temp.slice(0, 6));
+                setTotalNumberPage(Math.ceil(temp.length / 6));
             });
         } else if (searchName == "") {
             getWithToken("/api/v1.0/repairmans", localStorage.getItem("token")).then(
@@ -292,8 +292,8 @@ export default function Repairman() {
                         var temp2 = res.data;
                         setRepairmanList(temp2);
                         setUseListRepairmanShow(temp2);
-                        setUseListRepairmanShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
-                        setTotalNumberPage(Math.ceil(temp2.length / 8));
+                        setUseListRepairmanShowPage(temp2.slice(numberPage * 6 - 6, numberPage * 6));
+                        setTotalNumberPage(Math.ceil(temp2.length / 6));
                     }
                 })
         }
@@ -301,7 +301,7 @@ export default function Repairman() {
     const closeBtn = (x) => (
         <button
             className="btn border border-danger"
-            style={{ color: "#B22222" }}
+            style={{ color: "#B22222" , backgroundColor:"white"}}
             onClick={x}
         >
             X
@@ -550,6 +550,7 @@ export default function Repairman() {
                                                                     ((e.Status === 1 && 'rgb(34, 176, 34)')
                                                                         ||
                                                                         (e.Status === 3 && 'red') ||
+                                                                        (e.Status === 2 && '#0b0808') ||
                                                                         (e.Status === 0 && 'rgb(50, 102, 100)'))
 
                                                             }}
@@ -704,8 +705,6 @@ export default function Repairman() {
             <Modal isOpen={modalApprove} toggle={toggleApprove}>
                 <ModalHeader
                     style={{ color: "#B22222" }}
-                    close={closeBtn(toggleApprove)}
-                    toggle={toggleApprove}
                 >
                     Are you sure?
                 </ModalHeader>
@@ -721,7 +720,7 @@ export default function Repairman() {
                     >
                         Approved
                     </Button>{" "}
-                    <Button color="secondary" onClick={toggleApprove}>
+                    <Button className="Cancel-button" onClick={toggleApprove}>
                         Cancel
                     </Button>
                 </ModalFooter>
@@ -730,8 +729,7 @@ export default function Repairman() {
             <Modal isOpen={modalDelete} toggle={toggleDelete}>
                 <ModalHeader
                     style={{ color: "#B22222" }}
-                    close={closeBtn(toggleDelete)}
-                    toggle={toggleDelete}
+
                 >
                     Are you sure?
                 </ModalHeader>
@@ -746,7 +744,7 @@ export default function Repairman() {
                     >
                         Delete
                     </Button>{" "}
-                    <Button color="secondary" onClick={toggleDelete}>
+                    <Button className="Cancel-button" onClick={toggleDelete}>
                         Cancel
                     </Button>
                 </ModalFooter>
