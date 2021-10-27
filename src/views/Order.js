@@ -84,7 +84,7 @@ export default function Order() {
         setServiceList(tempS);
 
       })
-    getWithToken("/api/v1.0/order", localStorage.getItem("token")).then(
+    getWithToken("/api/v1.0/orders", localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
           var temp = res.data;
@@ -247,8 +247,11 @@ export default function Order() {
       "84066527-2ba2-421a-8637-35d765b153e1": "Tâm Đăng",
       "b123ea59-f40d-495d-b4c8-3be7c96200ad": "Nguyễn Thuần",
       "50d2c8b8-2a11-4802-9592-4f76e92aed12": "Pham Tan Phat",
+      "e0ca88d0-e18d-4127-ae93-d81863c734e0": "Pham Tan Phat",
       "90b961b3-6c48-4bed-9169-cbbbc978cfee": "Đỗ Dương Tâm Đăng",
+      "08f7ee82-6f78-40fa-a368-2bdf202df346": "Lê Vương",
       "8f9cd415-da56-44af-8116-6ccbe3e3b037": "Phạm Hữu Nghĩa",
+      // "8f9cd415-da56-44af-8116-6ccbe3e3b037": "Phạm Hữu Nghĩa",
       "00c4858a-f32a-4218-9266-641088f1e373": "Đỗ Dương Tâm Đăng",
     };
     return stateValue[type] ? stateValue[type] : "";
