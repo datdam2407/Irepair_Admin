@@ -106,6 +106,8 @@ export default function Repairman() {
 
     function displayRepairmanName(type) {
         const stateValue = {
+            "0e9ceddf-9796-478a-87fc-132567a68116":"Tiệm Sửa Xe Đinh Thành",
+            "e427ae66-4f89-47c9-8032-0cca6577b28f":"Cty sửa chữa xe máy PHÁT THÀNH VINH 10",
             "234be13b-421b-40d9-8226-0f162dee7ac8": "Công ty điện lạnh Thành Công",
             "7e179e62-21da-45c1-afe4-114a580f0a12": "Công ty điện lạnh Long Châu",
             "404f25c6-4f40-4f83-acfd-16a0d7c2f8e9": "Công ty điện lạnh, điện gia dụng Thủy Tiên",
@@ -704,12 +706,15 @@ export default function Repairman() {
 
             <Modal isOpen={modalApprove} toggle={toggleApprove}>
                 <ModalHeader
-                    style={{ color: "#B22222" }}
+                    style={{ color: "#1bd1ff" }}
                 >
                     Are you sure?
                 </ModalHeader>
                 <ModalBody>Do you want to Appprove this repairman</ModalBody>
-                <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+         <Button className="Cancel-button" onClick={toggleApprove}>
+                        Cancel
+                    </Button>
                     <Button
                         color="danger"
                         onClick={() => {
@@ -720,21 +725,22 @@ export default function Repairman() {
                     >
                         Approved
                     </Button>{" "}
-                    <Button className="Cancel-button" onClick={toggleApprove}>
-                        Cancel
-                    </Button>
+                 
                 </ModalFooter>
             </Modal>
 
             <Modal isOpen={modalDelete} toggle={toggleDelete}>
                 <ModalHeader
-                    style={{ color: "#B22222" }}
+                    style={{ color: "#1bd1ff" }}
 
                 >
                     Are you sure?
                 </ModalHeader>
                 <ModalBody>Do you want to delete this repairman</ModalBody>
-                <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+         <Button className="Cancel-button" onClick={toggleDelete}>
+                        Cancel
+                    </Button>
                     <Button
                         color="danger"
                         onClick={() => {
@@ -744,9 +750,7 @@ export default function Repairman() {
                     >
                         Delete
                     </Button>{" "}
-                    <Button className="Cancel-button" onClick={toggleDelete}>
-                        Cancel
-                    </Button>
+                   
                 </ModalFooter>
             </Modal>
 
@@ -754,7 +758,7 @@ export default function Repairman() {
             <Modal isOpen={modalStatus} toggle={toggleDetails}>
                 <ModalHeader
                     toggle={toggleDetails}
-                    style={{ color: "#B22222" }}
+                    style={{ color: "#1bd1ff" }}
                     close={closeBtn(toggleDetails)}
                 >
                     <h3> INFORMATION </h3>

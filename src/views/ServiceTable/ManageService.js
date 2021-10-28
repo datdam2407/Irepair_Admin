@@ -293,7 +293,7 @@ function ManageSevice() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#1bd1ff" }}
       onClick={x}
     >
       X
@@ -330,6 +330,15 @@ function ManageSevice() {
       "c2dc1cf0-24c1-4e52-9504-f1dad032f6e9": "Sửa xe Đinh Nguyễn 77",
 
 
+
+
+      "86083895-18dc-4fba-a721-a5acce6a26a8": "Xe số",
+      "6eaa4097-e5e5-465e-8f15-f15f81f0e36e": "Xe tay ga",
+      "813a4c08-fa29-48bb-9d76-0beaa4d133f8": "Xe đạp điện",
+      "458dcfdd-d1e1-43cf-9276-176574447f61": "Xe ô tô máy xăng",
+      "b65f8d53-c476-4474-9b45-268ea039ecbf": "Xe ô tô máy điện",
+      "2e316c2d-153e-42cb-8ef8-bb828d8f1d4c": "Xe ô tô máy dầu",
+    
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -468,6 +477,31 @@ function ManageSevice() {
                       <th
                         className="description"
                         onClick={() => {
+                          if (sortedField === "FieldId" && ascending) {
+                            setSortedField("FieldId");
+                            setAscending(false);
+                            sort("FieldId", false, useListserviceShowPage);
+                          } else {
+                            setSortedField("FieldId");
+                            setAscending(true);
+                            sort("FieldId", true, useListserviceShowPage);
+                          }
+                        }}
+                      >
+                        Major field{" "}
+                        {sortedField === "FieldId" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th>
+                      <th
+                        className="description"
+                        onClick={() => {
                           if (sortedField === "Description" && ascending) {
                             setSortedField("Description");
                             setAscending(false);
@@ -490,31 +524,7 @@ function ManageSevice() {
                           <FontAwesomeIcon icon={faCaretDown} />
                         )}
                       </th>
-                      <th
-                        className="description"
-                        onClick={() => {
-                          if (sortedField === "CompanyId" && ascending) {
-                            setSortedField("CompanyId");
-                            setAscending(false);
-                            sort("CompanyId", false, useListserviceShowPage);
-                          } else {
-                            setSortedField("CompanyId");
-                            setAscending(true);
-                            sort("CompanyId", true, useListserviceShowPage);
-                          }
-                        }}
-                      >
-                        Company{" "}
-                        {sortedField === "CompanyId" ? (
-                          ascending === true ? (
-                            <FontAwesomeIcon icon={faCaretUp} />
-                          ) : (
-                            <FontAwesomeIcon icon={faCaretDown} />
-                          )
-                        ) : (
-                          <FontAwesomeIcon icon={faCaretDown} />
-                        )}
-                      </th>
+{/*                     
                       <th
                         className="description"
                         onClick={() => {
@@ -539,7 +549,7 @@ function ManageSevice() {
                         ) : (
                           <FontAwesomeIcon icon={faCaretDown} />
                         )}
-                      </th>
+                      </th> */}
                       <th className="description">Status</th>
                       <th className="viewAll">Actions</th>
                     </tr>
@@ -558,19 +568,22 @@ function ManageSevice() {
                             </Grid>
                           </TableCell>
                           <td>
+                            {/* {displayCompanyName(e.FieldId)} */}
+                            {displayCompanyName(e.FieldId)}
+                            {/* {e.FieldId} */}
+                          </td>
+                          <td>
                             {e.Description}
                           </td>
-                          <td>
-                            {displayCompanyName(e.CompanyId)}
-                          </td>
-                          <td>
+                          
+                          {/* <td>
                             <NumberFormat className="input-type-css"
                               thousandsGroupStyle="thousand"
                               value={e.Price}
                               decimalSeparator="."
                               thousandSeparator={true}
                               disabled />
-                          </td>
+                          </td> */}
                           <TableCell>
                             <Typography
                               className={classes.Status}
@@ -728,12 +741,15 @@ function ManageSevice() {
       </Container>
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to Appprove this service</ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleApprove}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -744,20 +760,21 @@ function ManageSevice() {
           >
             Approved
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleApprove}>
-            Cancel
-          </Button>
+         
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalserviceDelete} toggle={toggleserviceDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to delete this service</ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleserviceDelete}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -767,15 +784,13 @@ function ManageSevice() {
           >
             Delete
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleserviceDelete}>
-            Cancel
-          </Button>
+      
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
         >
           <ModalTitle>Do you want to edit service ?</ModalTitle>
         </ModalHeader>
@@ -829,7 +844,7 @@ function ManageSevice() {
             </FormGroup>
           </Form>
         </ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
           <Button color="danger" onClick={() => { // handleServiceDetele();
             handleEditSubmit();
             setserviceModalEdit(false);

@@ -249,10 +249,15 @@ export default function Order() {
       "50d2c8b8-2a11-4802-9592-4f76e92aed12": "Pham Tan Phat",
       "e0ca88d0-e18d-4127-ae93-d81863c734e0": "Pham Tan Phat",
       "90b961b3-6c48-4bed-9169-cbbbc978cfee": "Đỗ Dương Tâm Đăng",
+      "9f5e4a52-c68b-4eab-9358-a8a90af49f3e": "Đỗ Dương Tâm Đăng",
+      "8a022b6b-95de-4430-82b4-2b2fb6e43abf": "Nguyễn Hoàng Quốc Khánh",
       "08f7ee82-6f78-40fa-a368-2bdf202df346": "Lê Vương",
       "8f9cd415-da56-44af-8116-6ccbe3e3b037": "Phạm Hữu Nghĩa",
       // "8f9cd415-da56-44af-8116-6ccbe3e3b037": "Phạm Hữu Nghĩa",
       "00c4858a-f32a-4218-9266-641088f1e373": "Đỗ Dương Tâm Đăng",
+
+
+//
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -272,7 +277,8 @@ export default function Order() {
       "0533e4c5-68db-43df-833c-557fd3d4dca7": "Thay Nhớt",
       "9c86debe-48cd-4ef9-9afd-6a73db4b3129": "Đo và cân chỉnh áp suất lốp",
       "02d59c6b-8e61-48cc-a01d-2eb7da6350d8": "Đo và cân chỉnh áp suất lốp",
-
+      "9a5a8a2e-c7dc-439c-94c3-fe9116114f0f": "Đo và cân chỉnh áp suất lốp",
+      "48623af0-6de4-4fed-9e25-3a6835ae7c3b":"Thay nhớt chuyên dụng cho xe ô tô máy xăng",
 
     };
     return stateValue[type] ? stateValue[type] : "";
@@ -282,7 +288,7 @@ export default function Order() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#1bd1ff" }}
       onClick={x}
     >
       X
@@ -418,7 +424,7 @@ export default function Order() {
                   {/* <th className="description">Username</th> */}
 
                   {/* <th className="description">Created Date </th> */}
-                  <th className="description">Payment Date</th>
+                  <th className="description">Create Date</th>
                   <th
                     className="description-price"
                     onClick={() => {
@@ -475,7 +481,8 @@ export default function Order() {
                       {/* <td >{moment(e.CreateTime).format("MM-DD-YYYY")}
                       </td> */}
                       <td>
-                        {moment(e.PaymentTime).format("MM-DD-YYYY")}
+                        {/* {moment(e.PaymentTime).format("MM-DD-YYYY")} */}
+                        {moment(e.CreateTime).format("MM-DD-YYYY")}
                       </td>
                       <td>
                       <NumberFormat className="input-type-css-order"
@@ -483,7 +490,7 @@ export default function Order() {
                           value= {e.Total}
                           decimalSeparator="."
                           thousandSeparator={true}
-                          disabled/>
+                          disabled />
                       </td>
                       <td className="point-customer">
                         {e.FeedbackPoint}✩
@@ -612,7 +619,7 @@ export default function Order() {
       </Col>
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleEdit)}
           toggle={toggleEdit}
         >
@@ -681,7 +688,7 @@ export default function Order() {
 
       <Modal isOpen={modalDelete} toggle={toggleDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDelete)}
           toggle={toggleDelete}
         >
@@ -708,7 +715,7 @@ export default function Order() {
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
           toggle={toggleDetails}
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDetails)}
         >
           <h3> Detailed Field Information </h3>

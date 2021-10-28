@@ -715,7 +715,7 @@ export default function ManageCompany() {
 
       <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
 
         >
           <ModalTitle>Do you want to create new company</ModalTitle>
@@ -784,7 +784,10 @@ export default function ManageCompany() {
             </Form.Group> */}
           </Form>
         </ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleCreate}>
+            Cancel
+          </Button>
           <Button onClick={(e) =>  // handleCompanyDetele();
             handleSubmit()
             // setCompanyModalEdit(false);
@@ -792,15 +795,13 @@ export default function ManageCompany() {
           >
             Save
           </Button>
-          <Button className="Cancel-button" onClick={toggleCreate}>
-            Cancel
-          </Button>
+      
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
 
         >
           <ModalTitle>Do you want to edit Company</ModalTitle>
@@ -872,7 +873,10 @@ export default function ManageCompany() {
 
           </Form>
         </ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleEdit}>
+            Cancel
+          </Button>
           <Button onClick={(e) =>  // handleCompanyDetele();
             handleEditSubmit(e)
             // setCompanyModalEdit(false);
@@ -880,21 +884,22 @@ export default function ManageCompany() {
           >
             Edit
           </Button>
-          <Button className="Cancel-button" onClick={toggleEdit}>
-            Cancel
-          </Button>
+        
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalDelete} toggle={toggleDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
 
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to delete this company</ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleDelete}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -906,20 +911,21 @@ export default function ManageCompany() {
           >
             Delete
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleDelete}>
-            Cancel
-          </Button>
+        
         </ModalFooter>
       </Modal>
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
 
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to appprove this Company</ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleApprove}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -930,9 +936,7 @@ export default function ManageCompany() {
           >
             Approved
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleApprove}>
-            Cancel
-          </Button>
+          
         </ModalFooter>
       </Modal>
     </>

@@ -879,7 +879,10 @@ function MajorFields() {
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to delete this major</ModalBody>
-        <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleMajorDelete}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -889,9 +892,7 @@ function MajorFields() {
           >
             Delete
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleMajorDelete}>
-            Cancel
-          </Button>
+         
         </ModalFooter>
       </Modal>
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
@@ -903,7 +904,10 @@ function MajorFields() {
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to Appprove this major</ModalBody>
-        <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+         <Button className="Cancel-button" onClick={toggleApprove}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -914,9 +918,7 @@ function MajorFields() {
           >
             Approved
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleApprove}>
-            Cancel
-          </Button>
+         
         </ModalFooter>
       </Modal>
 
@@ -985,7 +987,10 @@ function MajorFields() {
           </Form>
         </ModalBody>
 
-        <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+         <Button className="Cancel-button" onClick={() => { cancelRepairmanByID() }}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -996,9 +1001,7 @@ function MajorFields() {
           >
             Edit
           </Button>
-          <Button className="Cancel-button" onClick={() => { cancelRepairmanByID() }}>
-            Cancel
-          </Button>
+
         </ModalFooter>
       </Modal>
 
@@ -1068,7 +1071,10 @@ function MajorFields() {
           </Form>
         </ModalBody>
 
-        <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+         <Button className="Cancel-button" onClick={toggleCreate}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -1079,9 +1085,7 @@ function MajorFields() {
           >
             Save
           </Button>
-          <Button className="Cancel-button" onClick={toggleCreate}>
-            Cancel
-          </Button>
+        
         </ModalFooter>
       </Modal>
 

@@ -741,12 +741,16 @@ function MajorTables() {
 
       <Modal isOpen={modalMajorDelete} toggle={toggleMajorDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to delete this major</ModalBody>
-        <ModalFooter>
+        <ModalFooter style={{ justifyContent: 'space-around'}}>
+
+        <Button className="Cancel-button" onClick={toggleMajorDelete}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -756,15 +760,13 @@ function MajorTables() {
           >
             Delete
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleMajorDelete}>
-            Cancel
-          </Button>
+        
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered size ="lg">
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
         >
           <ModalTitle>Do you want to create new major ?</ModalTitle>
         </ModalHeader>
@@ -814,7 +816,11 @@ function MajorTables() {
             </Grid>
           </Form>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter style={{ justifyContent: 'space-around'}}>
+
+        <Button className="Cancel-button" onClick={()=> {cancelRepairmanByID()}}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -824,15 +830,13 @@ function MajorTables() {
           >
             Update
           </Button>
-          <Button className="Cancel-button" onClick={()=> {cancelRepairmanByID()}}>
-            Cancel
-          </Button>
+        
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalCreate} toggle={toggleCreate} centered size ="lg">
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
         >
           <ModalTitle>Do you want to create new major ?</ModalTitle>
         </ModalHeader>
@@ -885,7 +889,11 @@ function MajorTables() {
             </Grid>
           </Form>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter style={{ justifyContent: 'space-around'}}>
+
+        <Button className="Cancel-button" onClick={toggleCreate}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -896,15 +904,13 @@ function MajorTables() {
           >
             Save
           </Button>
-          <Button className="Cancel-button" onClick={toggleCreate}>
-            Cancel
-          </Button>
+
         </ModalFooter>
       </Modal>
       
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDetails)}
           toggle={toggleDetails}>
           <h3>INFORMATION</h3>
@@ -928,12 +934,13 @@ function MajorTables() {
 
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to appprove this major</ModalBody>
-        <ModalFooter>
+        <ModalFooter style={{ justifyContent: 'space-around'}}>
+
           <Button
             color="danger"
             onClick={() => {

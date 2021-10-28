@@ -384,7 +384,7 @@ export default function Customer() {
       </Col>
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
         >
           <ModalTitle>Do you want to edit Customer</ModalTitle>
         </ModalHeader>
@@ -451,7 +451,7 @@ export default function Customer() {
 
       <Modal isOpen={modalDelete} toggle={toggleDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
 
         >
           Are you sure?
@@ -477,7 +477,7 @@ export default function Customer() {
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
           toggle={toggleDetails}
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDetails)}
         >
          <h3> Detailed Field Information </h3>
