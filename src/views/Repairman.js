@@ -161,6 +161,7 @@ export default function Repairman() {
                     var temp = res.data;
                     setRepairmanList(res.data.RepairmanId)
                     setRepairmanList(temp);
+                    sort("Id", ascending, temp);
                     setUseListRepairmanShow(temp);
                     setUseListRepairmanShowPage(temp.slice(numberPage * 6 - 6, numberPage * 6));
                     setTotalNumberPage(Math.ceil(temp.length / 6));
@@ -239,9 +240,9 @@ export default function Repairman() {
         },
         name: {
             fontWeight: 'bold',
-         color: '#1d98e0f7',
-
-        },
+            color: '#e86a10f7',
+            width: '194px',
+          },
         Status: {
             fontWeight: '700',
             width: '71px',
@@ -434,6 +435,31 @@ export default function Repairman() {
                                                     <FontAwesomeIcon icon={faCaretDown} />
                                                 )}
                                             </th>
+                                            <th
+                                                className="description"
+                                                onClick={() => {
+                                                    if (sortedField === "Name" && ascending) {
+                                                        setSortedField("Username");
+                                                        setAscending(false);
+                                                        sort("Username", false, useListRepairmanShowPage);
+                                                    } else {
+                                                        setSortedField("Username");
+                                                        setAscending(true);
+                                                        sort("Username", true, useListRepairmanShowPage);
+                                                    }
+                                                }}
+                                            >
+                                                User Name{" "}
+                                                {sortedField === "Username" ? (
+                                                    ascending === true ? (
+                                                        <FontAwesomeIcon icon={faCaretUp} />
+                                                    ) : (
+                                                        <FontAwesomeIcon icon={faCaretDown} />
+                                                    )
+                                                ) : (
+                                                    <FontAwesomeIcon icon={faCaretDown} />
+                                                )}
+                                            </th>
                                             <th className="description">Phone </th>
                                             <th
                                                 className="description"
@@ -463,31 +489,6 @@ export default function Repairman() {
 
                                             {/* <th className="description">Username</th> */}
                                             <th className="description">Create Date</th>
-                                            <th
-                                                className="description"
-                                                onClick={() => {
-                                                    if (sortedField === "Name" && ascending) {
-                                                        setSortedField("Name");
-                                                        setAscending(false);
-                                                        sort("Name", false, useListRepairmanShowPage);
-                                                    } else {
-                                                        setSortedField("Name");
-                                                        setAscending(true);
-                                                        sort("Name", true, useListRepairmanShowPage);
-                                                    }
-                                                }}
-                                            >
-                                                Full Name{" "}
-                                                {sortedField === "Name" ? (
-                                                    ascending === true ? (
-                                                        <FontAwesomeIcon icon={faCaretUp} />
-                                                    ) : (
-                                                        <FontAwesomeIcon icon={faCaretDown} />
-                                                    )
-                                                ) : (
-                                                    <FontAwesomeIcon icon={faCaretDown} />
-                                                )}
-                                            </th>
                                             <th className="description">Company</th>
                                             <th className="description">Status</th>
                                             <th className="viewAll">Actions</th>
@@ -507,13 +508,18 @@ export default function Repairman() {
                                                         <Grid container>
 
                                                             <Grid item lg={10}>
-                                                                <Typography className={classes.name}>{e.Username}</Typography>
+                                                                <Typography className={classes.name}>{e.Name}</Typography>
                                                                 <Typography color="textSecondary" variant="body2">{e.Id}
                                                                 </Typography>
                                                             </Grid>
                                                         </Grid>
                                                     </TableCell>
-
+                                                    <td onClick={() => {
+                                                        setModalStatus(true);
+                                                        setSelectRepairman(e);
+                                                    }}>
+                                                        {e.Username}
+                                                    </td>
                                                     <td onClick={() => {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);
@@ -531,12 +537,7 @@ export default function Repairman() {
                                                         setSelectRepairman(e);
                                                     }}>{moment(e.CreateDate).format("MM-DD-YYYY")}
                                                     </td>
-                                                    <td onClick={() => {
-                                                        setModalStatus(true);
-                                                        setSelectRepairman(e);
-                                                    }}>
-                                                        {e.Name}
-                                                    </td>
+                                                  
                                                     <td onClick={() => {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);

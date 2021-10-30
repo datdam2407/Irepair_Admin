@@ -133,7 +133,6 @@ function MajorTables() {
       overflow: 'unset',
       borderRadius: '32%',
       // img: 'string',
-
     },
     name: {
       fontWeight: 'bold',
@@ -542,7 +541,6 @@ function MajorTables() {
                                 <Grid item lg={10}>
                                   <Typography className={classes.name}>{e.Name}</Typography>
                                   <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
-                                  {/* <Typography color="textSecondary" variant="body2">{e.Id}</Typography> */}
                                 </Grid>
                               </Grid>
                             </TableCell>

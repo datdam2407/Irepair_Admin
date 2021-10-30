@@ -75,41 +75,11 @@ export default function ManageCompany() {
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
 
   const useStyles = makeStyles((theme) => ({
-    table: {
-      minWidth: 650,
-    },
-    tableContainer: {
-      borderRadius: 15,
-      margin: '10px 10px',
-      maxWidth: ' 100%'
-    },
-    tableHeaderCell: {
-      color: 'burlywood',
-      fontWeight: 'bold',
-      backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.getContrastText(theme.palette.primary.dark),
-      backgroundColor: 'gray',
-      fontWeight: '700',
 
-    },
-    thmajorheaderform: {
-      fontWeight: 'bold',
-      fontWeight: '700',
-      color: theme.palette.getContrastText(theme.palette.primary.dark),
-    },
-
-    avatar: {
-      backgroundColor: '#FFFFFF',
-      fontSize: '200px',
-      right: '10px',
-      overflow: 'unset',
-      borderRadius: '32%',
-      // img: 'string',
-
-    },
     name: {
       fontWeight: 'bold',
-   color: '#1d98e0f7',
+      color: '#292a2c',
+      fontWeight:'700'
 
     },
     Status: {
@@ -186,7 +156,6 @@ export default function ManageCompany() {
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
-          // res.data;
           console.log(res.data);
         }
       });
@@ -291,7 +260,7 @@ export default function ManageCompany() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" , backgroundColor:"white"}}
+      style={{ color: "#B22222", backgroundColor: "white" }}
       onClick={x}
     >
       X
@@ -526,13 +495,19 @@ export default function ManageCompany() {
                 <tbody>
                   {useListCompanyShowPage.map((e, index) => {
                     return (
-                      <tr className="" key={index}>
+                      <tr key={index}>
                         {/* <td>
                         <img src={e.ImageUrl}/>
                           </td> */}
-                        <td className="nameSize">
-                          {e.CompanyName}
-                        </td>
+                        <TableCell>
+                          <Grid container>
+                            <Grid item lg={10}>
+                              <Typography className={classes.name}>{e.CompanyName}</Typography>
+                              <Typography color="textSecondary" variant="body2">{e.Id}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </TableCell>
                         <td>
                           {e.Address}
                         </td>
@@ -547,21 +522,21 @@ export default function ManageCompany() {
                         </td>
 
 
-                          <TableCell onClick={() => {
-                            setCompanyDelete(e.Id);
-                            setCompanyModalApprove(true)
-                          }}>
-                            <Typography
-                              className={classes.Status}
-                              style={{
-                                backgroundColor:
-                                  ((e.Status === 1 && 'green') ||
-                                    (e.Status === 0 && '#119fb3') ||
-                                    (e.Status === 3 && 'red')
-                                  )
-                              }}
-                            >{displayStateName(e.Status)}</Typography>
-                          </TableCell>
+                        <TableCell onClick={() => {
+                          setCompanyDelete(e.Id);
+                          setCompanyModalApprove(true)
+                        }}>
+                          <Typography
+                            className={classes.Status}
+                            style={{
+                              backgroundColor:
+                                ((e.Status === 1 && 'green') ||
+                                  (e.Status === 0 && '#119fb3') ||
+                                  (e.Status === 3 && 'red')
+                                )
+                            }}
+                          >{displayStateName(e.Status)}</Typography>
+                        </TableCell>
 
                         <td>
 
@@ -784,8 +759,8 @@ export default function ManageCompany() {
             </Form.Group> */}
           </Form>
         </ModalBody>
- <ModalFooter style={{ justifyContent: 'space-around'}}>
-        <Button className="Cancel-button" onClick={toggleCreate}>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleCreate}>
             Cancel
           </Button>
           <Button onClick={(e) =>  // handleCompanyDetele();
@@ -795,7 +770,7 @@ export default function ManageCompany() {
           >
             Save
           </Button>
-      
+
         </ModalFooter>
       </Modal>
 
@@ -873,8 +848,8 @@ export default function ManageCompany() {
 
           </Form>
         </ModalBody>
- <ModalFooter style={{ justifyContent: 'space-around'}}>
-        <Button className="Cancel-button" onClick={toggleEdit}>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleEdit}>
             Cancel
           </Button>
           <Button onClick={(e) =>  // handleCompanyDetele();
@@ -884,7 +859,7 @@ export default function ManageCompany() {
           >
             Edit
           </Button>
-        
+
         </ModalFooter>
       </Modal>
 
@@ -896,8 +871,8 @@ export default function ManageCompany() {
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to delete this company</ModalBody>
- <ModalFooter style={{ justifyContent: 'space-around'}}>
-        <Button className="Cancel-button" onClick={toggleDelete}>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleDelete}>
             Cancel
           </Button>
           <Button
@@ -911,7 +886,7 @@ export default function ManageCompany() {
           >
             Delete
           </Button>{" "}
-        
+
         </ModalFooter>
       </Modal>
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
@@ -922,8 +897,8 @@ export default function ManageCompany() {
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to appprove this Company</ModalBody>
- <ModalFooter style={{ justifyContent: 'space-around'}}>
-        <Button className="Cancel-button" onClick={toggleApprove}>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleApprove}>
             Cancel
           </Button>
           <Button
@@ -936,7 +911,7 @@ export default function ManageCompany() {
           >
             Approved
           </Button>{" "}
-          
+
         </ModalFooter>
       </Modal>
     </>

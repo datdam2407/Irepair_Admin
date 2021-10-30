@@ -127,47 +127,31 @@ export default function Order() {
   }
 
   const useStyles = makeStyles((theme) => ({
-    table: {
-      minWidth: 650,
-    },
-    tableContainer: {
-      borderRadius: 15,
-      margin: '10px 10px',
-      maxWidth: ' 100%'
-    },
-    tableHeaderCell: {
-      color: 'burlywood',
-      fontWeight: 'bold',
-      backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.getContrastText(theme.palette.primary.dark),
-      backgroundColor: 'gray',
-      fontWeight: '700',
-
-    },
-    thmajorheaderform: {
-      fontWeight: 'bold',
-      fontWeight: '700',
-      color: theme.palette.getContrastText(theme.palette.primary.dark),
-    },
-
-    avatar: {
-      backgroundColor: theme.palette.primary.light,
-      color: theme.palette.getContrastText(theme.palette.primary.light),
-      fontSize: '200px',
-      right: '10px',
-      overflow: 'unset',
-      borderRadius: '32%',
-      // img: 'string',
-
-    },
     name: {
       fontWeight: 'bold',
-   color: '#1d98e0f7',
-
+      color: '#1d98e0f7',
+      width: '164px',
+      paddingRight:'20px'
+    },
+    nameService: {
+      fontWeight: 'bold',
+      color: 'black',
+      width: '194px',
+      paddingRight:'5px'
+    },
+    repairman: {
+      fontWeight: 'bold',
+      color: '#e86a10f7',
+      width: '194px',
     },
     Status: {
       fontWeight: '700',
-      width: '71px',
+      width: '121px',
+    },
+    StatusOrder: {
+      fontWeight: '700',
+      textAlign: 'center',
+      width: '91px',
       fontSize: '0.76rem',
       color: 'white',
       backgroundColor: 'green',
@@ -177,8 +161,6 @@ export default function Order() {
     }
   }));
   const classes = useStyles();
-
-
   //sort
   function sort(field, status, items) {
     items.sort((a, b) => {
@@ -234,51 +216,67 @@ export default function Order() {
   // custom state
   function displayStateName(type) {
     const stateValue = {
-      1: "Active",
-      0: "Not Alaviable",
+      3: "Pending",
+      2: "Cancelled",
+      1: "",
+      0: "Compeleted",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
   function displayRepairName(type) {
     const stateValue = {
-      "9e2b3583-c775-4273-aa7f-41ef03498d93": "Dat Dam",
+      "304a7d8c-735e-49ef-9ec5-004a4feb3a2f": "Lê Minh Tài",
+      "3f37cd77-95c4-407d-af05-21a3498e28d9": "Nguyễn Hoàng Duy",
+      "8a022b6b-95de-4430-82b4-2b2fb6e43abf": "Nguyễn Hoàng Quốc Khánh",
+      "8f9cd415-da56-44af-8116-6ccbe3e3b037": "Phạm Hữu Nghĩa",
+      "8634c44c-7ebc-4b85-a1a7-862fbe7d162c": "Nguyễn Lê Thuần",
+      "9f5e4a52-c68b-4eab-9358-a8a90af49f3e": "Đỗ Dương Tâm Đăng",
+      "ce714876-383b-4b74-82d9-acefc7061d05": "Hà Lê Phúc",
+      "43b11fa5-c4a8-4618-947f-b03c086dbaef": "Đàm Tiến Đạt",
+      "c1fc7c9f-84e3-4321-991f-cf29ea554fe0": "Nguyễn Minh Hoàng",
+      "e0ca88d0-e18d-4127-ae93-d81863c734e0": "Phạm Tấn Phát",
+      "484d58bc-991c-48a7-b6bf-d83fad176b82": "Phạm Gia Nguyên",
+      "376f16ef-e4fc-4cc6-873e-fc5fd1255d86": "Lê Anh Nguyên",
 
       "7c172d79-7c5d-4ed5-8e71-26ba2e7bf1a3": "nguyen thuan",
-      "84066527-2ba2-421a-8637-35d765b153e1": "Tâm Đăng",
+      "84066527-2ba2-421a-8637-35d765b153e1": "Tam Dang",
       "b123ea59-f40d-495d-b4c8-3be7c96200ad": "Nguyễn Thuần",
-      "50d2c8b8-2a11-4802-9592-4f76e92aed12": "Pham Tan Phat",
-      "e0ca88d0-e18d-4127-ae93-d81863c734e0": "Pham Tan Phat",
-      "90b961b3-6c48-4bed-9169-cbbbc978cfee": "Đỗ Dương Tâm Đăng",
-      "9f5e4a52-c68b-4eab-9358-a8a90af49f3e": "Đỗ Dương Tâm Đăng",
-      "8a022b6b-95de-4430-82b4-2b2fb6e43abf": "Nguyễn Hoàng Quốc Khánh",
-      "08f7ee82-6f78-40fa-a368-2bdf202df346": "Lê Vương",
-      "8f9cd415-da56-44af-8116-6ccbe3e3b037": "Phạm Hữu Nghĩa",
-      // "8f9cd415-da56-44af-8116-6ccbe3e3b037": "Phạm Hữu Nghĩa",
-      "00c4858a-f32a-4218-9266-641088f1e373": "Đỗ Dương Tâm Đăng",
+      "50d2c8b8-2a11-4802-9592-4f76e92aed12": "Pham Tan Phat (K14 HCM)",
+      "00c4858a-f32a-4218-9266-641088f1e373": "Do Duong Tam Dang",
 
-
-//
+      //
     };
     return stateValue[type] ? stateValue[type] : "";
   }
 
   function displayServiceName(type) {
     const stateValue = {
-      "3b910bd2-8046-47bf-ab8e-00145f6d9ffb": "Sửa chữa lốc máy",
-      "6aeac270-3ce6-4693-b9af-07e8575e72e6": "Kiểm tra dàn lạnh",
-      "42931fd3-b056-4210-8467-0818059b8157": "Sửa Quần",
-      "4a0839a2-a1dd-4411-a387-0a898d71a38a": "Sửa Laptop",
-      "03372569-1d24-4af6-ac50-0c0ec5827191": "Sửa Laptop",
-      "b68e53f9-d13d-4631-b749-22f50a1e2ad3": "Đo và bơm gas máy lạnhh",
-      "616a22f4-05c8-4617-86bf-255292bdafad": "Tủ Đông",
-      "dd47f3bf-9a93-422c-baa8-ad659d6334ba": "Vá vết xước thân xe",
-      "4a46e366-774b-428b-bb19-8104c0544f87": "Vá vết xước thân xe",
-      "d865633f-de3f-4b16-889d-4285739d6da5": "Thay Nhớt",
-      "0533e4c5-68db-43df-833c-557fd3d4dca7": "Thay Nhớt",
-      "9c86debe-48cd-4ef9-9afd-6a73db4b3129": "Đo và cân chỉnh áp suất lốp",
-      "02d59c6b-8e61-48cc-a01d-2eb7da6350d8": "Đo và cân chỉnh áp suất lốp",
+
+      "d43a8be6-03c2-41e1-83fa-0311cc9045ce": "Sửa xe chết máy",
+      "89b30cb7-eff1-4867-8941-03e26cd6aeec": "Sửa xe chết máy",
+      "11917ecd-e0de-466d-9183-04e0b0aca256": "Vá xe",
+      "acf37625-db7b-4bba-a323-07c5bc88841a": "Sửa bình điện",
+      "3186167d-d125-4a9c-9ea4-1f5cf92e0ac6": "Sửa dây sên bị chùng",
+      "3ffcf820-e283-4630-a933-318bd640c811": "Vá xe",
+      "bf3b524b-fdbe-4fd1-9fb0-35a21e3fcbd5": "Đo và cân chỉnh áp suất lốp",
+      "48623af0-6de4-4fed-9e25-3a6835ae7c3b": "Thay nhớt",
+      "5b847142-764f-4d58-afd4-4259b324922a": "Thay nhớt",
+      "441f3efa-6b06-442c-9fb6-4bd0ce1a1a63": "Thay nhớt",
+      "6d24a554-954e-40f1-af29-53b28d41d0ce": "Vá xe",
+      "c8bdbcaf-745e-496f-8f15-753a4dd34d04": "Sửa dây sên bị chùng",
+      "ad42056d-9978-442b-97be-80188ea6f4fb": "Sửa dây sên bị chùng",
+      "f6553513-3704-4dd4-b16f-873e483ef5d8": "Đo và cân chỉnh áp suất lốp",
+      "e4c6ec3a-4c98-4b63-9ecf-92e03c66e13a": "Thay nhớt",
+      "d3b8e0d8-8c55-490a-b081-ab87d4c5cdd9": "Thay nhớt",
+      "1f68f6fb-3ec2-41e9-a68c-ab91cde860ad": "Sửa phanh xe",
+      "29956e2a-3923-4946-a9f7-b2c8f008a766": "Sửa phanh xe",
+      "94db7531-fbad-4ed9-95b7-d6937ed5ac32": "Sửa phanh xe",
       "9a5a8a2e-c7dc-439c-94c3-fe9116114f0f": "Đo và cân chỉnh áp suất lốp",
-      "48623af0-6de4-4fed-9e25-3a6835ae7c3b":"Thay nhớt chuyên dụng cho xe ô tô máy xăng",
+
+      "2": "Repairman",
+      "1": "Customer",
+      "0": "Customer",
+      "null": "Remaining"
 
     };
     return stateValue[type] ? stateValue[type] : "";
@@ -320,6 +318,32 @@ export default function Order() {
             <Table className="table-hover table-striped">
               <thead>
                 <tr>
+                  
+                <th
+                    className="description"
+                    onClick={() => {
+                      if (sortedField === "ServiceId" && ascending) {
+                        setSortedField("ServiceId");
+                        setAscending(false);
+                        sort("ServiceId", false, useListCustomerShowPage);
+                      } else {
+                        setSortedField("ServiceId");
+                        setAscending(true);
+                        sort("ServiceId", true, useListCustomerShowPage);
+                      }
+                    }}
+                  >
+                    Service{" "}
+                    {sortedField === "ServiceId" ? (
+                      ascending === true ? (
+                        <FontAwesomeIcon icon={faCaretUp} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )
+                    ) : (
+                      <FontAwesomeIcon icon={faCaretDown} />
+                    )}
+                  </th>
                   <th
                     className="description"
                     onClick={() => {
@@ -396,35 +420,15 @@ export default function Order() {
                     )}
                   </th>
 
-                  <th
-                    className="description"
-                    onClick={() => {
-                      if (sortedField === "ServiceId" && ascending) {
-                        setSortedField("ServiceId");
-                        setAscending(false);
-                        sort("ServiceId", false, useListCustomerShowPage);
-                      } else {
-                        setSortedField("ServiceId");
-                        setAscending(true);
-                        sort("ServiceId", true, useListCustomerShowPage);
-                      }
-                    }}
-                  >
-                    Service{" "}
-                    {sortedField === "ServiceId" ? (
-                      ascending === true ? (
-                        <FontAwesomeIcon icon={faCaretUp} />
-                      ) : (
-                        <FontAwesomeIcon icon={faCaretDown} />
-                      )
-                    ) : (
-                      <FontAwesomeIcon icon={faCaretDown} />
-                    )}
-                  </th>
                   {/* <th className="description">Username</th> */}
 
                   {/* <th className="description">Created Date </th> */}
                   <th className="description">Create Date</th>
+
+                  {/* <th className="description">Person</th> */}
+                  <th className="description">Reason</th>
+                  <th className="description">Status</th>
+
                   <th
                     className="description-price"
                     onClick={() => {
@@ -459,35 +463,68 @@ export default function Order() {
                 {useListCustomerShowPage.map((e, index) => {
                   return (
                     <tr key={index}>
-
+                      <TableCell>
+                        <Grid container>
+                          <Grid item lg={10}>
+                            <Typography className={classes.nameService}>{displayServiceName(e.ServiceId)}</Typography>
+                            <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
+                          </Grid>
+                        </Grid>
+                      </TableCell>
                       <TableCell>
                         <Grid container>
                           <Grid item lg={10}>
                             <Typography className={classes.name}>{displayRepairName(e.CustomerId)}</Typography>
-                            <Typography color="black" variant="body2">{(e.CustomerId)}
-                            </Typography>
                           </Grid>
                         </Grid>
                       </TableCell>
                       <td>
                         {e.CustomerAddress}
                       </td>
-                      <td>
-                        {displayRepairName(e.RepairmanId)}
-                      </td>
-                      <td>
-                        {displayServiceName(e.ServiceId)}
-                      </td>
-                      {/* <td >{moment(e.CreateTime).format("MM-DD-YYYY")}
-                      </td> */}
+                      <TableCell>
+                        <Grid container>
+                          <Grid item lg={10}>
+                            <Typography className={classes.repairman}> {displayRepairName(e.RepairmanId)}</Typography>
+                          </Grid>
+                        </Grid>
+                      </TableCell>
+
                       <td>
                         {/* {moment(e.PaymentTime).format("MM-DD-YYYY")} */}
                         {moment(e.CreateTime).format("MM-DD-YYYY")}
                       </td>
+                      {/* <td> */}
+                      {/* {e.CancelPerson} */}
+                      {/* {displayServiceName(e.CancelPerson)} */}
+                      {/* </td> */}
+                      <TableCell>
+                        <Typography
+                          className={classes.Status}
+                          style={{
+                            color:
+                              ((e.CancelReason === "Không liên hệ được thợ" && 'red') ||
+                                // ((e.CancelReason === "Không liên hệ được thợ" && 'red') ||
+                                (e.CancelReason === "Thời gian chờ thợ đến quá lâu" && 'red'))
+                          }}
+                        >{e.CancelReason}</Typography>
+                      </TableCell>
+
+                      <TableCell>
+                        <Typography
+                          className={classes.StatusOrder}
+                          style={{
+                            backgroundColor:
+                              ((e.Status === 0 && 'rgb(34, 176, 34)') ||
+                                (e.Status === 3 && 'gray') ||
+                                (e.Status === 2 && 'red'))
+                          }}
+                        >  {displayStateName(e.Status)}</Typography>
+                      </TableCell>
+
                       <td>
-                      <NumberFormat className="input-type-css-order"
+                        <NumberFormat className="input-type-css-order"
                           thousandsGroupStyle="thousand"
-                          value= {e.Total}
+                          value={e.Total}
                           decimalSeparator="."
                           thousandSeparator={true}
                           disabled />

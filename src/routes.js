@@ -79,13 +79,13 @@ var routes = [
   // },
   //aaaa
   
-  // {
-  //   path: "/dashboard",
-  //   layout: "/admin",
-  //   name: "Dashboard",
-  //   icon: "nc-icon nc-chart-pie-35",
-  //   component: Dashboard,
-  // },
+  {
+    path: "/dashboard",
+    layout: "/admin",
+    name: "Dashboard",
+    icon: "nc-icon nc-chart-pie-35",
+    component: Dashboard,
+  },
   // manage repairman
  
 
