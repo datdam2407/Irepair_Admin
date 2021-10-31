@@ -293,3 +293,15 @@ font-size: larger;}
     height: 40px;
     border-radius: 50%;
 }
+ .title-customer-h3{
+ color:"#929234" ;
+ font-weight :  700
+}
+.bg-gradient-danger-abv{
+    background-color: coral 87deg
+    ,#e42e52,#f56036 !important;
+}
+
+.bg-gradient-danger-abx{
+    background-color: rgb(32, 31, 31);
+}

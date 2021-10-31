@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { IconName ,TiStar } from "react-icons/ti";
 // react-bootstrap components
 import {
   Button,
@@ -423,7 +423,7 @@ export default function Order() {
                   {/* <th className="description">Username</th> */}
 
                   {/* <th className="description">Created Date </th> */}
-                  <th className="description">Create Date</th>
+                  {/* <th className="description">Create Date</th> */}
 
                   {/* <th className="description">Person</th> */}
                   <th className="description">Reason</th>
@@ -443,7 +443,7 @@ export default function Order() {
                       }
                     }}
                   >
-                    Total{" "}
+                    Total (VNĐ) {" "}
                     {sortedField === "Total" ? (
                       ascending === true ? (
                         <FontAwesomeIcon icon={faCaretUp} />
@@ -489,10 +489,9 @@ export default function Order() {
                         </Grid>
                       </TableCell>
 
-                      <td>
-                        {/* {moment(e.PaymentTime).format("MM-DD-YYYY")} */}
+                      {/* <td>
                         {moment(e.CreateTime).format("MM-DD-YYYY")}
-                      </td>
+                      </td> */}
                       {/* <td> */}
                       {/* {e.CancelPerson} */}
                       {/* {displayServiceName(e.CancelPerson)} */}
@@ -524,13 +523,13 @@ export default function Order() {
                       <td>
                         <NumberFormat className="input-type-css-order"
                           thousandsGroupStyle="thousand"
-                          value={e.Total}
+                          value={e.Total} 
                           decimalSeparator="."
                           thousandSeparator={true}
                           disabled />
                       </td>
                       <td className="point-customer">
-                        {e.FeedbackPoint}✩
+                        {e.FeedbackPoint} <TiStar/>
                       </td>
                       {/* <td className="point-customer">
                         {e.FeedbackMessage}

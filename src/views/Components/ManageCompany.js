@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef  } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -64,6 +64,7 @@ export default function ManageCompany() {
     "Blocked",
     "Deleted",
   ];
+ 
   const [filterState, setListFilterState] = useState(listStates);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -79,7 +80,8 @@ export default function ManageCompany() {
     name: {
       fontWeight: 'bold',
       color: '#292a2c',
-      fontWeight:'700'
+      fontWeight: '700',
+      width:'200px'
 
     },
     Status: {
@@ -144,19 +146,23 @@ export default function ManageCompany() {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [hotline, setHotline] = useState("");
+  const [Status, setStatus] = useState(0);
+  const [Price2, setPrice2] = useState(0);
 
   //sort
 
-  const [sortedField, setSortedField] = useState("Id");
+  const [sortedField, setSortedField] = useState("id");
   const [ascending, setAscending] = useState(true);
-
+  // const totalPrice = useRef(0);
   useEffect(() => {
     getCompanyList();
     getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
-          console.log(res.data);
+          setPrice2(res.data);
+
+
         }
       });
   }, []);
@@ -192,12 +198,18 @@ export default function ManageCompany() {
         setUseListCompanyShow(temp);
         setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
         setTotalNumberPage(Math.ceil(temp.length / 8));
+        console.log("companyList", temp);
+        var totalPrice =0;
+        temp.map((e, index) =>{
+          totalPrice  +=  temp[index].totalMoney;
+        })
+        localStorage.setItem("revenus", totalPrice);
       }).catch((err) => {
         console.log(err);
       });
     }
   }
-
+  
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
@@ -217,7 +229,7 @@ export default function ManageCompany() {
   console.log("cpName", name)
   function handleEditSubmit2(e) {
     putWithToken(
-      `/api/v1.0/companies?companyId=${CompanyDelete}`,
+      `/api/v1.0/companies?companyid=${CompanyDelete}`,
       {
         id: null,
         companyName: name,
@@ -241,14 +253,28 @@ export default function ManageCompany() {
         console.log(err)
       });
   }
+  
+  // function handleCompanyDetele(){
+  //   const [NewStatus, setNewStatus] = useState(3);
+  //   const [OldStatus, setOldStatus] = useState({
+  //     Status : 1
+  //   });
+  //   useEffect(() => {
+  //     del(`/api/v1.0/companies/${CompanyDelete}`, localStorage.getItem("token"))
+  //     const { Status } = OldStatus;
+  
+  //     setNewStatus(Status === 1 ? "1" : "3");
+  //   },
+  //   [dimension, dimension.height, dimension.width]);
+  
+  //   return [NewStatus, setOldStatus];
+  // }
+
   function handleCompanyDetele() {
-    // console.log("abc" , CompanyDelete);
     del(`/api/v1.0/companies/${CompanyDelete}`, localStorage.getItem("token")
     ).then((res) => {
       if (res.status === 200) {
-        window.location = "/admin/Company";
-        alert("Deleted Successfully")
-
+        window.location.href("admin/Company")
       }
     })
       .catch((err) => {
@@ -502,40 +528,39 @@ export default function ManageCompany() {
                         <TableCell>
                           <Grid container>
                             <Grid item lg={10}>
-                              <Typography className={classes.name}>{e.CompanyName}</Typography>
-                              <Typography color="textSecondary" variant="body2">{e.Id}
+                              <Typography className={classes.name}>{e.companyName}</Typography>
+                              <Typography color="textSecondary" variant="body2">{e.id}
                               </Typography>
                             </Grid>
                           </Grid>
                         </TableCell>
                         <td>
-                          {e.Address}
+                          {e.address}
                         </td>
                         <td className="descriptionSize">
-                          {e.Description}
+                          {e.description}
                         </td>
                         <td className="emailSize">
-                          {e.Email}
+                          {e.email}
                         </td>
                         <td>
-                          {e.Hotline}
+                          {e.hotline}
                         </td>
 
-
                         <TableCell onClick={() => {
-                          setCompanyDelete(e.Id);
+                          setCompanyDelete(e.id);
                           setCompanyModalApprove(true)
                         }}>
                           <Typography
                             className={classes.Status}
                             style={{
                               backgroundColor:
-                                ((e.Status === 1 && 'green') ||
-                                  (e.Status === 0 && '#119fb3') ||
-                                  (e.Status === 3 && 'red')
+                                ((e.status === 1 && 'green') ||
+                                  (e.status === 0 && '#119fb3') ||
+                                  (e.status === 3 && 'red')
                                 )
                             }}
-                          >{displayStateName(e.Status)}</Typography>
+                          >{displayStateName(e.status)}</Typography>
                         </TableCell>
 
                         <td>
@@ -552,7 +577,7 @@ export default function ManageCompany() {
                           >
                             <Button
                               onClick={() => {
-                                setCompanyDelete(e.Id);
+                                setCompanyDelete(e.id);
                                 setCompanyModalApprove(true);
                               }}
 
@@ -575,7 +600,7 @@ export default function ManageCompany() {
                           >
                             <Button
                               onClick={() => {
-                                setCompanyDelete(e.Id);
+                                setCompanyDelete(e.id);
                                 setCompanyModalDelete(true);
                               }}
 
@@ -880,7 +905,6 @@ export default function ManageCompany() {
             onClick={() => {
               handleCompanyDetele();
               setCompanyModalDelete(false);
-              setCompanyModalSuccess(true);
 
             }}
           >
@@ -904,7 +928,7 @@ export default function ManageCompany() {
           <Button
             color="danger"
             onClick={() => {
-              // deleteMajorFieldsByID();
+              // deleteMajorFieldsByid();
               handleEditSubmit2();
               setCompanyModalApprove(false);
             }}

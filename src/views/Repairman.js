@@ -44,6 +44,7 @@ import {
     faCaretDown,
     faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
+import { Avatar } from "material-ui-core";
 export default function Repairman() {
 
     const [modalDelete, setRepairmanModalDelete] = useState(false);
@@ -498,11 +499,13 @@ export default function Repairman() {
                                         {useListRepairmanShowPage.map((e, index) => {
                                             return (
                                                 <tr key={index}>
+                                                   
                                                     <td onClick={() => {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);
                                                     }}>
-                                                        <img className="avatar-repairman" src={e.Avatar} />
+                                                        
+                                                        <Avatar style={{width:'90px' , height:'90px'}} className="avatar-repairman" src={e.Avatar} />
                                                     </td>
                                                     <TableCell>
                                                         <Grid container>
