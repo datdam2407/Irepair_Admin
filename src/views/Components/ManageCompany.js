@@ -18,6 +18,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+import { IconName ,TiStar ,TiLockClosed } from "react-icons/ti";
+
 import {
   Modal,
   ModalHeader,
@@ -274,7 +276,7 @@ export default function ManageCompany() {
     del(`/api/v1.0/companies/${CompanyDelete}`, localStorage.getItem("token")
     ).then((res) => {
       if (res.status === 200) {
-        window.location.href("admin/Company")
+        window.location = "/admin/Company";
       }
     })
       .catch((err) => {
@@ -622,8 +624,9 @@ export default function ManageCompany() {
                               className="btn-link btn-icon"
                               type="button"
                               variant="danger"
+                              style={{fontSize:'x-large'}}
                             >
-                              <i className="fas fa-times"></i>
+                              <TiLockClosed/>
                             </Button>
                           </OverlayTrigger>
 

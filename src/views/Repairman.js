@@ -45,6 +45,8 @@ import {
     faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { Avatar } from "material-ui-core";
+import { IconName ,TiStar ,TiLockClosed } from "react-icons/ti";
+
 export default function Repairman() {
 
     const [modalDelete, setRepairmanModalDelete] = useState(false);
@@ -613,8 +615,9 @@ export default function Repairman() {
                                                                     className="btn-link btn-icon"
                                                                     type="button"
                                                                     variant="danger"
+                                                                    style={{fontSize:'x-large'}}
                                                                 >
-                                                                    <i className="fas fa-times"></i>
+                                                                    <TiLockClosed/>
                                                                 </Button>
                                                             </OverlayTrigger>
                                                         </td>

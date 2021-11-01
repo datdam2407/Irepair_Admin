@@ -434,8 +434,6 @@ export default function Order() {
 
                   {/* <th className="description">Person</th> */}
                   <th className="description">Reason</th>
-                  <th className="description">Status</th>
-
                   <th
                     className="description-price"
                     onClick={() => {
@@ -461,8 +459,11 @@ export default function Order() {
                       <FontAwesomeIcon icon={faCaretDown} />
                     )}
                   </th>
+                  <th className="description">Status</th>
 
-                  <th className="description">Point</th>
+               
+
+                  {/* <th className="description">Point</th> */}
                   {/* <th className="description">Feedback</th> */}
                 </tr>
               </thead>
@@ -515,6 +516,16 @@ export default function Order() {
                         >{e.CancelReason}</Typography>
                       </TableCell>
 
+
+                      <td>
+                        <NumberFormat className="input-type-css-order"
+                          thousandsGroupStyle="thousand"
+                          value={e.Total} 
+                          decimalSeparator="."
+                          thousandSeparator={true}
+                          disabled />
+                      </td>
+                      
                       <TableCell>
                         <Typography
                           className={classes.StatusOrder}
@@ -526,18 +537,9 @@ export default function Order() {
                           }}
                         >  {displayStateName(e.Status)}</Typography>
                       </TableCell>
-
-                      <td>
-                        <NumberFormat className="input-type-css-order"
-                          thousandsGroupStyle="thousand"
-                          value={e.Total} 
-                          decimalSeparator="."
-                          thousandSeparator={true}
-                          disabled />
-                      </td>
-                      <td className="point-customer">
+                      {/* <td className="point-customer">
                         {e.FeedbackPoint} <TiStar/>
-                      </td>
+                      </td> */}
                       {/* <td className="point-customer">
                         {e.FeedbackMessage}
                       </td> */}

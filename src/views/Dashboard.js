@@ -1060,6 +1060,7 @@ function Dashboard() {
                   <div className="col">
                     <h3 className="mb-0">Top 5 Companies</h3>
                   </div>
+                  
                   <div className="col text-right">
                     <Button
                       color="primary"
