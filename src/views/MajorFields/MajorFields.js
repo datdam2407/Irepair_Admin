@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Dropdown } from "semantic-ui-react";
-import "semantic-ui-css/semantic.min.css";
+import { Dropdown } from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css';
 import {
   Modal,
   ModalHeader,
@@ -11,15 +10,18 @@ import {
   InputGroup,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
   InputGroupButtonDropdown,
   PaginationItem,
   Input,
   PaginationLink,
   FormGroup,
 } from "reactstrap";
-import { storage } from "Firebase/firebaseConfig";
-// react-bootstrap components
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faCaretDown,
+  faCaretUp,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Button,
   Card,
@@ -31,35 +33,20 @@ import {
   OverlayTrigger,
   ModalTitle,
 } from "react-bootstrap";
-import "../../assets/css/customSize.css";
+import "../../assets/css/customSize.css"
+import { del, put, get, postWithToken, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
+import { makeStyles } from '@material-ui/core/styles';
 import {
-  del,
-  put,
-  get,
-  postWithToken,
-  getWithTokenParams,
-  getWithToken,
-  putWithToken,
-} from "../../service/ReadAPI";
-import { makeStyles } from "@material-ui/core/styles";
-
-import {
-  TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Avatar,
   Grid,
   Typography,
-} from "@material-ui/core";
-import FormDialog from "./DialogFields";
+} from '@material-ui/core';
 import FilterState from "./FilterState";
-import { Tooltip } from "react-tippy";
-import "react-tippy/dist/tippy.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import {
+  Tooltip,
+} from 'react-tippy';
+import 'react-tippy/dist/tippy.css'
 function MajorFields() {
   //delete modal
   const [ServiceDelete, setServiceDelete] = useState(null);
@@ -95,10 +82,15 @@ function MajorFields() {
   const [selectMajor, setSelectMajor] = useState();
 
   const [searchName, setSearchName] = useState("");
+  //sort
 
+  const [sortedField, setSortedField] = useState("Id");
+  const [ascending, setAscending] = useState(true);
   //Filter
-  const listStates = ["Inactive", "Active"];
-
+  const listStates = [
+    "Active",
+    "Inactive",
+  ];
   // custom table
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -132,8 +124,8 @@ function MajorFields() {
       borderRadius: "32%",
     },
     name: {
-      fontWeight: "bold",
-      color: theme.palette.secondary.dark,
+      fontWeight: 'bold',
+   color: '#1d98e0f7'
     },
     Status: {
       fontWeight: "700",
@@ -178,30 +170,14 @@ function MajorFields() {
   const [data1, setData1] = useState({ array: [] });
   const [MajorSelectID, setMajorSelectID] = useState(ID);
   const [listSelectMajor, setListMajor] = useState([]);
-
-  const initialValue = { name: "", description: "", imageUrl: "", status: "1" };
-
-  const [gridApi, setGridApi] = useState(null);
-  const [tableData, setTableData] = useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [formData, setFormData] = useState(initialValue);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setFormData(initialValue);
-  };
   //upload image
-  const [loading, setLoading] = useState(false);
-
-  const uploadImage = async (e) => {
-    const files = e.target.files;
-    const data = new FormData();
-    data.append("file", files[0]);
-    data.append("upload_preset", "reactSWD");
-    setLoading(true);
+  const [loading, setLoading] = useState(false)
+  const uploadImage = async e => {
+    const files = e.target.files
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'reactSWD')
+    setLoading(true)
     const res = await fetch(
       " https://api.cloudinary.com/v1_1/fpt-claudary/image/upload",
       {
@@ -224,47 +200,11 @@ function MajorFields() {
     const newFile = new File([blob], this.dat.imageName, { type: "image/png" });
     //console.log(newFile)
   }
-
-  const url =
-    "https://ec2-3-1-222-201.ap-southeast-1.compute.amazonaws.com/api/v1.0/major-fields";
-  const columnDefs = [
-    { headerName: "ID", field: "Id" },
-    { headerName: "Name", field: "name" },
-    { headerName: "Description", field: "description" },
-    { headerName: "Major", field: "majorId" },
-    { headerName: "imageUrl", field: "imageUrl" },
-    {
-      headerName: "Actions",
-      field: "Id",
-      cellRendererFramework: (params) => (
-        <div>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => handleUpdate(params.data)}
-          >
-            Update
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            onClick={() => handleDelete(params.value)}
-          >
-            Delete
-          </Button>
-        </div>
-      ),
-    },
-  ];
   const onChange = (e) => {
     const { value, id } = e.target;
     // console.log(value,id)
-    setFormData({ ...formData, [id]: value });
-  };
-  const onGridReady = (params) => {
-    setGridApi(params);
-  };
-
+    setFormData({ ...formData, [id]: value })
+  }
   //filter
   async function handleChooseState(e, id) {
     let newListState = [];
@@ -283,9 +223,7 @@ function MajorFields() {
     setstateListFilter(newListState);
     getMajorFieldsList(newListState);
   }
-
   // update
-
   async function handleEditSubmit2(e) {
     await putWithToken(
       `/api/v1.0/major-fields`,
@@ -295,7 +233,7 @@ function MajorFields() {
         description: description,
         majorId: major,
         imageUrl: picture,
-        status: 1,
+        status: 0,
       },
       localStorage.getItem("token")
     )
@@ -317,7 +255,7 @@ function MajorFields() {
         description: description,
         majorId: MajorSelectID,
         imageUrl: picture,
-        status: 1,
+        status: 0,
       },
       localStorage.getItem("token")
     )
@@ -352,60 +290,6 @@ function MajorFields() {
         console.log(err);
       });
   }
-  // setting update row data to form data and opening pop up window
-  const handleUpdate = (oldData) => {
-    setFormData(oldData);
-    console.log(oldData);
-    handleClickOpen();
-  };
-  function checkDisableImage(state) {
-    const list = [1, 3];
-    if (list.includes(state)) return true;
-    else return false;
-  }
-  const handleFormSubmit = () => {
-    if (formData.id) {
-      //updating a user
-      const confirm = window.confirm(
-        "Are you sure, you want to update this row ?"
-      );
-      confirm &&
-        fetch(url + `/${formData.id}`, {
-          method: "put",
-          body: JSON.stringify(formData),
-          headers: {
-            "content-type": "application/json",
-          },
-        })
-          .then((resp) => resp.json())
-          .then((resp) => {
-            handleClose();
-            getMajorFieldsList();
-          });
-    } else {
-      // adding new user
-      fetch(url, {
-        method: "post",
-        body: JSON.stringify(formData),
-        headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6IklJY3YyMGVPeGVibmJsOVM3Sm00WnNsZnVUODIiLCJjZXJ0c2VyaWFsbnVtYmVyIjoiNWYxYzhkMjItNGM0ZS00MmE0LWFmYTgtODE2ZjRmZDAwNWIwIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNjMzODY4MzQ0LCJleHAiOjE2MzM5NTQ3NDQsImlhdCI6MTYzMzg2ODM0NH0.UGHIVGarMnVEevVMIKNw-2Qd0lcJV7eAEuL_XwOgDfw`,
-          "Content-type": "application/json",
-        },
-      })
-        .then((resp) => resp.json())
-        .then((resp) => {
-          handleClose();
-          getMajorFieldsList();
-        });
-    }
-  };
-
-  const defaultColDef = {
-    sortable: true,
-    flex: 1,
-    filter: true,
-    floatingFilter: true,
-  };
   function displayMajorName(type) {
     const nameMajor = {
       "a037b04c-51b3-4650-b369-0ea7ee869821": "Điện Tử",
@@ -418,6 +302,7 @@ function MajorFields() {
       "bd3ee5ea-9cea-4df6-99e0-03b4f46bc25e": "Sửa đồ gỗ",
       "11fedcef-5113-4fb8-8854-42622e68cac6": "Sửa điện lạnh",
       "3d38e346-ba11-4f70-b18d-ea2515752ab8": "Keys",
+      "67381e19-f761-4a4f-9520-3225290f6470": "Két sắt",
     };
     return nameMajor[type] ? nameMajor[type] : "";
   }
@@ -426,8 +311,7 @@ function MajorFields() {
     setMajorSelect(e.target.MajorID);
     setMajorSelectID(value.value);
   }
-  console.log("aaaa", MajorSelectID);
-  // console.log("majornam", MajorNameByFieldID)
+  console.log("aaaa", MajorSelectID)
   useEffect(() => {
     let params = {};
     let currentField = {};
@@ -482,9 +366,9 @@ function MajorFields() {
         console.log(err);
       });
   }
-
   // /api/v1.0/major/{id}
-  //delete fc
+  //delete fc is updating error 
+  //BE is fixing 
   function deleteMajorFieldsByID() {
     del(`/api/v1.0/major-fields/${MajorDelete}`, localStorage.getItem("token"))
       .then((res) => {
@@ -505,22 +389,40 @@ function MajorFields() {
     let params = {};
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithTokenParams(
-      `/api/v1.0/major-fields`,
-      params,
-      localStorage.getItem("token")
-    )
-      .then((res) => {
+    if (sortedField !== null) {
+
+      getWithTokenParams(`/api/v1.0/major-fields`, params, localStorage.getItem("token")).then((res) => {
         var temp = res.data.filter((x) => x.state !== "Completed");
         setMajorList(temp);
+
         setUseListMajorShow(temp);
         setUseListMajorShowPage(temp.slice(numberPage * 6 - 6, numberPage * 6));
         setTotalNumberPage(Math.ceil(temp.length / 6));
         setCount(count);
-      })
-      .catch((err) => {
+      }).catch((err) => {
         console.log(err);
       });
+    }
+  }
+  //sort
+  function sort(field, status, items) {
+    items.sort((a, b) => {
+      if (a[field] < b[field]) {
+        if (status) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      if (a[field] > b[field]) {
+        if (status) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+      return 0;
+    });
   }
   //Paging
   function onClickPage(number) {
@@ -532,7 +434,7 @@ function MajorFields() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#B22222" , backgroundColor:"white"}}
       onClick={x}
     >
       X
@@ -541,31 +443,11 @@ function MajorFields() {
   // Custom state
   function displayStateName(type) {
     const stateValue = {
-      0: "Inactive",
-      1: "Active",
+      1: "Inactive",
+      0: "Active",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
-
-  // upload img
-  // handleImageupload = (e) =>{
-  //   if (target.files[0]){
-  //     const image = (e.target.files[0]);
-  //     const uploadTask = storage.ref(`image/${image.name}`).put(image)
-  //     uploadTask.on('change_stage',
-  //     (snapshot) => {
-  //       console.log(snapshot)
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //     }, () =>{
-  //       storage.ref('image').child(image.name).getDowLoadUrl().then(url => {
-  //         this.setState(url);
-  //       })
-  //     }
-  //     )
-  //   }
-  // }
 
   function onSubmitSearch(e) {
     e.preventDefault();
@@ -576,6 +458,8 @@ function MajorFields() {
       ).then((res) => {
         var temp = res.data;
         setMajorList(temp);
+        sort(sortedField, ascending, temp);
+
         setNumberPage(1);
         setUseListMajorShow(temp);
         setUseListMajorShowPage(temp.slice(0, 6));
@@ -598,6 +482,16 @@ function MajorFields() {
       });
     }
   }
+
+  function cancelRepairmanByID() {
+    setName("");
+    setDescription("");
+    setMajorfieldID("");
+    setImage("");
+    setMajor("");
+    toggleEdit();
+  }
+
   return (
     <>
       <Container fluid>
@@ -675,9 +569,81 @@ function MajorFields() {
                 <Table className="table">
                   <thead>
                     <tr>
-                      <th className="description">Major Field</th>
-                      <th className="description">Major</th>
-                      <th className="description">Description</th>
+                      <th
+                        className="description"
+                        onClick={() => {
+                          if (sortedField === "Id" && ascending) {
+                            setSortedField("Id");
+                            setAscending(false);
+                            sort("Id", false, useListMajorShowPage);
+                          } else {
+                            setSortedField("Id");
+                            setAscending(true);
+                            sort("Id", true, useListMajorShowPage);
+                          }
+                        }}
+                      >
+                        Major Field{" "}
+                        {sortedField === "Id" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th>
+                      <th
+                        className="description"
+                        onClick={() => {
+                          if (sortedField === "MajorId" && ascending) {
+                            setSortedField("MajorId");
+                            setAscending(false);
+                            sort("MajorId", false, useListMajorShowPage);
+                          } else {
+                            setSortedField("MajorId");
+                            setAscending(true);
+                            sort("MajorId", true, useListMajorShowPage);
+                          }
+                        }}
+                      >
+                        Major{" "}
+                        {sortedField === "MajorId" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th>
+                      <th
+                        className="description"
+                        onClick={() => {
+                          if (sortedField === "Description" && ascending) {
+                            setSortedField("Description");
+                            setAscending(false);
+                            sort("Description", false, useListMajorShowPage);
+                          } else {
+                            setSortedField("Description");
+                            setAscending(true);
+                            sort("Description", true, useListMajorShowPage);
+                          }
+                        }}
+                      >
+                        Description{" "}
+                        {sortedField === "Description" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th>
                       <th className="description">Status</th>
                       <th className="viewAll">Actions</th>
                       <th></th>
@@ -764,15 +730,17 @@ function MajorFields() {
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  (e.Status === 1 && "rgb(34 176 34)") ||
-                                  (e.Status === 0 && "red") ||
-                                  (e.Status === 2 && "red"),
+                                  ((e.Status === 0 && 'rgb(34 176 34)')
+                                    ||
+                                    (e.Status === 1 && 'red')
+                                    ||
+                                    (e.Status === 2 && 'red'))
                               }}
                             >
                               {displayStateName(e.Status)}{" "}
                             </Typography>
                           </TableCell>
-                          <td className="td-actions">
+                          <td className="td-actions" >
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
                               overlay={
@@ -823,38 +791,6 @@ function MajorFields() {
                                 <i className="fas fa-edit"></i>
                               </Button>
                             </OverlayTrigger>
-
-                            {/* <OverlayTrigger
-                              overlay={
-                                <Tooltip id="tooltip-436082023">
-                                  <br />
-                                  <br />
-                                  APPROVE..
-                                </Tooltip>
-                              }
-                              placement="right"
-                            >
-
-                              <Button
-                                // onClick={() => handleUpdate(e.data)}
-                                // onGridReady={onGridReady}
-
-                                onClick={() => {
-                                  // setMajorEdit(e.Id);
-                                  setMajorModalApprove(true);
-                                }}
-
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="success"
-                              >
-                                {checkDisableImage(e.state) ? (
-                                  <i className="fas fa-undo"></i>
-                                ) : (
-                                  <i className="fas fa-undo"></i>
-                                )}
-                              </Button>
-                            </OverlayTrigger> */}
 
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
@@ -975,17 +911,17 @@ function MajorFields() {
           </Col>
         </Row>
       </Container>
-
       <Modal isOpen={modalMajorFieldDelete} toggle={toggleMajorDelete}>
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleMajorDelete)}
-          toggle={toggleMajorDelete}
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to delete this major</ModalBody>
-        <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleMajorDelete}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -995,9 +931,7 @@ function MajorFields() {
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleMajorDelete}>
-            Cancel
-          </Button>
+         
         </ModalFooter>
       </Modal>
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
@@ -1009,7 +943,10 @@ function MajorFields() {
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to Appprove this major</ModalBody>
-        <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+         <Button className="Cancel-button" onClick={toggleApprove}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -1020,75 +957,79 @@ function MajorFields() {
           >
             Approved
           </Button>{" "}
-          <Button color="secondary" onClick={toggleApprove}>
-            Cancel
-          </Button>
+         
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
+      <Modal isOpen={modalEdit} toggle={toggleEdit} centered size="lg">
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleEdit)}
-          toggle={toggleEdit}
         >
-          <ModalTitle>Do you want to edit major field ?</ModalTitle>
+          <ModalTitle><h3>Do you want to edit major field ?</h3></ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Form>
-            <Form.Group className="mb-2">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Major name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Major</Form.Label>
-              {/* <Form.Control disabled type="text" placeholder="Major" value={major}
-                onChange={e => setMajor(e.target.value)}
-              /> */}
-              <FormGroup className="mb-2">
-                <Dropdown
-                  fluid
-                  search
-                  selection
-                  // value={majorSelect}
-                  value={majorSelect}
-                  onChange={handleOnchangeSelectdmajor}
-                  options={listSelectMajor}
-                />
-              </FormGroup>
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Description"
-                as="textarea"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={3}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Picture</Form.Label>
-              <Form.Control
-                type="file"
-                onFileChange={picture}
-                onChange={uploadImage}
-              />
-              {loading ? (
-                <h3>Loading...</h3>
-              ) : (
-                <img src={picture} style={{ width: "300px" }} />
-              )}
-            </Form.Group>
+            <Grid
+              container
+              rowSpacing={4}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              <Grid item xs={6}>
+                <Form.Group className="mb-2">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Major name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label>Major</Form.Label>
+                  <FormGroup className="mb-2">
+                    <Dropdown
+                      fluid
+                      search
+                      selection
+                      // value={majorSelect}
+                      value={majorSelect}
+                      onChange={handleOnchangeSelectdmajor}
+                      options={listSelectMajor}
+                    />
+                  </FormGroup>
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Description"
+                    as="textarea"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                  />
+                </Form.Group>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Form.Group className="mb-2 ml-5">
+                  <Form.Label>Picture</Form.Label>
+                  <Form.Control type="file" onChange={uploadImage} />
+                  {loading ? (
+                    <h3>Loading...</h3>
+                  ) : (
+                    <img src={picture} style={{ width: "300px" }} />
+                  )}
+                </Form.Group>
+              </Grid>
+            </Grid>
           </Form>
         </ModalBody>
-        <ModalFooter>
+
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+         <Button className="Cancel-button" onClick={() => { cancelRepairmanByID() }}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -1099,19 +1040,15 @@ function MajorFields() {
           >
             Edit
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
-            Cancel
-          </Button>
+
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalCreate} toggle={toggleCreate} centered size="lg">
         <ModalHeader
           style={{ color: "#B22222" }}
-          close={closeBtn(toggleCreate)}
-          toggle={toggleCreate}
         >
-          <ModalTitle>Do you want to create major field ?</ModalTitle>
+          <ModalTitle><h3>Do you want to create major field ?</h3></ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Form>
@@ -1173,7 +1110,10 @@ function MajorFields() {
           </Form>
         </ModalBody>
 
-        <ModalFooter>
+         <ModalFooter style={{ justifyContent: 'space-around'}}>
+         <Button className="Cancel-button" onClick={toggleCreate}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -1184,9 +1124,7 @@ function MajorFields() {
           >
             Save
           </Button>
-          <Button color="secondary" onClick={toggleCreate}>
-            Cancel
-          </Button>
+        
         </ModalFooter>
       </Modal>
 
@@ -1237,15 +1175,7 @@ function MajorFields() {
           <br />
         </ModalBody>
       </Modal>
-      <FormDialog
-        open={open}
-        handleClose={handleClose}
-        data={formData}
-        onChange={onChange}
-        handleFormSubmit={handleFormSubmit}
-      />
     </>
   );
 }
-
 export default MajorFields;

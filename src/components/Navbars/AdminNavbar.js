@@ -172,7 +172,7 @@ function AdminNavbar() {
           >
             Log out
           </Button>{" "}
-          <Button color="secondary" onClick={toggleLogOut}>
+          <Button className="Cancel-button" onClick={toggleLogOut}>
             Cancel
           </Button>
         </ModalFooter>

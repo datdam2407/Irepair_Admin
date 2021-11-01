@@ -17,8 +17,9 @@ import {
   Input,
   Spinner,
 } from "reactstrap";
-function Login() {
 
+function Login() {
+  
   const [user, loading, error] = useAuthState(auth);
   const history = useHistory();
   useEffect(() => {
@@ -36,6 +37,7 @@ function Login() {
       setCardClasses("");
     }, 1000);
   });
+  
   // function handleSubmit(e) {
   //     e.preventDefault();
   //     setButton(true);

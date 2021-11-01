@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef  } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -18,6 +18,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+import { IconName ,TiStar ,TiLockClosed } from "react-icons/ti";
+
 import {
   Modal,
   ModalHeader,
@@ -36,10 +38,10 @@ import {
   Media,
 
 } from "reactstrap";
-import deleteIcon from "assets/img/remove.png";
-import editIcon from "assets/img/edit.png";
+
 import { del, post, get, put, getWithToken, putWithToken, getWithTokenParams, postWithToken } from "../../service/ReadAPI";
 import "../../assets/css/customSize.css";
+import NumberFormat from 'react-number-format';
 
 import {
   TableBody,
@@ -64,6 +66,7 @@ export default function ManageCompany() {
     "Blocked",
     "Deleted",
   ];
+ 
   const [filterState, setListFilterState] = useState(listStates);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -75,41 +78,12 @@ export default function ManageCompany() {
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
 
   const useStyles = makeStyles((theme) => ({
-    table: {
-      minWidth: 650,
-    },
-    tableContainer: {
-      borderRadius: 15,
-      margin: '10px 10px',
-      maxWidth: ' 100%'
-    },
-    tableHeaderCell: {
-      color: 'burlywood',
-      fontWeight: 'bold',
-      backgroundColor: theme.palette.primary.dark,
-      color: theme.palette.getContrastText(theme.palette.primary.dark),
-      backgroundColor: 'gray',
-      fontWeight: '700',
 
-    },
-    thmajorheaderform: {
-      fontWeight: 'bold',
-      fontWeight: '700',
-      color: theme.palette.getContrastText(theme.palette.primary.dark),
-    },
-
-    avatar: {
-      backgroundColor: '#FFFFFF',
-      fontSize: '200px',
-      right: '10px',
-      overflow: 'unset',
-      borderRadius: '32%',
-      // img: 'string',
-
-    },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark,
+      color: '#292a2c',
+      fontWeight: '700',
+      width:'200px'
 
     },
     Status: {
@@ -117,7 +91,7 @@ export default function ManageCompany() {
       width: '71px',
       fontSize: '0.76rem',
       color: 'white',
-      textAlign :'center',
+      textAlign: 'center',
       backgroundColor: 'red',
       borderRadius: 8,
       padding: '3px 10px',
@@ -174,36 +148,70 @@ export default function ManageCompany() {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [hotline, setHotline] = useState("");
+  const [Status, setStatus] = useState(0);
+  const [Price2, setPrice2] = useState(0);
 
+  //sort
 
-
+  const [sortedField, setSortedField] = useState("id");
+  const [ascending, setAscending] = useState(true);
+  // const totalPrice = useRef(0);
   useEffect(() => {
     getCompanyList();
     getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
-          // res.data;
-          console.log(res.data);
+          setPrice2(res.data);
+
+
         }
       });
   }, []);
-
+  //sort
+  function sort(field, status, items) {
+    items.sort((a, b) => {
+      if (a[field] < b[field]) {
+        if (status) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      if (a[field] > b[field]) {
+        if (status) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+      return 0;
+    });
+  }
   function getCompanyList(stateList) {
     let params = {};
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithTokenParams("/api/v1.0/companies", params, localStorage.getItem("token")).then((res) => {
-      var temp = res.data.filter((x) => x.state !== "Completed");
-      setCompanyList(temp);
-      setUseListCompanyShow(temp);
-      setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
-      setTotalNumberPage(Math.ceil(temp.length / 8));
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+    if (sortedField !== null) {
 
+      getWithTokenParams("/api/v1.0/companies", params, localStorage.getItem("token")).then((res) => {
+        var temp = res.data.filter((x) => x.state !== "Completed");
+        setCompanyList(temp);
+        setUseListCompanyShow(temp);
+        setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
+        setTotalNumberPage(Math.ceil(temp.length / 8));
+        console.log("companyList", temp);
+        var totalPrice =0;
+        temp.map((e, index) =>{
+          totalPrice  +=  temp[index].totalMoney;
+        })
+        localStorage.setItem("revenus", totalPrice);
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
+  }
+  
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
@@ -223,7 +231,7 @@ export default function ManageCompany() {
   console.log("cpName", name)
   function handleEditSubmit2(e) {
     putWithToken(
-      `/api/v1.0/companies?companyId=${CompanyDelete}`,
+      `/api/v1.0/companies?companyid=${CompanyDelete}`,
       {
         id: null,
         companyName: name,
@@ -240,21 +248,35 @@ export default function ManageCompany() {
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/Company";
-          alert("Approved Successfully")
+          // alert("Approved Successfully")
         }
       })
       .catch((err) => {
         console.log(err)
       });
   }
+  
+  // function handleCompanyDetele(){
+  //   const [NewStatus, setNewStatus] = useState(3);
+  //   const [OldStatus, setOldStatus] = useState({
+  //     Status : 1
+  //   });
+  //   useEffect(() => {
+  //     del(`/api/v1.0/companies/${CompanyDelete}`, localStorage.getItem("token"))
+  //     const { Status } = OldStatus;
+  
+  //     setNewStatus(Status === 1 ? "1" : "3");
+  //   },
+  //   [dimension, dimension.height, dimension.width]);
+  
+  //   return [NewStatus, setOldStatus];
+  // }
+
   function handleCompanyDetele() {
-    // console.log("abc" , CompanyDelete);
     del(`/api/v1.0/companies/${CompanyDelete}`, localStorage.getItem("token")
     ).then((res) => {
       if (res.status === 200) {
         window.location = "/admin/Company";
-        alert("Deleted Successfully")
-
       }
     })
       .catch((err) => {
@@ -266,7 +288,7 @@ export default function ManageCompany() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#B22222", backgroundColor: "white" }}
       onClick={x}
     >
       X
@@ -274,30 +296,33 @@ export default function ManageCompany() {
   );
   function onSubmitSearch(e) {
     e.preventDefault();
-  
+
     if (searchName !== "") {
       getWithToken(
         `/api/v1.0/companies?Name=` + searchName,
-        
+
         localStorage.getItem("token")
       ).then((res) => {
         var temp = res.data;
         setCompanyList(temp);
+        sort(sortedField, ascending, temp);
         setNumberPage(1);
-      setUseListCompanyShow(temp);
-      setUseListCompanyShowPage(temp.slice(0, 8));
-      setTotalNumberPage(Math.ceil(temp.length / 8));
+        setUseListCompanyShow(temp);
+        setUseListCompanyShowPage(temp.slice(0, 8));
+        setTotalNumberPage(Math.ceil(temp.length / 8));
       });
-    } else if(searchName == "") {
+    } else if (searchName == "") {
       getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then(
         (res) => {
           if (res && res.status === 200) {
             var temp2 = res.data;
             setCompanyList(temp2);
-      setUseListCompanyShow(temp2);
-      setUseListCompanyShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
-      setTotalNumberPage(Math.ceil(temp2.length / 8));
-    }})}
+            setUseListCompanyShow(temp2);
+            setUseListCompanyShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
+            setTotalNumberPage(Math.ceil(temp2.length / 8));
+          }
+        })
+    }
   }
 
   return (
@@ -334,22 +359,22 @@ export default function ManageCompany() {
                       </InputGroup>
                     </Row>
                   </Col>
-                 
+
                 </div>
                 <Col md={2}>
-                    <Form
-                      onClick={(e) => {
-                        onSubmitSearch(e);
-                      }}
-                    >
-                      <InputGroup className="fixed">
-                        <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..." ></Input>
-                        <Button className="dropdown-filter-css" >
-                          <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
-                        </Button>
-                      </InputGroup>
-                    </Form>
-                  </Col>
+                  <Form
+                    onClick={(e) => {
+                      onSubmitSearch(e);
+                    }}
+                  >
+                    <InputGroup className="fixed">
+                      <Input onChange={e => setSearchName(e.target.value)} placeholder="Search name..." ></Input>
+                      <Button className="dropdown-filter-css" >
+                        <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
+                      </Button>
+                    </InputGroup>
+                  </Form>
+                </Col>
                 <Col>
                   <Col align="right">
                     <Button
@@ -366,59 +391,195 @@ export default function ManageCompany() {
               <Table className="table">
                 <thead>
                   <tr>
-                    {/* <th className="description">ID</th> */}
-                    <th className="description">Name</th>
-                    <th className="description">Address</th>
-                    <th className="description">Description</th>
-                    <th className="description">Email</th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "CompanyName" && ascending) {
+                          setSortedField("CompanyName");
+                          setAscending(false);
+                          sort("CompanyName", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("CompanyName");
+                          setAscending(true);
+                          sort("CompanyName", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Name{" "}
+                      {sortedField === "CompanyName" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "Address" && ascending) {
+                          setSortedField("Address");
+                          setAscending(false);
+                          sort("Address", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("Address");
+                          setAscending(true);
+                          sort("Address", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Address{" "}
+                      {sortedField === "Address" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "Description" && ascending) {
+                          setSortedField("Description");
+                          setAscending(false);
+                          sort("Description", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("Description");
+                          setAscending(true);
+                          sort("Description", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Description{" "}
+                      {sortedField === "Description" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
+                    <th className="description">Human resources</th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "Email" && ascending) {
+                          setSortedField("Email");
+                          setAscending(false);
+                          sort("Email", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("Email");
+                          setAscending(true);
+                          sort("Email", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Email{" "}
+                      {sortedField === "Email" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
+                    <th className="description">Revenus (Vnd)</th>
                     <th className="description">Hotline</th>
-                    {/* <th className="description">Picture</th> */}
-                    <th className="description">State</th>
+                    <th
+                      className="description"
+                      onClick={() => {
+                        if (sortedField === "Status" && ascending) {
+                          setSortedField("Status");
+                          setAscending(false);
+                          sort("Status", false, useListCompanyShowPage);
+                        } else {
+                          setSortedField("Status");
+                          setAscending(true);
+                          sort("Status", true, useListCompanyShowPage);
+                        }
+                      }}
+                    >
+                      Status{" "}
+                      {sortedField === "Status" ? (
+                        ascending === true ? (
+                          <FontAwesomeIcon icon={faCaretUp} />
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )
+                      ) : (
+                        <FontAwesomeIcon icon={faCaretDown} />
+                      )}
+                    </th>
                     <th className="description">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {useListCompanyShowPage.map((e, index) => {
                     return (
-                      <tr className="" key={index}>
+                      <tr key={index}>
                         {/* <td>
-                            {e.Id}
+                        <img src={e.ImageUrl}/>
                           </td> */}
-                        <td className="nameSize">
-                          {e.CompanyName}
-                        </td>
+                        <TableCell>
+                          <Grid container>
+                            <Grid item lg={10}>
+                              <Typography className={classes.name}>{e.companyName}</Typography>
+                              <Typography color="textSecondary" variant="body2">{e.id}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </TableCell>
                         <td>
-                          {e.Address}
+                          {e.address}
                         </td>
                         <td className="descriptionSize">
-                          {e.Description}
+                          {e.description}
+                        </td>
+                        <td className="descriptionSize">
+                          {e.totalWorker} members
                         </td>
                         <td className="emailSize">
-                          {e.Email}
+                          {e.email}
                         </td>
                         <td>
-                          {e.Hotline}
-                        </td>
-
+                        <NumberFormat className="input-type-css-order"
+                          thousandsGroupStyle="thousand"
+                          value={e.totalMoney} 
+                          decimalSeparator="."
+                          locale="vn"
+                          thousandSeparator={true}
+                          disabled />
+                      </td>
+                        
                         <td>
-
-                          <TableCell onClick={() => {
-                            setCompanyDelete(e.Id);
-                            setCompanyModalApprove(true)
-                          }}>
-                            <Typography
-                              className={classes.Status}
-                              style={{
-                                backgroundColor:
-                                  ((e.Status === 1 && 'green') ||
-                                    (e.Status === 0 && '#119fb3') ||
-                                    (e.Status === 3 && 'red')
-                                  )
-                              }}
-                            >{displayStateName(e.Status)}</Typography>
-                          </TableCell>
-
+                          {e.hotline}
                         </td>
+
+                        <TableCell onClick={() => {
+                          setCompanyDelete(e.id);
+                          setCompanyModalApprove(true)
+                        }}>
+                          <Typography
+                            className={classes.Status}
+                            style={{
+                              backgroundColor:
+                                ((e.status === 1 && 'green') ||
+                                  (e.status === 0 && '#119fb3') ||
+                                  (e.status === 3 && 'red')
+                                )
+                            }}
+                          >{displayStateName(e.status)}</Typography>
+                        </TableCell>
+
                         <td>
 
                           <OverlayTrigger
@@ -433,7 +594,7 @@ export default function ManageCompany() {
                           >
                             <Button
                               onClick={() => {
-                                setCompanyDelete(e.Id);
+                                setCompanyDelete(e.id);
                                 setCompanyModalApprove(true);
                               }}
 
@@ -456,15 +617,16 @@ export default function ManageCompany() {
                           >
                             <Button
                               onClick={() => {
-                                setCompanyDelete(e.Id);
+                                setCompanyDelete(e.id);
                                 setCompanyModalDelete(true);
                               }}
 
                               className="btn-link btn-icon"
                               type="button"
                               variant="danger"
+                              style={{fontSize:'x-large'}}
                             >
-                              <i className="fas fa-times"></i>
+                              <TiLockClosed/>
                             </Button>
                           </OverlayTrigger>
 
@@ -571,9 +733,8 @@ export default function ManageCompany() {
 
       <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleCreate)}
-          toggle={toggleCreate}
+          style={{ color: "#1bd1ff" }}
+
         >
           <ModalTitle>Do you want to create new company</ModalTitle>
         </ModalHeader>
@@ -640,7 +801,10 @@ export default function ManageCompany() {
             </Form.Group> */}
           </Form>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleCreate}>
+            Cancel
+          </Button>
           <Button onClick={(e) =>  // handleCompanyDetele();
             handleSubmit()
             // setCompanyModalEdit(false);
@@ -648,17 +812,14 @@ export default function ManageCompany() {
           >
             Save
           </Button>
-          <Button color="secondary" onClick={toggleCreate}>
-            Cancel
-          </Button>
+
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleEdit)}
-          toggle={toggleEdit}
+          style={{ color: "#1bd1ff" }}
+
         >
           <ModalTitle>Do you want to edit Company</ModalTitle>
         </ModalHeader>
@@ -729,7 +890,10 @@ export default function ManageCompany() {
 
           </Form>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleEdit}>
+            Cancel
+          </Button>
           <Button onClick={(e) =>  // handleCompanyDetele();
             handleEditSubmit(e)
             // setCompanyModalEdit(false);
@@ -737,61 +901,58 @@ export default function ManageCompany() {
           >
             Edit
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
-            Cancel
-          </Button>
+
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalDelete} toggle={toggleDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleDelete)}
-          toggle={toggleDelete}
+          style={{ color: "#1bd1ff" }}
+
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to delete this company</ModalBody>
-        <ModalFooter>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleDelete}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
               handleCompanyDetele();
               setCompanyModalDelete(false);
-              setCompanyModalSuccess(true);
 
             }}
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleDelete}>
-            Cancel
-          </Button>
+
         </ModalFooter>
       </Modal>
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleApprove)}
-          toggle={toggleApprove}
+          style={{ color: "#1bd1ff" }}
+
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to appprove this Company</ModalBody>
-        <ModalFooter>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleApprove}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
-              // deleteMajorFieldsByID();
+              // deleteMajorFieldsByid();
               handleEditSubmit2();
               setCompanyModalApprove(false);
             }}
           >
             Approved
           </Button>{" "}
-          <Button color="secondary" onClick={toggleApprove}>
-            Cancel
-          </Button>
+
         </ModalFooter>
       </Modal>
     </>

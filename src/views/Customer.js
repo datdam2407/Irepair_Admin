@@ -37,7 +37,7 @@ import {
 } from '@material-ui/core';
 import { del, post, get, getWithToken } from "../../src/service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
-
+import "../assets/css/customSize.css"
 export default function Customer() {
 
   const [CustomerDelete, setCustomerDelete] = useState(null);
@@ -126,7 +126,7 @@ export default function Customer() {
     },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark,
+   color: '#1d98e0f7',
 
     },
     Status: {
@@ -141,14 +141,6 @@ export default function Customer() {
     }
   }));
   const classes = useStyles();
-  function getCustomerListID() {
-    get("/api/v1.0/customer/get-by-id" + CustomerEdit).then((res) => {
-      var temp = res.data;
-      setCustomerListID(temp);
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
 
   //Paging
   function onClickPage(number) {
@@ -156,32 +148,7 @@ export default function Customer() {
     setUseListCustomerShowPage(useListCustomerShow.slice(number * 10 - 10, number * 10));
     setTotalNumberPage(Math.ceil(useListCustomerShow.length / 10));
   }
-  // create form 
-  function handleSubmit(e) {
-    e.preventDefault();
-    setButton(true);
-    post(
-      "/api/v1.0/customer/create",
-      {
-        customer_Name: e.target.customer_Name.value,
-        address: e.target.address.value,
-        description: e.target.description.value,
-        email: e.target.email.value,
-        hotline: e.target.hotline.value,
-        is_Online: 1,
-        is_Delete: 0,
-        picture: e.target.picture.value,
-      },
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/Customer";
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-  }
+
   // custom state
   function displayStateName(type) {
     const stateValue = {
@@ -194,7 +161,7 @@ export default function Customer() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#B22222" , backgroundColor:"white"}}
       onClick={x}
     >
       X
@@ -205,16 +172,7 @@ export default function Customer() {
       <Col md="12">
         <Card className="strpied-tabled-with-hover">
           <Card.Header>
-            {/* <Button
 
-                  onClick={() => {
-                    // setCustomerEdit(e.Id);
-                    // getCustomerListID();
-                    // handleSubmit(e);
-                    setCustomerModalCreate(true);
-                  }}>
-                  Create new Customer
-                </Button> */}
           </Card.Header>
           <Card.Body className="table-full-width table-responsive px-0">
             <Table className="table-hover table-striped">
@@ -236,8 +194,8 @@ export default function Customer() {
                   return (
                     <tr key={index}>
                       
-                      <td>
-                        <img src={e.Avatar}/>
+                      <td >
+                        <img className="avatar-repairman" src={e.Avatar}/>
                       </td>
                      <TableCell>
                             <Grid container>
@@ -426,9 +384,7 @@ export default function Customer() {
       </Col>
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleEdit)}
-          toggle={toggleEdit}
+          style={{ color: "#1bd1ff" }}
         >
           <ModalTitle>Do you want to edit Customer</ModalTitle>
         </ModalHeader>
@@ -487,7 +443,7 @@ export default function Customer() {
           >
             Edit
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
+          <Button className="Cancel-button" onClick={toggleEdit}>
             Cancel
           </Button>
         </ModalFooter>
@@ -495,9 +451,8 @@ export default function Customer() {
 
       <Modal isOpen={modalDelete} toggle={toggleDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleDelete)}
-          toggle={toggleDelete}
+          style={{ color: "#1bd1ff" }}
+
         >
           Are you sure?
         </ModalHeader>
@@ -512,7 +467,7 @@ export default function Customer() {
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleDelete}>
+          <Button className="Cancel-button" onClick={toggleDelete}>
             Cancel
           </Button>
         </ModalFooter>
@@ -522,7 +477,7 @@ export default function Customer() {
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
           toggle={toggleDetails}
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDetails)}
         >
          <h3> Detailed Field Information </h3>

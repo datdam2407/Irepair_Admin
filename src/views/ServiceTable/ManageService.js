@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSearch,
-  faCaretDown,
-  faCaretUp,
-} from "@fortawesome/free-solid-svg-icons";
 import {
   Modal,
   ModalHeader,
@@ -18,7 +12,6 @@ import {
   InputGroup,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem,
   InputGroupButtonDropdown,
   Input,
   FormGroup,
@@ -39,11 +32,8 @@ import {
 } from "react-bootstrap";
 import "../../assets/css/customSize.css"
 
-import { del, put, get, getWithParams, getWithToken, getWithTokenParams, putWithToken } from "../../service/ReadAPI";
+import { del, put, getWithToken, getWithTokenParams, putWithToken } from "../../service/ReadAPI";
 import FilterState from "../MajorFields/FilterState";
-
-// import 'ag-grid-community/dist/styles/ag-grid.css';
-// import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
@@ -57,20 +47,17 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import FormDialog from './DialogService';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faCaretDown,
+  faCaretUp,
+} from "@fortawesome/free-solid-svg-icons";
 function ManageSevice() {
   //delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
   const [modalDelete, setServiceModalDelete] = useState(false);
   const toggleDelete = () => setServiceModalDelete(!modalDelete);
-  //edit modal  
-  const [ServiceEdit, setServiceEdit] = useState(null);
-  // const [modalEdit, setServiceModalEdit] = useState(false);
-  // const toggleEdit = () => setServiceModalEdit(!modalEdit);
-
-  //modal create
-  const [modalCreate, setserviceModalCreate] = useState(false);
-  const toggleCreate = () => setserviceModalCreate(!modalCreate)
 
   //Edit service
   const [serviceEdit, setserviceEdit] = useState(null);
@@ -85,8 +72,8 @@ function ManageSevice() {
   const [modalStatus, setModalStatus] = useState(false);
   const toggleDetails = () => setModalStatus(!modalStatus);
   const [selectservice, setSelectservice] = useState();
-//
-const [majorApprove, setMajorApprove] = useState(null);
+  //
+  const [majorApprove, setMajorApprove] = useState(null);
   const [modalApprove, setModalApprove] = useState(false);
   const toggleApprove = () => setModalApprove(!modalApprove)
 
@@ -129,7 +116,9 @@ const [majorApprove, setMajorApprove] = useState(null);
 
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
-
+  //sort
+  const [sortedField, setSortedField] = useState("Id");
+  const [ascending, setAscending] = useState(true);
 
   const [searchName, setSearchName] = useState("");
 
@@ -168,7 +157,7 @@ const [majorApprove, setMajorApprove] = useState(null);
     },
     name: {
       fontWeight: 'bold',
-      color: theme.palette.secondary.dark
+   color: '#1d98e0f7'
     },
     Status: {
       fontWeight: '700',
@@ -177,7 +166,7 @@ const [majorApprove, setMajorApprove] = useState(null);
       color: 'white',
       backgroundColor: 'green',
       borderRadius: 8,
-      textAlign :'center',
+      textAlign: 'center',
       padding: '3px 10px',
       display: 'inline-block'
     }
@@ -202,40 +191,6 @@ const [majorApprove, setMajorApprove] = useState(null);
     getserviceList(newListState);
   }
 
-  useEffect(() => {
-    let params = {};
-    let currentField = {};
-    let FieldId = "";
-    getWithToken(
-      `/api/v1.0/major-fields`, localStorage.getItem("token")
-    ).then((res) => {
-      FieldId = res.data.FieldId
-      console.log(res.data)
-      currentField['text'] = `${res.data.name}`;
-      currentField['value'] = res.data.fieldId;
-      currentField['key'] = res.data.fieldId;
-      setFieldID(FieldId);
-
-    }).then(() => {
-    });
-
-    params['Status'] = [1].reduce((f, s) => `${f},${s}`);
-    getWithTokenParams("/api/v1.0/major-fields", params, localStorage.getItem("token")
-    ).then(res => {
-      setData1(res.data);
-      const newlistField = res.data.reduce((list, item) => [...list,
-      {
-        text: `${item.Name}`,
-        value: item.Id,
-        key: item.Id
-      }], [])
-      setListField(
-        [currentField, ...newlistField],
-      );
-    })
-  }, []);
-
-
   console.log("field", FieldSelectID)
 
   // update
@@ -251,7 +206,7 @@ const [majorApprove, setMajorApprove] = useState(null);
         Price: 0,
         ImageUrl: "String",
         status: 0,
-      },localStorage.getItem("token")
+      }, localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
@@ -287,36 +242,10 @@ const [majorApprove, setMajorApprove] = useState(null);
       });
   }
 
-  // setting update row data to form data and opening pop up window
-
-
-  // Load service by ID
-  // useEffect(() => {
-  //   getserviceByID();
-  //   get(`/service/get-by-id?id=${serviceEdit}`).then((res)=>{
-  //     setName(res.data.name);
-  //     setDescription(res.data.description);
-  //     setImage(res.data.picture);
-  //     setIsDeleted(res.data.is_Delete);
-  //   });
-  // }, []);
   function handleOnchangeSelectedAsset(e, value) {
     //console.log(e.target,value);
     setfieldSelect(e.target.fieldId);
     setFieldSelectID(value.value);
-  }
-  function getserviceByID(Id) {
-    getWithToken(`/api/v1.0/services/${Id}`, localStorage.getItem("token")).then((res) => {
-      setserviceID(Id);
-      setName(res.data.serviceName);
-      setDescription(res.data.description);
-      setImage(res.data.imageUrl);
-      setPrice(res.data.price);
-      setCompanyID(res.data.companyId);
-      setFieldID(res.data.fieldId);
-    }).catch((err) => {
-      console.log(err);
-    });
   }
 
   // /api/v1.0/service/{id}
@@ -341,28 +270,30 @@ const [majorApprove, setMajorApprove] = useState(null);
     let params = {};
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
-    getWithTokenParams(`/api/v1.0/services`, params, localStorage.getItem("token")).then((res) => {
-      var temp = res.data.filter((x) => x.state !== "Completed");
-      setserviceList(temp);
-      setUseListserviceShow(temp);
-      setUseListserviceShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
-      setTotalNumberPage(Math.ceil(temp.length / 8));
-      setCount(count);
-    }).catch((err) => {
-      console.log(err);
-    });
+    if (sortedField !== null) {
+      getWithTokenParams(`/api/v1.0/services`, params, localStorage.getItem("token")).then((res) => {
+        var temp = res.data.filter((x) => x.state !== "Completed");
+        setserviceList(temp);
+        setUseListserviceShow(temp);
+        setUseListserviceShowPage(temp.slice(numberPage * 10 - 10, numberPage * 10));
+        setTotalNumberPage(Math.ceil(temp.length / 10));
+        setCount(count);
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
   }
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListserviceShowPage(useListserviceShow.slice(number * 8 - 8, number * 8));
-    setTotalNumberPage(Math.ceil(useListserviceShow.length / 8));
+    setUseListserviceShowPage(useListserviceShow.slice(number * 10 - 10, number * 10));
+    setTotalNumberPage(Math.ceil(useListserviceShow.length / 10));
   }
 
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#1bd1ff" }}
       onClick={x}
     >
       X
@@ -380,44 +311,86 @@ const [majorApprove, setMajorApprove] = useState(null);
   }
   function displayCompanyName(type) {
     const stateValue = {
-      "234be13b-421b-40d9-8226-0f162dee7ac8": "Công ty điện lạnh Thành Công",
       "7e179e62-21da-45c1-afe4-114a580f0a12": "Công ty điện lạnh Long Châu",
       "404f25c6-4f40-4f83-acfd-16a0d7c2f8e9": "Công ty điện lạnh, điện gia dụng Thủy Tiên",
       "4bb0a83e-e9d9-47b5-8019-20c19e953181": "Công ty điện lạnh Hòa Hưng",
       "dd0b937a-8e90-4af3-bfe8-0a8cc0722f6a": "IrepairX",
       "17ab8695-daec-4ceb-9f78-07c9528c0009": "CompanyX",
+      "234be13b-421b-40d9-8226-0f162dee7ac8": "Công ty điện lạnh Thành Công",
+      "e427ae66-4f89-47c9-8032-0cca6577b28f": "Cty sửa chữa xe máy PHÁT THÀNH VINH 10",
+      "0e9ceddf-9796-478a-87fc-132567a68116": "Tiệm Sửa Xe Đinh Thành",
+      "a9f6fc01-3033-4b57-93eb-13fbc04d4e42": "Tiệm Sửa Xe Trường",
+      "4bb0a83e-e9d9-47b5-8019-20c19e953181": "Công ty điện lạnh Hòa Hưng",
+      "e5260446-f254-4d8c-a2a8-366748f11068": "Tiệm Sửa Xe Khoa Tay Ga",
+      "99e14380-7924-4522-91d5-69533f247258": "Tiệm Sửa Xe Thanh Long",
+      "473274b9-8345-4d0d-b765-87daf43a9bf7": "Sửa xe Tuấn 195 Bạch Đằng",
+      "033c9453-18a7-4066-b40e-923f685071ae": "Tiệm Sửa Xe Thành Trung",
+      "2e0a4a57-7ff9-4f0c-859e-9c6ef6228ca2": "Trung Tâm Kĩ Thuật Xe Máy Hải Dương",
+      "b7153746-4f68-47fb-83e5-e5f1ecbed192": "Sửa xe máy Hoài Thu",
+      "c2dc1cf0-24c1-4e52-9504-f1dad032f6e9": "Sửa xe Đinh Nguyễn 77",
+
+
+
+
+      "86083895-18dc-4fba-a721-a5acce6a26a8": "Xe số",
+      "6eaa4097-e5e5-465e-8f15-f15f81f0e36e": "Xe tay ga",
+      "813a4c08-fa29-48bb-9d76-0beaa4d133f8": "Xe đạp điện",
+      "458dcfdd-d1e1-43cf-9276-176574447f61": "Xe ô tô máy xăng",
+      "b65f8d53-c476-4474-9b45-268ea039ecbf": "Xe ô tô máy điện",
+      "2e316c2d-153e-42cb-8ef8-bb828d8f1d4c": "Xe ô tô máy dầu",
+    
     };
     return stateValue[type] ? stateValue[type] : "";
   }
-
   function onSubmitSearch(e) {
     e.preventDefault();
     if (searchName !== "") {
       getWithToken(
         `/api/v1.0/services?Name=` + searchName,
-        
+
         localStorage.getItem("token")
       ).then((res) => {
         var temp = res.data;
         setserviceList(temp);
+        sort(sortedField, ascending, temp);
         setNumberPage(1);
         setUseListserviceShow(temp);
-      setUseListserviceShowPage(temp.slice(0, 8));
-      setTotalNumberPage(Math.ceil(temp.length / 8));
-      
+        setUseListserviceShowPage(temp.slice(0, 10));
+        setTotalNumberPage(Math.ceil(temp.length / 10));
+
       });
-    } else if(searchName == "") {
+    } else if (searchName == "") {
       getWithToken("/api/v1.0/services", localStorage.getItem("token")).then(
         (res) => {
           if (res && res.status === 200) {
             var temp2 = res.data;
             setserviceList(temp2);
             setUseListserviceShow(temp2);
-            setUseListserviceShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
-            setTotalNumberPage(Math.ceil(temp2.length / 8));
-    }})}
+            setUseListserviceShowPage(temp2.slice(numberPage * 10 - 10, numberPage * 10));
+            setTotalNumberPage(Math.ceil(temp2.length / 10));
+          }
+        })
+    }
+  }//sort
+  function sort(field, status, items) {
+    items.sort((a, b) => {
+      if (a[field] < b[field]) {
+        if (status) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      if (a[field] > b[field]) {
+        if (status) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+      return 0;
+    });
   }
-
   return (
     <>
       <Container fluid>
@@ -476,12 +449,107 @@ const [majorApprove, setMajorApprove] = useState(null);
                 <Table className="table">
                   <thead>
                     <tr>
-                      {/* <th className="text-left-topic">Topic</th> */}
-                      {/* <th className="text-left-topic">FieldId</th> */}
-                      <th className="description" >Service Name</th>
-                      <th className="description">Description</th>
-                      <th className="description">Company</th>
-                      <th className="description-price">Price</th>
+                      <th
+                        className="description"
+                        onClick={() => {
+                          if (sortedField === "Id" && ascending) {
+                            setSortedField("Id");
+                            setAscending(false);
+                            sort("Id", false, useListserviceShowPage);
+                          } else {
+                            setSortedField("Id");
+                            setAscending(true);
+                            sort("Id", true, useListserviceShowPage);
+                          }
+                        }}
+                      >
+                        Service Name{" "}
+                        {sortedField === "Id" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th>
+                      <th
+                        className="description"
+                        onClick={() => {
+                          if (sortedField === "FieldId" && ascending) {
+                            setSortedField("FieldId");
+                            setAscending(false);
+                            sort("FieldId", false, useListserviceShowPage);
+                          } else {
+                            setSortedField("FieldId");
+                            setAscending(true);
+                            sort("FieldId", true, useListserviceShowPage);
+                          }
+                        }}
+                      >
+                        Major field{" "}
+                        {sortedField === "FieldId" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th>
+                      <th
+                        className="description"
+                        onClick={() => {
+                          if (sortedField === "Description" && ascending) {
+                            setSortedField("Description");
+                            setAscending(false);
+                            sort("Description", false, useListserviceShowPage);
+                          } else {
+                            setSortedField("Description");
+                            setAscending(true);
+                            sort("Description", true, useListserviceShowPage);
+                          }
+                        }}
+                      >
+                        Description{" "}
+                        {sortedField === "Description" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th>
+{/*                     
+                      <th
+                        className="description"
+                        onClick={() => {
+                          if (sortedField === "Price" && ascending) {
+                            setSortedField("Price");
+                            setAscending(false);
+                            sort("Price", false, useListserviceShowPage);
+                          } else {
+                            setSortedField("Price");
+                            setAscending(true);
+                            sort("Price", true, useListserviceShowPage);
+                          }
+                        }}
+                      >
+                        Price{" "}
+                        {sortedField === "Price" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th> */}
                       <th className="description">Status</th>
                       <th className="viewAll">Actions</th>
                     </tr>
@@ -492,12 +560,6 @@ const [majorApprove, setMajorApprove] = useState(null);
                         <tr key={index}>
                           <TableCell>
                             <Grid container>
-                              {/* <Grid item lg={2}>
-                                <Avatar src={e.ImageUrl} className={classes.avatar}>
-                                <img src="string"/>
-
-                                </Avatar>
-                              </Grid> */}
                               <Grid item lg={10}>
                                 <Typography className={classes.name}>{e.ServiceName}</Typography>
                                 <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
@@ -505,21 +567,23 @@ const [majorApprove, setMajorApprove] = useState(null);
                               </Grid>
                             </Grid>
                           </TableCell>
-
+                          <td>
+                            {/* {displayCompanyName(e.FieldId)} */}
+                            {displayCompanyName(e.FieldId)}
+                            {/* {e.FieldId} */}
+                          </td>
                           <td>
                             {e.Description}
                           </td>
-                          <td>
-                            {displayCompanyName(e.CompanyId)}
-                          </td>
-                          <td>
-                          <NumberFormat className="input-type-css"
-                          thousandsGroupStyle="thousand"
-                          value= {e.Price}
-                          decimalSeparator="."
-                          thousandSeparator={true}
-                          disabled/>
-                          </td>
+                          
+                          {/* <td>
+                            <NumberFormat className="input-type-css"
+                              thousandsGroupStyle="thousand"
+                              value={e.Price}
+                              decimalSeparator="."
+                              thousandSeparator={true}
+                              disabled />
+                          </td> */}
                           <TableCell>
                             <Typography
                               className={classes.Status}
@@ -535,7 +599,7 @@ const [majorApprove, setMajorApprove] = useState(null);
                               }}
                             >{displayStateName(e.Status)}</Typography>
                           </TableCell>
-                          <td className="td-actions">
+                          <td className="td-actions" >
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
                               overlay={
@@ -673,43 +737,19 @@ const [majorApprove, setMajorApprove] = useState(null);
               </Card.Body>
             </Card>
           </Col>
-
         </Row>
       </Container>
-      {/* <Modal isOpen={modalMajorFieldDelete} toggle={toggleMajorDelete}>
-        <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleMajorDelete)}
-          toggle={toggleMajorDelete}
-        >
-          Are you sure?
-        </ModalHeader>
-        <ModalBody>Do you want to delete this major</ModalBody>
-        <ModalFooter>
-          <Button
-            color="danger"
-            onClick={() => {
-              deleteMajorFieldsByID();
-              setMajorModalFieldDelete(false);
-            }}
-          >
-            Delete
-          </Button>{" "}
-          <Button color="secondary" onClick={toggleMajorDelete}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal> */}
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleApprove)}
-          toggle={toggleApprove}
+          style={{ color: "#1bd1ff" }}
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to Appprove this service</ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleApprove}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -720,26 +760,21 @@ const [majorApprove, setMajorApprove] = useState(null);
           >
             Approved
           </Button>{" "}
-          <Button color="secondary" onClick={toggleApprove}>
-            Cancel
-          </Button>
+         
         </ModalFooter>
       </Modal>
 
-
-
-
-
       <Modal isOpen={modalserviceDelete} toggle={toggleserviceDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleserviceDelete)}
-          toggle={toggleserviceDelete}
+          style={{ color: "#1bd1ff" }}
         >
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to delete this service</ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleserviceDelete}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -749,17 +784,13 @@ const [majorApprove, setMajorApprove] = useState(null);
           >
             Delete
           </Button>{" "}
-          <Button color="secondary" onClick={toggleserviceDelete}>
-            Cancel
-          </Button>
+      
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
         <ModalHeader
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleEdit)}
-          toggle={toggleEdit}
+          style={{ color: "#1bd1ff" }}
         >
           <ModalTitle>Do you want to edit service ?</ModalTitle>
         </ModalHeader>
@@ -813,7 +844,7 @@ const [majorApprove, setMajorApprove] = useState(null);
             </FormGroup>
           </Form>
         </ModalBody>
-        <ModalFooter>
+ <ModalFooter style={{ justifyContent: 'space-around'}}>
           <Button color="danger" onClick={() => { // handleServiceDetele();
             handleEditSubmit();
             setserviceModalEdit(false);
@@ -821,7 +852,7 @@ const [majorApprove, setMajorApprove] = useState(null);
           >
             Edit
           </Button>
-          <Button color="secondary" onClick={toggleEdit}>
+          <Button className="Cancel-button" onClick={toggleEdit}>
             Cancel
           </Button>
         </ModalFooter>
@@ -829,8 +860,6 @@ const [majorApprove, setMajorApprove] = useState(null);
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
           toggle={toggleDetails}
-          style={{ color: "#B22222" }}
-          close={closeBtn(toggleDetails)}
         >
           <h3>INFORMATION</h3>
         </ModalHeader>
@@ -871,7 +900,7 @@ const [majorApprove, setMajorApprove] = useState(null);
         </ModalBody>
       </Modal>
 
-   
+
     </>
   );
 }
