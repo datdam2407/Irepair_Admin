@@ -17,8 +17,13 @@ import {
   Table,
   Container,
   Row,
+  UncontrolledTooltip,
   Col,
+  Form ,Input,
 } from "reactstrap";
+import firebase from "firebase";
+import "firebase/storage";
+import 'firebase/firestore';
 import {
   Avatar,
 } from '@material-ui/core';
@@ -34,6 +39,9 @@ import "../assets/css/customSize.css";
 // } from "variables/charts.js";
 import { getWithToken } from "../service/ReadAPI";
 function Dashboard() {
+  const [dataBase , setDataBase] = useState([]);
+  const [loadDataBase, setLoadDatabase] = useState(true);
+const ref = firebase.firestore().collection("tips");
 
   const [dashboard, setDashboard] = useState([]);
   // const [companyListid, setCompanyList] = useState([]);
@@ -97,6 +105,23 @@ function Dashboard() {
   // if (window.Chart) {
   //   parseOptions(Chart, chartOptions());
   // }
+
+function getDataTips(){
+    ref.onSnapshot((querySnapshot => {
+      const items = []
+      querySnapshot.forEach((doc => {
+        items.push(doc.data())
+      }),
+      setDataBase(items),
+      setLoadDatabase(false),
+    )}),
+    )
+  }
+  useEffect(() =>{
+    getDataTips()
+    console.log("aaaaData" ,dataBase)
+  },[])
+  console.log("database" , ref)
   return (
     <>
       <CardsHeader name="Default" parentName="Dashboards" />
@@ -405,6 +430,263 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
+        <Row>
+          <Col xl="5">
+            <Card>
+              <CardHeader>
+                <h5 className="title-customer-h3"> POTENTIAL CUSTOMER</h5>
+              </CardHeader>
+              <CardHeader className="d-flex align-items-center">
+                <div className="d-flex align-items-center">
+                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                    <img
+                      alt="..."
+                      className="avatar-repairman"
+                      src={require("../assets/img/thuanne.jpg").default}
+                    />
+                  </a>
+                  <div className="mx-3">
+                    <a
+                      className="text-dark font-weight-600 text-sm"
+                      href="#pablo"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      {ShowRoyalName}
+                    </a>
+                    <small className="d-block text-muted">3 days ago</small>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardBody>
+                <p className="mb-4">
+                  App is calling repairman weakly! Very useful
+                </p>
+                <img
+                  alt="..."
+                  className="img-fluid rounded"
+                  src={require("../assets/img/img-1-1000x600.jpg").default}
+                />
+                <Row className="align-items-center my-3 pb-3 border-bottom">
+                  <Col sm="6">
+                    <div className="icon-actions">
+                      <a
+                        className="like active"
+                        href="#pablo"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        <i className="ni ni-like-2" />
+                        <span className="text-muted">150</span>
+                      </a>
+                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                        <i className="ni ni-chat-round" />
+                        <span className="text-muted">36</span>
+                      </a>
+                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                        <i className="ni ni-curved-next" />
+                        <span className="text-muted">12</span>
+                      </a>
+                    </div>
+                  </Col>
+                  <Col className="d-none d-sm-block" sm="6">
+                    <div className="d-flex align-items-center justify-content-sm-end">
+                      <div className="avatar-group">
+                        <a
+                          className="avatar avatar-xs rounded-circle"
+                          href="#pablo"
+                          id="tooltip36177092"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          {/* <img
+                            alt="..."
+                            src={require("../assets/img/thuanne.jpg").default}
+                          /> */}
+                        </a>
+                        <UncontrolledTooltip delay={0} target="tooltip36177092">
+                          Jessica Rowland
+                        </UncontrolledTooltip>
+                        <a
+                          href="#pablo"
+                          id="tooltip857639221"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <img
+                            alt="..."
+                            className="avatar-repairman-footer"
+                            src={require("../assets/img/thuanne.jpg").default}
+                          />
+                        </a>
+                        <UncontrolledTooltip
+                          delay={0}
+                          target="tooltip857639221"
+                        >
+                          Audrey Love
+                        </UncontrolledTooltip>
+                        <a
+                          // className="avatar avatar-xs rounded-circle"
+                          href="#pablo"
+                          id="tooltip260223080"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <img
+                            alt="..."
+                            className="avatar-repairman-footer"
+                            src={require("../assets/img/dangne2.jpg").default}
+                          />
+                        </a>
+                        <UncontrolledTooltip
+                          delay={0}
+                          target="tooltip260223080"
+                        >
+                          Nguyen Khanh
+                        </UncontrolledTooltip>
+                      </div>
+                      <small className="pl-2 font-weight-bold">
+                        and 30+ more
+                      </small>
+                    </div>
+                  </Col>
+                </Row>
+
+                <div className="mb-1">
+                  <Media className="media-comment">
+                    <img
+                      alt="..."
+                      className="avatar avatar-lg media-comment-avatar rounded-circle"
+                      src={require("../assets/img/khanhne2.jpg").default}
+                    />
+                    <Media>
+                      <div className="media-comment-text">
+                        <h6 className="h5 mt-0">Nguyen Khanh</h6>
+                        <p className="text-sm lh-160">
+                          Cras sit amet nibh libero nulla vel metus scelerisque
+                          ante sollicitudin. Cras purus odio vestibulum in
+                          vulputate viverra turpis.
+                        </p>
+                        <div className="icon-actions">
+                          <a
+                            className="like active"
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="ni ni-like-2" />
+                            <span className="text-muted">3 likes</span>
+                          </a>
+                          <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                            <i className="ni ni-curved-next" />
+                            <span className="text-muted">2 shares</span>
+                          </a>
+                        </div>
+                      </div>
+                    </Media>
+                  </Media>
+                  <Media className="media-comment">
+                    <img
+                      alt="..."
+                      className="avatar avatar-lg media-comment-avatar rounded-circle"
+                      src={require("../assets/img/thuanne.jpg").default}
+                    />
+                    <Media>
+                      <div className="media-comment-text">
+                        <h6 className="h5 mt-0">Le Thuan</h6>
+                        <p className="text-sm lh-160">
+                          Cras sit amet nibh libero, in gravida nulla. Nulla vel
+                          metus scelerisque ante sollicitudin. Cras purus odio,
+                          vestibulum in vulputate at, tempus viverra turpis.
+                        </p>
+                        <div className="icon-actions">
+                          <a
+                            className="like active"
+                            href="#pablo"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <i className="ni ni-like-2" />
+                            <span className="text-muted">10 likes</span>
+                          </a>
+                          <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                            <i className="ni ni-curved-next" />
+                            <span className="text-muted">1 share</span>
+                          </a>
+                        </div>
+                      </div>
+                    </Media>
+                  </Media>
+                  <hr />
+                  <Media className="align-items-center">
+                       <img
+                      className="avatar-rounded-circle-b-c"
+
+                      alt="..."
+                      src={localStorage.getItem("photo")}
+                    ></img>
+                    <Media body>
+                      <Form>
+                        <Input
+                          placeholder="Write your comment"
+                          rows="1"
+                          type="textarea"
+                        />
+                      </Form>
+                    </Media>
+                  </Media>
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+           
+            
+            <Col xl="7">
+            <Card>
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">Tips</h3>
+                  </div>
+                  
+                  <div className="col text-right">
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={() => window.location.href = "/admin/Company"}
+                      size="sm"
+                    >
+                      See all
+                    </Button>
+                  </div>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Content</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                  {dataBase.map((tips,index) => {
+                    return (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                      <td><img className="avatar-repairman" src={tips.imageUrl} /></td>  
+                     
+                        <td>{tips.content} </td>
+                        <td>
+                        {tips.title}
+
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+        </Row>
+
+       
       </Container>
     </>
   );

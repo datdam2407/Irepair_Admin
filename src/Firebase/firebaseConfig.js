@@ -3,6 +3,7 @@ import "firebase/storage";
 import 'firebase/firestore';
 import 'firebase/auth';
 import { post } from "../../src/service/ReadAPI";
+import { useState , useEffect } from "react";
 
 
 export const app = firebase.initializeApp({
@@ -15,6 +16,8 @@ export const app = firebase.initializeApp({
   measurementId: "G-ES2FWLTWYC"
 });
 
+
+
 if (!firebase.apps.length) {
   app;
 } else {
@@ -23,6 +26,7 @@ if (!firebase.apps.length) {
 const storage = firebase.storage();
 const auth = app.auth();
 const db = app.firestore();
+
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 const signInWithGoogle = async () => {

@@ -229,6 +229,9 @@ font-size: larger;}
         height: 100px;
         border-radius: 50%;
     }
+    .wrapper-css{
+        background-color: #771111;
+    }
 
 
 .Cancel-button{

@@ -104,6 +104,7 @@
 
     .sidebar-wrapper{
         position: relative;
+        background-color: rgba(255, 255, 255, 0.363);
         max-height: calc(100vh - 75px);
         min-height: 100%;
         overflow: auto;
@@ -456,7 +457,7 @@
     }
 
     .footer{
-        border-top: 1px solid #26648af5;
+        border-top: 1px solid #110e0ef5;
     }
 
     .navbar{
