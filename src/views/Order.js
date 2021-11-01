@@ -90,6 +90,13 @@ export default function Order() {
           var temp = res.data;
           setCustomerList(temp);
           setUseListCustomerShow(temp);
+          var totalPrice = 0;
+          temp.map((e, index) =>{
+            totalPrice  +=  e.Total;
+          })
+          console.log(totalPrice);
+
+          localStorage.setItem("revenus", totalPrice);
           setUseListCustomerShowPage(temp.slice(numberPage * 10 - 10, numberPage * 10));
           setTotalNumberPage(Math.ceil(temp.length / 10));
         }

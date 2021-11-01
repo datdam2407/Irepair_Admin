@@ -36,10 +36,10 @@ import {
   Media,
 
 } from "reactstrap";
-import deleteIcon from "assets/img/remove.png";
-import editIcon from "assets/img/edit.png";
+
 import { del, post, get, put, getWithToken, putWithToken, getWithTokenParams, postWithToken } from "../../service/ReadAPI";
 import "../../assets/css/customSize.css";
+import NumberFormat from 'react-number-format';
 
 import {
   TableBody,
@@ -203,7 +203,7 @@ export default function ManageCompany() {
         temp.map((e, index) =>{
           totalPrice  +=  temp[index].totalMoney;
         })
-        localStorage.setItem("revenus", totalPrice);
+        localStorage.setItem("revenusCompany", totalPrice);
       }).catch((err) => {
         console.log(err);
       });
@@ -246,7 +246,7 @@ export default function ManageCompany() {
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/Company";
-          alert("Approved Successfully")
+          // alert("Approved Successfully")
         }
       })
       .catch((err) => {
@@ -464,6 +464,7 @@ export default function ManageCompany() {
                         <FontAwesomeIcon icon={faCaretDown} />
                       )}
                     </th>
+                    <th className="description">Human resources</th>
                     <th
                       className="description"
                       onClick={() => {
@@ -489,6 +490,7 @@ export default function ManageCompany() {
                         <FontAwesomeIcon icon={faCaretDown} />
                       )}
                     </th>
+                    <th className="description">Revenus (Vnd)</th>
                     <th className="description">Hotline</th>
                     <th
                       className="description"
@@ -540,9 +542,22 @@ export default function ManageCompany() {
                         <td className="descriptionSize">
                           {e.description}
                         </td>
+                        <td className="descriptionSize">
+                          {e.totalWorker} members
+                        </td>
                         <td className="emailSize">
                           {e.email}
                         </td>
+                        <td>
+                        <NumberFormat className="input-type-css-order"
+                          thousandsGroupStyle="thousand"
+                          value={e.totalMoney} 
+                          decimalSeparator="."
+                          locale="vn"
+                          thousandSeparator={true}
+                          disabled />
+                      </td>
+                        
                         <td>
                           {e.hotline}
                         </td>

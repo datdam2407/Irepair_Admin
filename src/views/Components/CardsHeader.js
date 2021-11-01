@@ -74,11 +74,7 @@ const [ascending, setAscending] = useState(true);
         setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
         setTotalNumberPage(Math.ceil(temp.length / 8));
         console.log("companyList", temp);
-        var totalPrice =0;
-        temp.map((e, index) =>{
-          totalPrice  +=  temp[index].totalMoney;
-        })
-        localStorage.setItem("revenus", totalPrice);
+      
       }).catch((err) => {
         console.log(err);
       });
