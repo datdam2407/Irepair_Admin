@@ -27,10 +27,16 @@ import {
   OverlayTrigger,
   ModalTitle,
 } from "react-bootstrap";
-import "../../assets/css/customSize.css"
-import FilterState from "../MajorFields/FilterState"
-import { del, getWithTokenParams, getWithToken, putWithToken, postWithToken } from "../../service/ReadAPI";
-import { makeStyles } from '@material-ui/core/styles';
+import "../../assets/css/customSize.css";
+import FilterState from "../MajorFields/FilterState";
+import {
+  del,
+  getWithTokenParams,
+  getWithToken,
+  putWithToken,
+  postWithToken,
+} from "../../service/ReadAPI";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   TableBody,
   TableCell,
@@ -41,7 +47,7 @@ import {
   Avatar,
   Grid,
   Typography,
-} from '@material-ui/core';
+} from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSearch,
@@ -49,14 +55,14 @@ import {
   faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
 function MajorTables() {
-  //delete modal  
+  //delete modal
   const [modalDelete, setServiceModalDelete] = useState(false);
   const toggleDelete = () => setServiceModalDelete(!modalDelete);
-  //edit modal  
+  //edit modal
   const [searchName, setSearchName] = useState("");
   //modal create
   const [modalCreate, setMajorModalCreate] = useState(false);
-  const toggleCreate = () => setMajorModalCreate(!modalCreate)
+  const toggleCreate = () => setMajorModalCreate(!modalCreate);
   //Edit Major
   const [modalEdit, setMajorModalEdit] = useState(false);
   const toggleEdit = () => setMajorModalEdit(!modalEdit);
@@ -71,7 +77,7 @@ function MajorTables() {
   const [selectMajor, setSelectMajor] = useState();
   //Approved
   const [modalApprove, setMajorModalApprove] = useState(false);
-  const toggleApprove = () => setMajorModalApprove(!modalApprove)
+  const toggleApprove = () => setMajorModalApprove(!modalApprove);
   //Major List
   const [useListMajorShow, setUseListMajorShow] = useState([]);
   const [useListMajorShowPage, setUseListMajorShowPage] = useState([]);
@@ -129,17 +135,16 @@ function MajorTables() {
       // img: 'string',
     },
     name: {
-      fontWeight: 'bold',
-   color: '#1d98e0f7',
-
+      fontWeight: "bold",
+      color: "#1d98e0f7",
     },
     Status: {
-      fontWeight: '700',
-      textAlign: 'center',
-      width: '71px',
-      fontSize: '0.76rem',
-      color: 'white',
-      backgroundColor: 'green',
+      fontWeight: "700",
+      textAlign: "center",
+      width: "71px",
+      fontSize: "0.76rem",
+      color: "white",
+      backgroundColor: "green",
       borderRadius: 8,
       padding: "3px 10px",
       display: "inline-block",
@@ -229,13 +234,13 @@ function MajorTables() {
       });
   }
   //upload image
-  const [loading, setLoading] = useState(false)
-  const uploadImage = async e => {
-    const files = e.target.files
-    const data = new FormData()
-    data.append('file', files[0])
-    data.append('upload_preset', 'reactSWD')
-    setLoading(true)
+  const [loading, setLoading] = useState(false);
+  const uploadImage = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "reactSWD");
+    setLoading(true);
     const res = await fetch(
       " https://api.cloudinary.com/v1_1/fpt-claudary/image/upload",
       {
@@ -248,8 +253,12 @@ function MajorTables() {
     setLoading(false);
   };
   function onFileChange(event) {
-    var blob = event.target.files[0].slice(0, event.target.files[0].size, 'image/png');
-    const newFile = new File([blob], this.dat.imageName, { type: 'image/png' })
+    var blob = event.target.files[0].slice(
+      0,
+      event.target.files[0].size,
+      "image/png"
+    );
+    const newFile = new File([blob], this.dat.imageName, { type: "image/png" });
   }
   // get major by ID
   function getMajorByID(Id) {
@@ -287,16 +296,24 @@ function MajorTables() {
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
     if (sortedField !== null) {
-      getWithTokenParams(`/api/v1.0/majors`, params, localStorage.getItem("token")).then((res) => {
-        var temp = res.data.filter((x) => x.state !== "Completed");
-        setMajorList(temp);
-        setUseListMajorShow(temp);
-        setUseListMajorShowPage(temp.slice(numberPage * 7 - 7, numberPage * 7));
-        setTotalNumberPage(Math.ceil(temp.length / 7));
-        setCount(count);
-      }).catch((err) => {
-        console.log(err);
-      });
+      getWithTokenParams(
+        `/api/v1.0/majors`,
+        params,
+        localStorage.getItem("token")
+      )
+        .then((res) => {
+          var temp = res.data.filter((x) => x.state !== "Completed");
+          setMajorList(temp);
+          setUseListMajorShow(temp);
+          setUseListMajorShowPage(
+            temp.slice(numberPage * 7 - 7, numberPage * 7)
+          );
+          setTotalNumberPage(Math.ceil(temp.length / 7));
+          setCount(count);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
   //Paging
@@ -309,7 +326,7 @@ function MajorTables() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" , backgroundColor:"white"}}
+      style={{ color: "#B22222", backgroundColor: "white" }}
       onClick={x}
     >
       X
@@ -381,7 +398,7 @@ function MajorTables() {
     setImage("");
     setMajorID("");
     toggleEdit();
-}
+  }
   return (
     <>
       <Container fluid>
@@ -522,32 +539,36 @@ function MajorTables() {
                           <tr key={index}>
                             <TableCell>
                               <Grid container>
-                                <Tooltip html={(
-                                  <div style={{ width: 700, height: 300 }}>
-                                    <strong>
-                                      <ModalHeader
-                                        style={{ color: "yellow" }}
-                                      >
-                                        Detailed Major Information
-                                      </ModalHeader>
-                                      <ModalBody>
-                                        <Row>
-                                          <Col md={2}> Major Name:</Col>
-                                          <Col md={3}>  {e.Name}</Col>
-                                        </Row>
-                                        <Row>
-                                          <Col md={2}>Description:</Col>
-                                          <Col md={3}>
-                                            {e.Description}
-                                          </Col>
-                                        </Row>
-                                        <Row>
-                                          <Col md={3} ><img className="text-left-topic-toolpi" src={e.ImageUrl} /></Col>
-                                        </Row>
-                                      </ModalBody>
-                                    </strong>
-                                  </div>
-                                )}
+                                <Tooltip
+                                  html={
+                                    <div style={{ width: 700, height: 300 }}>
+                                      <strong>
+                                        <ModalHeader
+                                          style={{ color: "yellow" }}
+                                        >
+                                          Detailed Major Information
+                                        </ModalHeader>
+                                        <ModalBody>
+                                          <Row>
+                                            <Col md={2}> Major Name:</Col>
+                                            <Col md={3}> {e.Name}</Col>
+                                          </Row>
+                                          <Row>
+                                            <Col md={2}>Description:</Col>
+                                            <Col md={3}>{e.Description}</Col>
+                                          </Row>
+                                          <Row>
+                                            <Col md={3}>
+                                              <img
+                                                className="text-left-topic-toolpi"
+                                                src={e.ImageUrl}
+                                              />
+                                            </Col>
+                                          </Row>
+                                        </ModalBody>
+                                      </strong>
+                                    </div>
+                                  }
                                 >
                                   <Grid item lg={2}>
                                     <Avatar
@@ -560,8 +581,15 @@ function MajorTables() {
                                 </Tooltip>
 
                                 <Grid item lg={10}>
-                                  <Typography className={classes.name}>{e.Name}</Typography>
-                                  <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
+                                  <Typography className={classes.name}>
+                                    {e.Name}
+                                  </Typography>
+                                  <Typography
+                                    color="textSecondary"
+                                    variant="body2"
+                                  >
+                                    {e.Id}
+                                  </Typography>
                                 </Grid>
                               </Grid>
                             </TableCell>
@@ -571,11 +599,13 @@ function MajorTables() {
                               </Typography>
                               {/* <Typography color="textSecondary" variant="body2">{row.company}</Typography> */}
                             </TableCell>
-                            <TableCell onClick={() => {
-                              // setMajorEdit(e.Id);
-                              getMajorByID(e.Id);
-                              setMajorModalApprove(true)
-                            }}>
+                            <TableCell
+                              onClick={() => {
+                                // setMajorEdit(e.Id);
+                                getMajorByID(e.Id);
+                                setMajorModalApprove(true);
+                              }}
+                            >
                               <Typography
                                 className={classes.Status}
                                 style={{
@@ -758,15 +788,10 @@ function MajorTables() {
       </Container>
 
       <Modal isOpen={modalMajorDelete} toggle={toggleMajorDelete}>
-        <ModalHeader
-          style={{ color: "#1bd1ff" }}
-        >
-          Are you sure?
-        </ModalHeader>
+        <ModalHeader style={{ color: "#1bd1ff" }}>Are you sure?</ModalHeader>
         <ModalBody>Do you want to delete this major</ModalBody>
-        <ModalFooter style={{ justifyContent: 'space-around'}}>
-
-        <Button className="Cancel-button" onClick={toggleMajorDelete}>
+        <ModalFooter style={{ justifyContent: "space-around" }}>
+          <Button className="Cancel-button" onClick={toggleMajorDelete}>
             Cancel
           </Button>
           <Button
@@ -778,14 +803,11 @@ function MajorTables() {
           >
             Delete
           </Button>{" "}
-        
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={modalEdit} toggle={toggleEdit} centered size ="lg">
-        <ModalHeader
-          style={{ color: "#1bd1ff" }}
-        >
+      <Modal isOpen={modalEdit} toggle={toggleEdit} centered size="lg">
+        <ModalHeader style={{ color: "#1bd1ff" }}>
           <ModalTitle>Do you want to create new major ?</ModalTitle>
         </ModalHeader>
         <ModalBody>
@@ -795,25 +817,27 @@ function MajorTables() {
               rowSpacing={4}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
-
-            <Grid item xs={6}>  
-            <Form.Group className="mb-2">
-              <Form.Label>Major name</Form.Label>
-              <Form.Control type="text" placeholder="Major name" value={name}
-                onChange={e => setName(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Description"
-                as="textarea"
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                rows={3}
-              />
-            </Form.Group>
+              <Grid item xs={6}>
+                <Form.Group className="mb-2">
+                  <Form.Label>Major name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Major name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Description"
+                    as="textarea"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                  />
+                </Form.Group>
               </Grid>
 
               <Grid item xs={6}>
@@ -834,9 +858,13 @@ function MajorTables() {
             </Grid>
           </Form>
         </ModalBody>
-        <ModalFooter style={{ justifyContent: 'space-around'}}>
-
-        <Button className="Cancel-button" onClick={()=> {cancelRepairmanByID()}}>
+        <ModalFooter style={{ justifyContent: "space-around" }}>
+          <Button
+            className="Cancel-button"
+            onClick={() => {
+              cancelRepairmanByID();
+            }}
+          >
             Cancel
           </Button>
           <Button
@@ -848,14 +876,11 @@ function MajorTables() {
           >
             Update
           </Button>
-        
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={modalCreate} toggle={toggleCreate} centered size ="lg">
-        <ModalHeader
-          style={{ color: "#1bd1ff" }}
-        >
+      <Modal isOpen={modalCreate} toggle={toggleCreate} centered size="lg">
+        <ModalHeader style={{ color: "#1bd1ff" }}>
           <ModalTitle>Do you want to create new major ?</ModalTitle>
         </ModalHeader>
         <ModalBody>
@@ -865,28 +890,27 @@ function MajorTables() {
               rowSpacing={4}
               columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
-
-            <Grid item xs={6}>  
-              <Form.Group className="mb-2">
-                <Form.Label>Major name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Major name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Form.Group>
-              <Form.Group className="mb-2">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Description"
-                  as="textarea"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  rows={3}
-                />
-              </Form.Group>
+              <Grid item xs={6}>
+                <Form.Group className="mb-2">
+                  <Form.Label>Major name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Major name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Description"
+                    as="textarea"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                  />
+                </Form.Group>
               </Grid>
 
               <Grid item xs={6}>
@@ -907,9 +931,8 @@ function MajorTables() {
             </Grid>
           </Form>
         </ModalBody>
-        <ModalFooter style={{ justifyContent: 'space-around'}}>
-
-        <Button className="Cancel-button" onClick={toggleCreate}>
+        <ModalFooter style={{ justifyContent: "space-around" }}>
+          <Button className="Cancel-button" onClick={toggleCreate}>
             Cancel
           </Button>
           <Button
@@ -922,11 +945,10 @@ function MajorTables() {
           >
             Save
           </Button>
-
         </ModalFooter>
       </Modal>
-      
-      <Modal isOpen={modalStatus} toggle={toggleDetails}>
+
+      <Modal isOpen={modalStatus} toggle={toggleDetails} size = "lg">
         <ModalHeader
           style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDetails)}
@@ -934,44 +956,50 @@ function MajorTables() {
         >
           <h3>INFORMATION</h3>
         </ModalHeader>
-        <ModalBody>
-          <div className="img-container">
-            {selectMajor !== undefined ? <img className="text-left-topic" src={selectMajor.ImageUrl} /> : ""}
-          </div>
-        </ModalBody>
-        <ModalBody>
-          <b>Name:</b>{" "}
-          <a className="name">
-            {" "}
-            {selectMajor !== undefined ? selectMajor.Name : ""}
-          </a>
-          <br />
-          <b>Description:</b>{" "}
-          <a className="name">
-            {selectMajor !== undefined ? selectMajor.Description : ""}
-          </a>
-          <br />
-          <b>Status</b>
-          <a className="name">
-            {" "}
-            {selectMajor !== undefined
-              ? displayStateName(selectMajor.Status)
-              : ""}
-          </a>
-          <br />
-        </ModalBody>
 
+        <Grid container rowSpacing={4} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid item xs={5}>
+            <ModalBody>
+              <div className="img-container">
+                {selectMajor !== undefined ? (
+                  <img className="text-left-topic" src={selectMajor.ImageUrl} />
+                ) : (
+                  ""
+                )}
+              </div>
+            </ModalBody>
+          </Grid>
+
+          <Grid item xs={6}>
+            <ModalBody>
+              <b>Name:</b>{" "}
+              <a className="name">
+                {" "}
+                {selectMajor !== undefined ? selectMajor.Name : ""}
+              </a>
+              <br />
+              <b>Description:</b>{" "}
+              <a className="name">
+                {selectMajor !== undefined ? selectMajor.Description : ""}
+              </a>
+              <br />
+              <b>Status</b>
+              <a className="name">
+                {" "}
+                {selectMajor !== undefined
+                  ? displayStateName(selectMajor.Status)
+                  : ""}
+              </a>
+              <br />
+            </ModalBody>
+          </Grid>
+        </Grid>
       </Modal>
 
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
-        <ModalHeader
-          style={{ color: "#1bd1ff" }}
-        >
-          Are you sure?
-        </ModalHeader>
+        <ModalHeader style={{ color: "#1bd1ff" }}>Are you sure?</ModalHeader>
         <ModalBody>Do you want to appprove this major</ModalBody>
-        <ModalFooter style={{ justifyContent: 'space-around'}}>
-
+        <ModalFooter style={{ justifyContent: "space-around" }}>
           <Button
             color="danger"
             onClick={() => {

@@ -35,22 +35,22 @@ function UserPage() {
                         <Col className="pr-1" md="5">
                           <Form.Group>
                             <label>ID (disabled)</label>
-                            <Form.Control
+                            {/* <Form.Control
                               value={localStorage.getItem("IDADMIN")}
                               disabled
                               placeholder="Company"
                               type="text"
-                            ></Form.Control>
+                            ></Form.Control> */}
                           </Form.Group>
                         </Col>
                         <Col className="px-1" md="3">
                           <Form.Group>
                             <label>Username</label>
-                            <Form.Control
+                            {/* <Form.Control
                               value= {localStorage.getItem("NAME")}
                               placeholder="Username"
                               type="text"
-                            ></Form.Control>
+                            ></Form.Control> */}
                           </Form.Group>
                         </Col>
                         <Col className="pl-1" md="4">
@@ -58,13 +58,13 @@ function UserPage() {
                             <label htmlFor="exampleInputEmail1">
                               Email address
                             </label>
-                            <Form.Control
+                            {/* <Form.Control
                               placeholder="Email"
                               type="email"
                               value= {localStorage.getItem("email")}
                               disabled
                             > 
-                            </Form.Control>
+                            </Form.Control> */}
                           </Form.Group>
                         </Col>
                       </Row>
@@ -128,6 +128,8 @@ function UserPage() {
                   </Card>
                 </Form>
               </Col>
+
+              
               <Col md="4">
                 <Card className="card-user">
                   <Card.Header className="no-padding">

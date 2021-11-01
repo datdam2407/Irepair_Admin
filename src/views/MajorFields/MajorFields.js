@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown } from 'semantic-ui-react'
-import 'semantic-ui-css/semantic.min.css';
+import { Dropdown } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
 import {
   Modal,
   ModalHeader,
@@ -33,20 +33,21 @@ import {
   OverlayTrigger,
   ModalTitle,
 } from "react-bootstrap";
-import "../../assets/css/customSize.css"
-import { del, put, get, postWithToken, getWithTokenParams, getWithToken, putWithToken } from "../../service/ReadAPI";
-import { makeStyles } from '@material-ui/core/styles';
+import "../../assets/css/customSize.css";
 import {
-  TableCell,
-  Avatar,
-  Grid,
-  Typography,
-} from '@material-ui/core';
+  del,
+  put,
+  get,
+  postWithToken,
+  getWithTokenParams,
+  getWithToken,
+  putWithToken,
+} from "../../service/ReadAPI";
+import { makeStyles } from "@material-ui/core/styles";
+import { TableCell, Avatar, Grid, Typography } from "@material-ui/core";
 import FilterState from "./FilterState";
-import {
-  Tooltip,
-} from 'react-tippy';
-import 'react-tippy/dist/tippy.css'
+import { Tooltip } from "react-tippy";
+import "react-tippy/dist/tippy.css";
 function MajorFields() {
   //delete modal
   const [ServiceDelete, setServiceDelete] = useState(null);
@@ -87,10 +88,7 @@ function MajorFields() {
   const [sortedField, setSortedField] = useState("Id");
   const [ascending, setAscending] = useState(true);
   //Filter
-  const listStates = [
-    "Active",
-    "Inactive",
-  ];
+  const listStates = ["Active", "Inactive"];
   // custom table
   const useStyles = makeStyles((theme) => ({
     table: {
@@ -124,8 +122,8 @@ function MajorFields() {
       borderRadius: "32%",
     },
     name: {
-      fontWeight: 'bold',
-   color: '#1d98e0f7'
+      fontWeight: "bold",
+      color: "#1d98e0f7",
     },
     Status: {
       fontWeight: "700",
@@ -171,13 +169,13 @@ function MajorFields() {
   const [MajorSelectID, setMajorSelectID] = useState(ID);
   const [listSelectMajor, setListMajor] = useState([]);
   //upload image
-  const [loading, setLoading] = useState(false)
-  const uploadImage = async e => {
-    const files = e.target.files
-    const data = new FormData()
-    data.append('file', files[0])
-    data.append('upload_preset', 'reactSWD')
-    setLoading(true)
+  const [loading, setLoading] = useState(false);
+  const uploadImage = async (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+    data.append("file", files[0]);
+    data.append("upload_preset", "reactSWD");
+    setLoading(true);
     const res = await fetch(
       " https://api.cloudinary.com/v1_1/fpt-claudary/image/upload",
       {
@@ -203,8 +201,8 @@ function MajorFields() {
   const onChange = (e) => {
     const { value, id } = e.target;
     // console.log(value,id)
-    setFormData({ ...formData, [id]: value })
-  }
+    setFormData({ ...formData, [id]: value });
+  };
   //filter
   async function handleChooseState(e, id) {
     let newListState = [];
@@ -311,7 +309,7 @@ function MajorFields() {
     setMajorSelect(e.target.MajorID);
     setMajorSelectID(value.value);
   }
-  console.log("aaaa", MajorSelectID)
+  console.log("aaaa", MajorSelectID);
   useEffect(() => {
     let params = {};
     let currentField = {};
@@ -367,8 +365,8 @@ function MajorFields() {
       });
   }
   // /api/v1.0/major/{id}
-  //delete fc is updating error 
-  //BE is fixing 
+  //delete fc is updating error
+  //BE is fixing
   function deleteMajorFieldsByID() {
     del(`/api/v1.0/major-fields/${MajorDelete}`, localStorage.getItem("token"))
       .then((res) => {
@@ -390,18 +388,25 @@ function MajorFields() {
     if (stateList && stateList.length > 0)
       params["Status"] = stateList.reduce((f, s) => `${f},${s}`);
     if (sortedField !== null) {
+      getWithTokenParams(
+        `/api/v1.0/major-fields`,
+        params,
+        localStorage.getItem("token")
+      )
+        .then((res) => {
+          var temp = res.data.filter((x) => x.state !== "Completed");
+          setMajorList(temp);
 
-      getWithTokenParams(`/api/v1.0/major-fields`, params, localStorage.getItem("token")).then((res) => {
-        var temp = res.data.filter((x) => x.state !== "Completed");
-        setMajorList(temp);
-
-        setUseListMajorShow(temp);
-        setUseListMajorShowPage(temp.slice(numberPage * 6 - 6, numberPage * 6));
-        setTotalNumberPage(Math.ceil(temp.length / 6));
-        setCount(count);
-      }).catch((err) => {
-        console.log(err);
-      });
+          setUseListMajorShow(temp);
+          setUseListMajorShowPage(
+            temp.slice(numberPage * 6 - 6, numberPage * 6)
+          );
+          setTotalNumberPage(Math.ceil(temp.length / 6));
+          setCount(count);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
   //sort
@@ -434,7 +439,7 @@ function MajorFields() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" , backgroundColor:"white"}}
+      style={{ color: "#B22222", backgroundColor: "white" }}
       onClick={x}
     >
       X
@@ -730,17 +735,15 @@ function MajorFields() {
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 0 && 'rgb(34 176 34)')
-                                    ||
-                                    (e.Status === 1 && 'red')
-                                    ||
-                                    (e.Status === 2 && 'red'))
+                                  (e.Status === 0 && "rgb(34 176 34)") ||
+                                  (e.Status === 1 && "red") ||
+                                  (e.Status === 2 && "red"),
                               }}
                             >
                               {displayStateName(e.Status)}{" "}
                             </Typography>
                           </TableCell>
-                          <td className="td-actions" >
+                          <td className="td-actions">
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
                               overlay={
@@ -912,14 +915,10 @@ function MajorFields() {
         </Row>
       </Container>
       <Modal isOpen={modalMajorFieldDelete} toggle={toggleMajorDelete}>
-        <ModalHeader
-          style={{ color: "#B22222" }}
-        >
-          Are you sure?
-        </ModalHeader>
+        <ModalHeader style={{ color: "#B22222" }}>Are you sure?</ModalHeader>
         <ModalBody>Do you want to delete this major</ModalBody>
-         <ModalFooter style={{ justifyContent: 'space-around'}}>
-        <Button className="Cancel-button" onClick={toggleMajorDelete}>
+        <ModalFooter style={{ justifyContent: "space-around" }}>
+          <Button className="Cancel-button" onClick={toggleMajorDelete}>
             Cancel
           </Button>
           <Button
@@ -931,7 +930,6 @@ function MajorFields() {
           >
             Delete
           </Button>{" "}
-         
         </ModalFooter>
       </Modal>
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
@@ -943,8 +941,8 @@ function MajorFields() {
           Are you sure?
         </ModalHeader>
         <ModalBody>Do you want to Appprove this major</ModalBody>
-         <ModalFooter style={{ justifyContent: 'space-around'}}>
-         <Button className="Cancel-button" onClick={toggleApprove}>
+        <ModalFooter style={{ justifyContent: "space-around" }}>
+          <Button className="Cancel-button" onClick={toggleApprove}>
             Cancel
           </Button>
           <Button
@@ -957,15 +955,14 @@ function MajorFields() {
           >
             Approved
           </Button>{" "}
-         
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered size="lg">
-        <ModalHeader
-          style={{ color: "#B22222" }}
-        >
-          <ModalTitle><h3>Do you want to edit major field ?</h3></ModalTitle>
+        <ModalHeader style={{ color: "#B22222" }}>
+          <ModalTitle>
+            <h3>Do you want to edit major field ?</h3>
+          </ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Form>
@@ -1026,8 +1023,13 @@ function MajorFields() {
           </Form>
         </ModalBody>
 
-         <ModalFooter style={{ justifyContent: 'space-around'}}>
-         <Button className="Cancel-button" onClick={() => { cancelRepairmanByID() }}>
+        <ModalFooter style={{ justifyContent: "space-around" }}>
+          <Button
+            className="Cancel-button"
+            onClick={() => {
+              cancelRepairmanByID();
+            }}
+          >
             Cancel
           </Button>
           <Button
@@ -1040,15 +1042,14 @@ function MajorFields() {
           >
             Edit
           </Button>
-
         </ModalFooter>
       </Modal>
 
       <Modal isOpen={modalCreate} toggle={toggleCreate} centered size="lg">
-        <ModalHeader
-          style={{ color: "#B22222" }}
-        >
-          <ModalTitle><h3>Do you want to create major field ?</h3></ModalTitle>
+        <ModalHeader style={{ color: "#B22222" }}>
+          <ModalTitle>
+            <h3>Do you want to create major field ?</h3>
+          </ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Form>
@@ -1110,8 +1111,8 @@ function MajorFields() {
           </Form>
         </ModalBody>
 
-         <ModalFooter style={{ justifyContent: 'space-around'}}>
-         <Button className="Cancel-button" onClick={toggleCreate}>
+        <ModalFooter style={{ justifyContent: "space-around" }}>
+          <Button className="Cancel-button" onClick={toggleCreate}>
             Cancel
           </Button>
           <Button
@@ -1124,11 +1125,10 @@ function MajorFields() {
           >
             Save
           </Button>
-        
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={modalStatus} toggle={toggleDetails}>
+      <Modal isOpen={modalStatus} toggle={toggleDetails} size="lg">
         <ModalHeader
           style={{ color: "#B22222" }}
           close={closeBtn(toggleDetails)}
@@ -1136,44 +1136,52 @@ function MajorFields() {
         >
           <h3>INFORMATION</h3>
         </ModalHeader>
-        <ModalBody>
-          <div className="img-container">
-            {selectMajor !== undefined ? (
-              <img className="text-left-topic" src={selectMajor.ImageUrl} />
-            ) : (
-              ""
-            )}
-          </div>
-        </ModalBody>
-        <ModalBody>
-          <b>Major:</b>{" "}
-          <a className="name">
-            {selectMajor !== undefined
-              ? displayMajorName(selectMajor.MajorId)
-              : ""}
-          </a>
-          <br />
-          <b>Field:</b>{" "}
-          <a className="name">
-            {" "}
-            {selectMajor !== undefined ? selectMajor.Name : ""}
-          </a>
-          <br />
-          <b>Description:</b>{" "}
-          <a className="name">
-            {" "}
-            {selectMajor !== undefined ? selectMajor.Description : ""}
-          </a>
-          <br />
-          <b>Status</b>
-          <a className="name">
-            {" "}
-            {selectMajor !== undefined
-              ? displayStateName(selectMajor.Status)
-              : ""}
-          </a>
-          <br />
-        </ModalBody>
+
+        <Grid container rowSpacing={4} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          <Grid item xs={5}>
+            <ModalBody>
+              <div className="img-container">
+                {selectMajor !== undefined ? (
+                  <img className="text-left-topic" src={selectMajor.ImageUrl} />
+                ) : (
+                  ""
+                )}
+              </div>
+            </ModalBody>
+          </Grid>
+
+          <Grid item xs={6}>
+            <ModalBody>
+              <b>Major:</b>{" "}
+              <a className="name">
+                {selectMajor !== undefined
+                  ? displayMajorName(selectMajor.MajorId)
+                  : ""}
+              </a>
+              <br />
+              <b>Field:</b>{" "}
+              <a className="name">
+                {" "}
+                {selectMajor !== undefined ? selectMajor.Name : ""}
+              </a>
+              <br />
+              <b>Description:</b>{" "}
+              <a className="name">
+                {" "}
+                {selectMajor !== undefined ? selectMajor.Description : ""}
+              </a>
+              <br />
+              <b>Status</b>
+              <a className="name">
+                {" "}
+                {selectMajor !== undefined
+                  ? displayStateName(selectMajor.Status)
+                  : ""}
+              </a>
+              <br />
+            </ModalBody>
+          </Grid>
+        </Grid>
       </Modal>
     </>
   );

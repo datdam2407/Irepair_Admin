@@ -210,7 +210,7 @@ var routes = [
         component: UserPage,
       },
       {
-        name:"test modal",
+        name:"TEST MODAL ORDER",
         path: "/page-test",
         layout: "/admin",
         component: RegisterPage,

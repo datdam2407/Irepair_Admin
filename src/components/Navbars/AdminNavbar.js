@@ -110,11 +110,11 @@ function AdminNavbar() {
                   aria-labelledby="navbarDropdownMenuLink"
                 >
             
-                  <Dropdown.Item>
+                  {/* <Dropdown.Item>
                   
                     <i className="nc-icon nc-email-85"></i>
                     Messages
-                  </Dropdown.Item>
+                  </Dropdown.Item> */}
                   {/* <Dropdown.Item
                     href="#pablo"
                     onClick={(e) => e.preventDefault()}
@@ -126,11 +126,11 @@ function AdminNavbar() {
                     href="#pablo"
                     
                     onClick={(e) => 
-                      window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/user-page"}
+                      window.location.href = "https://main.d2ogi9l2y3fj48.amplifyapp.com/admin/dashboard"}
                       // window.location.href = "http://localhost:3000/admin/user-page"}
                   >
                     <i className="nc-icon nc-settings-90"></i>
-                    Setting
+                    Dashboard
                   </Dropdown.Item>
                   <div className="divider"></div>
 
