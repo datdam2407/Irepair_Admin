@@ -90,13 +90,13 @@ export default function Order() {
           var temp = res.data;
           setCustomerList(temp);
           setUseListCustomerShow(temp);
-          var totalPrice = 0;
-          temp.map((e, index) =>{
-            totalPrice  +=  e.Total;
-          })
-          console.log(totalPrice);
+          // var totalPrice = 0;
+          // temp.map((e, index) =>{
+          //   totalPrice  +=  e.Total;
+          // })
+          // console.log(totalPrice);
 
-          localStorage.setItem("revenus", totalPrice);
+          // localStorage.setItem("revenus", totalPrice);
           setUseListCustomerShowPage(temp.slice(numberPage * 10 - 10, numberPage * 10));
           setTotalNumberPage(Math.ceil(temp.length / 10));
         }
@@ -223,10 +223,10 @@ export default function Order() {
   // custom state
   function displayStateName(type) {
     const stateValue = {
-      3: "Pending",
+      1: "Pending",
       2: "Cancelled",
-      1: "",
-      0: "Compeleted",
+      0: "Received",
+      3: "Compeleted",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -531,8 +531,9 @@ export default function Order() {
                           className={classes.StatusOrder}
                           style={{
                             backgroundColor:
-                              ((e.Status === 0 && 'rgb(34, 176, 34)') ||
-                                (e.Status === 3 && 'gray') ||
+                              ((e.Status === 0 && '#1d98e0f7') ||
+                              (e.Status === 1 && 'gray') ||
+                                (e.Status === 3 && 'rgb(34, 176, 34)') ||
                                 (e.Status === 2 && 'red'))
                           }}
                         >  {displayStateName(e.Status)}</Typography>

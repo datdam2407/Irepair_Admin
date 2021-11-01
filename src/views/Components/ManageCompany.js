@@ -205,7 +205,7 @@ export default function ManageCompany() {
         temp.map((e, index) =>{
           totalPrice  +=  temp[index].totalMoney;
         })
-        localStorage.setItem("revenusCompany", totalPrice);
+        localStorage.setItem("revenus", totalPrice);
       }).catch((err) => {
         console.log(err);
       });
