@@ -19,6 +19,7 @@ import RegisterPage from "views/Pages/RegisterPage.js";
 // import LockScreenPage from "views/Pages/LockScreenPage.js";
 import img1 from "../src/assets/img/company.png"
 import Order from "views/Order";
+import { Modal } from "react-bootstrap";
 var routes = [
   
 
@@ -88,7 +89,13 @@ var routes = [
   },
   // manage repairman
  
-
+  {
+    path: "/order",
+    layout: "/admin",
+    name: " Order",
+    icon: "nc-icon nc-cart-simple",
+    component: Order,
+  },
   {
     path: "/customer",
     layout: "/admin",
@@ -103,13 +110,7 @@ var routes = [
     icon: "nc-icon nc-istanbul",
     component: ManageCompany,
   },
-  {
-    path: "/order",
-    layout: "/admin",
-    name: " Order",
-    icon: "nc-icon nc-cart-simple",
-    component: Order,
-  },
+  
   {
     path: "/repairman",
     layout: "/admin",
@@ -207,6 +208,12 @@ var routes = [
         path: "/user-page",
         layout: "/admin",
         component: UserPage,
+      },
+      {
+        name:"test modal",
+        path: "/page-test",
+        layout: "/admin",
+        component: RegisterPage,
       },
     
       // {
