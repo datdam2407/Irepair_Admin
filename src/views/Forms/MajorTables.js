@@ -178,7 +178,7 @@ function MajorTables() {
         name: name,
         description: description,
         imageUrl: picture,
-        status: 1,
+        status: 0,
       },
       localStorage.getItem("token")
     )
@@ -200,14 +200,13 @@ function MajorTables() {
         name: name,
         description: description,
         imageUrl: picture,
-        status: 1,
+        status: 0,
       },
       localStorage.getItem("token")
     )
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/major";
-          alert("Add Successfully")
         }
       })
       .catch((err) => {
@@ -222,7 +221,7 @@ function MajorTables() {
         name: name,
         description: description,
         imageUrl: picture,
-        status: 1,
+        status: 0,
       },
       localStorage.getItem("token")
     )
@@ -325,8 +324,8 @@ function MajorTables() {
   // Custom state 
   function displayStateName(type) {
     const stateValue = {
-      1: "Active",
-      0: "Inactive",
+      1: "Inactive",
+      0: "Active",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -557,8 +556,8 @@ function MajorTables() {
                                 className={classes.Status}
                                 style={{
                                   backgroundColor:
-                                    ((e.Status === 1 && 'rgb(34 176 34)') ||
-                                      (e.Status === 0 && 'red'))
+                                    ((e.Status === 1 && 'RED') ||
+                                      (e.Status === 0 && 'rgb(34 176 34)'))
                                 }}
                               >{displayStateName(e.Status)}</Typography>
                             </TableCell>
@@ -743,7 +742,7 @@ function MajorTables() {
         >
           Are you sure?
         </ModalHeader>
-        <ModalBody>Do you want to delete this major</ModalBody>
+        <ModalBody><h4>Do you want to delete this major?</h4></ModalBody>
         <ModalFooter style={{ justifyContent: 'space-around'}}>
 
         <Button className="Cancel-button" onClick={toggleMajorDelete}>
@@ -936,9 +935,11 @@ function MajorTables() {
         >
           Are you sure?
         </ModalHeader>
-        <ModalBody>Do you want to appprove this major</ModalBody>
+        <ModalBody><h4>Do you want to approve this major? </h4></ModalBody>
         <ModalFooter style={{ justifyContent: 'space-around'}}>
-
+        <Button className="Cancel-button" onClick={toggleApprove}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -949,9 +950,7 @@ function MajorTables() {
           >
             Approved
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleApprove}>
-            Cancel
-          </Button>
+         
         </ModalFooter>
       </Modal>
     </>

@@ -61,10 +61,9 @@ import { makeStyles } from '@material-ui/core/styles';
 export default function ManageCompany() {
   //Filter
   const listStates = [
-    "New",
-    "Approved",
-    "Blocked",
-    "Deleted",
+    "Active",
+    "Inactive",
+    
   ];
  
   const [filterState, setListFilterState] = useState(listStates);
@@ -210,7 +209,30 @@ export default function ManageCompany() {
       });
     }
   }
-  
+  function handleSubmit(){
+    postWithToken(
+      `/api/v1.0/companies`,
+      {
+        id: null,
+        companyName: name,
+        address: address,
+        description: description,
+        email: email,
+        hotline: hotline,
+        imageUrl: "none",
+        status: 0,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/Company";
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+  }
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
@@ -220,9 +242,8 @@ export default function ManageCompany() {
   // custom state
   function displayStateName(type) {
     const stateValue = {
-      3: "Deleted",
-      0: "New",
-      1: "Approved",
+      0: "Active",
+      1: "Inactive",
 
     };
     return stateValue[type] ? stateValue[type] : "";
@@ -298,13 +319,11 @@ export default function ManageCompany() {
     if (searchName !== "") {
       getWithToken(
         `/api/v1.0/companies?Name=` + searchName,
-
         localStorage.getItem("token")
       ).then((res) => {
         var temp = res.data;
         setCompanyList(temp);
         sort(sortedField, ascending, temp);
-        setNumberPage(1);
         setUseListCompanyShow(temp);
         setUseListCompanyShowPage(temp.slice(0, 8));
         setTotalNumberPage(Math.ceil(temp.length / 8));
@@ -570,9 +589,8 @@ export default function ManageCompany() {
                             className={classes.Status}
                             style={{
                               backgroundColor:
-                                ((e.status === 1 && 'green') ||
-                                  (e.status === 0 && '#119fb3') ||
-                                  (e.status === 3 && 'red')
+                                ((e.status === 1 && 'red') ||
+                                  (e.status === 0 && 'green')
                                 )
                             }}
                           >{displayStateName(e.status)}</Typography>
@@ -911,7 +929,7 @@ export default function ManageCompany() {
         >
           Are you sure?
         </ModalHeader>
-        <ModalBody>Do you want to delete this company</ModalBody>
+        <ModalBody><h4>Do you want to delete this company ?</h4></ModalBody>
         <ModalFooter style={{ justifyContent: 'space-around' }}>
           <Button className="Cancel-button" onClick={toggleDelete}>
             Cancel
@@ -936,7 +954,7 @@ export default function ManageCompany() {
         >
           Are you sure?
         </ModalHeader>
-        <ModalBody>Do you want to appprove this Company</ModalBody>
+        <ModalBody><h4>Do you want to appprove this company ?</h4></ModalBody>
         <ModalFooter style={{ justifyContent: 'space-around' }}>
           <Button className="Cancel-button" onClick={toggleApprove}>
             Cancel

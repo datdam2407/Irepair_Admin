@@ -18,22 +18,38 @@ import firebase from "firebase";
 import "firebase/storage";
 import 'firebase/firestore';
 import 'firebase/auth';
+import { postWithToken } from "service/ReadAPI";
 function Admin() {
 
-    // let history = useHistory();
+  // useEffect(() => {
+  //  postWithToken(
+  //     `/api/v1.0/authenticate-admins?token=${localStorage.getItem("token2")}`,
+  //     {
+  //       token: localStorage.getItem("token2")
+  //     },
+      
+  //   )
+  //     .then((res) => {
+  //       if (res.status === 401) {
+  //         window.location = "/";
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+ 
+    
 
-// useEffect(() => {
-//     if (localStorage.getItem("token") === null) {
-//       history.push("/");
-//     }
-// }, []);
 const [isSignin, setIsSignin]= useState(true);
+const [Message, setMessage]= useState("");
 firebase.auth().onAuthStateChanged((user)=>{
   if (user){
   return setIsSignin(true);}
   setIsSignin(false);
 })
-if(isSignin === true){
+
+if(isSignin === true ){
   const [sidebarImage, setSidebarImage] = React.useState(image1);
   const [sidebarBackground, setSidebarBackground] = React.useState("black");
   const getRoutes = (routes) => {

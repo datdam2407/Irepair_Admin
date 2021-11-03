@@ -38,44 +38,6 @@ function Login() {
     }, 1000);
   });
   
-  // function handleSubmit(e) {
-  //     e.preventDefault();
-  //     setButton(true);
-  //     setTextBtnLogin(<Spinner size="sm" color="danger" children="" />);
-  //     post("auth/login", {
-  //       username: username,
-  //       password: password,
-  //     })
-  //       .then((res) => {
-  //         setButton(false);
-  //         setTextBtnLogin("Login");
-  //         return res;
-  //       }, (err) => {
-  //         console.log(err.response)
-  //         if (err.response)
-  //           if (err.response.status === 401)
-  //             popUpMessage("Username or password is incorrect. Please try again")
-  //           else
-  //             popUpMessage(err.response.data.message);
-  //         else {
-  //           console.log(err.message)
-  //           popUpMessage(err.message)
-  //         }
-  //         setButton(false);
-  //         setTextBtnLogin("Login");
-  //       })
-  //       .then((res) => {
-  //         if (res)
-  //           res.data.firstLogin === true
-  //             ? setModal(true)
-  //             : res.data.roles[0] === "ROLE_ADMIN"
-  //               // ? history.push("/Admin")
-  //               // : history.push("/Staff");
-  //               ? window.location.href = "/Admin"
-  //       })
-  //       ;
-  //   }
-
   return (
     <>
       <div
@@ -88,11 +50,11 @@ function Login() {
             <div className="login__container">
               <h3 className="title-login">WELCOME TO IREPAIR</h3>
               <img className="login-logon" src={loginMan} />
-              <div class="input-div one">
-                <div class="i">
+              <div className="input-div one">
+                <div className="i">
                   <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
                 </div>
-                <div class="div">
+                <div className="div">
                   <Input
                     type="text"
                     name="username"
@@ -102,11 +64,11 @@ function Login() {
                   />
                 </div>
               </div>
-              <div class="input-div pass">
-                <div class="i">
+              <div className="input-div pass">
+                <div className="i">
                   <FontAwesomeIcon icon={faLock}></FontAwesomeIcon>
                 </div>
-                <div class="div">
+                <div className="div">
                   {/* <h5>Password</h5> */}
                   <Input
                     type="password"

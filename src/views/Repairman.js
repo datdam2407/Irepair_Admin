@@ -135,7 +135,6 @@ export default function Repairman() {
             .then((res) => {
                 if (res.status === 200) {
                     window.location = "/admin/repairman";
-                    alert("Deleted Successfully")
                 }
             })
     }
@@ -143,20 +142,17 @@ export default function Repairman() {
         await putWithToken(
             `/api/v1.0/repairmans?repairmanId=${RepairmanApprove}`,
             {
-                id: "String",
-                RepairmanName: "String",
-                description: "String",
-                FieldId: "String",
-                RepairmanId: "String",
-                Price: 0,
+                avatar: "String",
+                name: "String",
+                email: "String",
+                phoneNumber: "String",
+                username: "string",
                 ImageUrl: "String",
                 status: 0,
             }, localStorage.getItem("token")
         )
             .then((res) => {
                 if (res.status === 200) {
-                    alert("Approved Successfully")
-
                     window.location = "/admin/repairman";
                 }
             })
@@ -724,7 +720,7 @@ export default function Repairman() {
                 >
                     Are you sure?
                 </ModalHeader>
-                <ModalBody>Do you want to Appprove this repairman</ModalBody>
+                <ModalBody><h4>Do you want to Appprove this repairman ? </h4></ModalBody>
          <ModalFooter style={{ justifyContent: 'space-around'}}>
          <Button className="Cancel-button" onClick={toggleApprove}>
                         Cancel
@@ -750,7 +746,7 @@ export default function Repairman() {
                 >
                     Are you sure?
                 </ModalHeader>
-                <ModalBody>Do you want to delete this repairman</ModalBody>
+                <ModalBody><h4>Do you want to delete this repairman? </h4></ModalBody>
          <ModalFooter style={{ justifyContent: 'space-around'}}>
          <Button className="Cancel-button" onClick={toggleDelete}>
                         Cancel

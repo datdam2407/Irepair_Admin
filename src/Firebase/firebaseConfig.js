@@ -31,6 +31,7 @@ const googleProvider = new firebase.auth.GoogleAuthProvider();
 
 const signInWithGoogle = async () => {
   try {
+    
     const res = await auth.signInWithPopup(googleProvider);
     console.log("data", res)
     let t = await getToken(res.user._lat); // token firebase
@@ -41,22 +42,25 @@ const signInWithGoogle = async () => {
     localStorage.setItem("ADDRESS", t.data.addressDetail);// token Api
     localStorage.setItem("PHONE", t.data.phoneNumber);// token Api
     localStorage.setItem("photo", res.user.photoURL);// token Api
-    // console.log("respone", res);
+    
+    console.log("respone", res);
     console.log("email ne", t.data.email)
     console.log("photo ne", res.user.photoURL)
     
-    // localStorage.setItem("name", res.name);
+    localStorage.setItem("token2", res.user._lat);
+
     // localStorage.setItem("email", t.data.email);
-  } catch (err) {
+  }
+   catch (err) {
     console.log(err)
     return
   }
 };
 async function getToken(FBasetoken) {
   return await post(`/api/v1.0/authenticate-admins?token=${FBasetoken}`,
-    { token: FBasetoken });
+    { token: FBasetoken }
+    )
 }
-
 const logout = () => {
   auth.signOut();
   localStorage.clear();
@@ -69,6 +73,7 @@ export {
   auth,
   db,
   storage,
+  getToken,
   signInWithGoogle,
   logout,
 };

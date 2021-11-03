@@ -366,7 +366,6 @@ function MajorFields() {
       .then((res) => {
         if (res.status === 200) {
           window.location = "/admin/fields";
-          alert("Delete Successfully")
         }
       }).catch((err) => {
         console.log(err);
@@ -872,11 +871,11 @@ function MajorFields() {
       </Container>
       <Modal isOpen={modalMajorFieldDelete} toggle={toggleMajorDelete}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+            style={{ color: "#1bd1ff" }}
         >
           Are you sure?
         </ModalHeader>
-        <ModalBody>Do you want to delete this major</ModalBody>
+        <ModalBody><h4>Do you want to delete this major field? </h4></ModalBody>
          <ModalFooter style={{ justifyContent: 'space-around'}}>
         <Button className="Cancel-button" onClick={toggleMajorDelete}>
             Cancel
@@ -895,13 +894,13 @@ function MajorFields() {
       </Modal>
       <Modal isOpen={modalApprove} toggle={toggleApprove}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+            style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleApprove)}
           toggle={toggleApprove}
         >
           Are you sure?
         </ModalHeader>
-        <ModalBody>Do you want to Appprove this major</ModalBody>
+        <ModalBody><h4>Do you want to appprove this major field?</h4></ModalBody>
          <ModalFooter style={{ justifyContent: 'space-around'}}>
          <Button className="Cancel-button" onClick={toggleApprove}>
             Cancel
@@ -922,7 +921,7 @@ function MajorFields() {
 
       <Modal isOpen={modalEdit} toggle={toggleEdit} centered size="lg">
         <ModalHeader
-          style={{ color: "#B22222" }}
+            style={{ color: "#1bd1ff" }}
         >
           <ModalTitle><h3>Do you want to edit major field ?</h3></ModalTitle>
         </ModalHeader>
@@ -1005,7 +1004,7 @@ function MajorFields() {
 
       <Modal isOpen={modalCreate} toggle={toggleCreate} centered size="lg">
         <ModalHeader
-          style={{ color: "#B22222" }}
+            style={{ color: "#1bd1ff" }}
         >
           <ModalTitle><h3>Do you want to create major field ?</h3></ModalTitle>
         </ModalHeader>
@@ -1089,7 +1088,7 @@ function MajorFields() {
 
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
-          style={{ color: "#B22222" }}
+            style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDetails)}
           toggle={toggleDetails}>
           <h3>INFORMATION</h3>

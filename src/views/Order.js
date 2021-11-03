@@ -220,6 +220,11 @@ export default function Order() {
         console.log(err)
       });
   }
+  function checkDisableImage(state) {
+    const list = ["null"];
+    if (list.includes(state)) return true;
+    else return false;
+  }
   // custom state
   function displayStateName(type) {
     const stateValue = {
@@ -504,16 +509,26 @@ export default function Order() {
                       {/* {e.CancelPerson} */}
                       {/* {displayServiceName(e.CancelPerson)} */}
                       {/* </td> */}
-                       <td className="point-customer">
+                      {checkDisableImage(e.FeedbackMessage) !== null ?
+                      <td className="point-customer">
+                     {e.FeedbackMessage}  {e.FeedbackPoint}<TiStar/>
+                  
+                </td>  : (
+                  <td> null
+                  </td>
+                    )}
+
+
+                {/* <td className="point-customer">
                        {e.FeedbackMessage} / {e.FeedbackPoint} <TiStar/>
-                      </td>
+                      </td> */}
                       <TableCell>
                         <Typography
                           className={classes.Status}
                           style={{
                             color:
                               ((e.CancelReason === "Không liên hệ được thợ" && 'red') ||
-                                // ((e.CancelReason === "Không liên hệ được thợ" && 'red') ||
+                                (e.CancelReason === "Tôi không thể liên lạc được với khách" && 'red') ||
                                 (e.CancelReason === "Thời gian chờ thợ đến quá lâu" && 'red'))
                           }}
                         >{e.CancelReason}</Typography>

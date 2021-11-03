@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Dropdown } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch,
+  faCaretDown,
+  faCaretUp,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   Modal,
   ModalHeader,
@@ -12,11 +19,13 @@ import {
   InputGroup,
   DropdownToggle,
   DropdownMenu,
+  DropdownItem,
   InputGroupButtonDropdown,
   Input,
   FormGroup,
 } from "reactstrap";
-import NumberFormat from 'react-number-format';
+import "../../assets/css/customSize.css"
+
 // react-bootstrap components
 import {
   Button,
@@ -30,10 +39,13 @@ import {
   Tooltip,
   ModalTitle,
 } from "react-bootstrap";
-import "../../assets/css/customSize.css"
+// import "../../assets/css/customSize.css"
 
-import { del, put, getWithToken, getWithTokenParams, putWithToken } from "../../service/ReadAPI";
+import { del, put, get, getWithParams, getWithToken, getWithTokenParams, putWithToken, postWithToken } from "../../service/ReadAPI";
 import FilterState from "../MajorFields/FilterState";
+
+// import 'ag-grid-community/dist/styles/ag-grid.css';
+// import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
 import { makeStyles } from '@material-ui/core/styles';
 
 import {
@@ -47,17 +59,14 @@ import {
   Grid,
   Typography,
 } from '@material-ui/core';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSearch,
-  faCaretDown,
-  faCaretUp,
-} from "@fortawesome/free-solid-svg-icons";
 function ManageSevice() {
   //delete modal  
-  const [ServiceDelete, setServiceDelete] = useState(null);
   const [modalDelete, setServiceModalDelete] = useState(false);
   const toggleDelete = () => setServiceModalDelete(!modalDelete);
+
+  //modal create
+  const [modalCreate, setserviceModalCreate] = useState(false);
+  const toggleCreate = () => setserviceModalCreate(!modalCreate)
 
   //Edit service
   const [serviceEdit, setserviceEdit] = useState(null);
@@ -72,16 +81,12 @@ function ManageSevice() {
   const [modalStatus, setModalStatus] = useState(false);
   const toggleDetails = () => setModalStatus(!modalStatus);
   const [selectservice, setSelectservice] = useState();
-  //
-  const [majorApprove, setMajorApprove] = useState(null);
-  const [modalApprove, setModalApprove] = useState(false);
-  const toggleApprove = () => setModalApprove(!modalApprove)
+
 
   //service List
   const [useListserviceShow, setUseListserviceShow] = useState([]);
   const [useListserviceShowPage, setUseListserviceShowPage] = useState([]);
   const [serviceList, setserviceList] = useState([]);
-  const [serviceListID, setserviceListID] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
   const [count, setCount] = useState(1);
@@ -96,30 +101,27 @@ function ManageSevice() {
   const [serviceID, setserviceID] = useState("");
   const [fieldSelect, setfieldSelect] = useState("")
   const [data1, setData1] = useState({ array: [] });
-  const [FieldSelectID, setFieldSelectID] = useState(-1)
+  const [FieldSelectID, setFieldSelectID] = useState(1)
+
+  const [sortedField, setSortedField] = useState("Id");
+  const [ascending, setAscending] = useState(true);
 
 
 
   const [listField, setListField] = useState([]);
   //filter 
   const listStates = [
-    "New",
-    "Approved",
-    "Deleted",
-    "Updating",
+    "Active",
+    "Inative",
   ];
   const [filterState, setListFilterState] = useState(listStates);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
   const [stateListFilter, setstateListFilter] = useState([]);
-  const [CompanyDelete, setCompanyDelete] = useState(null);
-
   const toggleDropDown = () => setDropdownOpen(!dropdownOpen);
   const toggleDropDown1 = () => setDropdownOpen1(!dropdownOpen1);
-  //sort
-  const [sortedField, setSortedField] = useState("Id");
-  const [ascending, setAscending] = useState(true);
 
+  //search name
   const [searchName, setSearchName] = useState("");
 
   const useStyles = makeStyles((theme) => ({
@@ -157,7 +159,7 @@ function ManageSevice() {
     },
     name: {
       fontWeight: 'bold',
-   color: '#1d98e0f7'
+      color: "#1d98e0f7",
     },
     Status: {
       fontWeight: '700',
@@ -166,13 +168,13 @@ function ManageSevice() {
       color: 'white',
       backgroundColor: 'green',
       borderRadius: 8,
-      textAlign: 'center',
       padding: '3px 10px',
       display: 'inline-block'
     }
   }));
 
   const classes = useStyles();
+  //filter
   async function handleChooseState(e, id) {
     let newListState = [];
     if (id === -1) {
@@ -186,83 +188,10 @@ function ManageSevice() {
       if (e.target.checked) newListState = [...stateListFilter, id];
       else newListState = stateListFilter.filter((item) => item !== id);
     }
-    //console.log(newListState);
     setstateListFilter(newListState);
     getserviceList(newListState);
   }
-
-  console.log("field", FieldSelectID)
-
-  // update
-  async function handleEditSubmit2() {
-    await putWithToken(
-      `/api/v1.0/services?serviceId=${CompanyDelete}`,
-      {
-        id: "String",
-        ServiceName: "String",
-        description: "String",
-        FieldId: "String",
-        companyId: "String",
-        Price: 0,
-        ImageUrl: "String",
-        status: 0,
-      }, localStorage.getItem("token")
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/service";
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  async function handleEditSubmit(e) {
-    await put(
-      `/api/v1.0/services`,
-      {
-        id: serviceID,
-        ServiceName: name,
-        description: description,
-        FieldId: FieldSelectID,
-        companyId: companyId,
-        Price: price,
-        ImageUrl: picture,
-        status: 1,
-      },
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/service";
-
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function handleOnchangeSelectedAsset(e, value) {
-    //console.log(e.target,value);
-    setfieldSelect(e.target.fieldId);
-    setFieldSelectID(value.value);
-  }
-
-  // /api/v1.0/service/{id}
-  //delete fc
-  function deleteserviceByID() {
-    del(`/api/v1.0/services/${serviceDelete}`, localStorage.getItem("token")
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/service";
-
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
-  }
-  //Load service
+  //load service
   useEffect(() => {
     getserviceList();
   }, []);
@@ -275,25 +204,227 @@ function ManageSevice() {
         var temp = res.data.filter((x) => x.state !== "Completed");
         setserviceList(temp);
         setUseListserviceShow(temp);
-        setUseListserviceShowPage(temp.slice(numberPage * 10 - 10, numberPage * 10));
-        setTotalNumberPage(Math.ceil(temp.length / 10));
+        setUseListserviceShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
+        setTotalNumberPage(Math.ceil(temp.length / 8));
         setCount(count);
       }).catch((err) => {
         console.log(err);
       });
     }
   }
+
+  //major fields
+  useEffect(() => {
+    let params = {};
+    let currentField = {};
+    let FieldId = "";
+    getWithToken(
+      `/api/v1.0/major-fields`, localStorage.getItem("token")
+    ).then((res) => {
+      FieldId = res.data.FieldId
+      console.log(res.data)
+      currentField['text'] = `${res.data.name}`;
+      currentField['value'] = res.data.fieldId;
+      currentField['key'] = res.data.fieldId;
+      setFieldID(FieldId);
+
+    }).then(() => {
+    });
+
+    params['Status'] = [0].reduce((f, s) => `${f},${s}`);
+    getWithTokenParams("/api/v1.0/major-fields", params, localStorage.getItem("token")
+    ).then(res => {
+      setData1(res.data);
+      const newlistField = res.data.reduce((list, item) => [...list,
+      {
+        text: `${item.Name}`,
+        value: item.Id,
+        key: item.Id
+      }], [])
+      setListField(
+        [currentField, ...newlistField],
+      );
+    })
+  }, []);
+
+  console.log("field", FieldSelectID)
+  // update fc
+  async function handleEditSubmit(e) {
+    await putWithToken(
+      `/api/v1.0/services`,
+      {
+        id: serviceID,
+        ServiceName: name,
+        description: description,
+        FieldId: FieldSelectID,
+        companyId: companyId,
+        Price: price,
+        ImageUrl: picture,
+        status: 1,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/service";
+        }
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  // create fc
+  async function handleSubmitCreate(e) {
+    await postWithToken(
+      `/api/v1.0/services`,
+      {
+        id: null,
+        ServiceName: name,
+        description: description,
+        FieldId: FieldSelectID,
+        companyId: localStorage.getItem("IDCompany"),
+        Price: price,
+        ImageUrl: picture,
+        status: 0,
+      },
+      localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/service";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function onSubmitSearch(e) {
+    e.preventDefault();
+    if (searchName !== "") {
+      getWithToken(
+        `/api/v1.0/services?Name=` + searchName,
+
+        localStorage.getItem("token")
+      ).then((res) => {
+        var temp = res.data;
+        setserviceList(temp);
+        sort(sortedField, ascending, temp);
+        setNumberPage(1);
+        setUseListserviceShow(temp);
+        setUseListserviceShowPage(temp.slice(0, 8));
+        setTotalNumberPage(Math.ceil(temp.length / 8));
+
+      });
+    } else if (searchName == "") {
+      getWithToken("/api/v1.0/services", localStorage.getItem("token")).then(
+        (res) => {
+          if (res && res.status === 200) {
+            var temp2 = res.data;
+            setserviceList(temp2);
+            setUseListserviceShow(temp2);
+            setUseListserviceShowPage(temp2.slice(numberPage * 8 - 8, numberPage * 8));
+            setTotalNumberPage(Math.ceil(temp2.length / 8));
+          }
+        })
+    }
+  }
+
+  const [loading, setLoading] = useState(false)
+
+  const uploadImage = async e => {
+    const files = e.target.files
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'reactSWD')
+    setLoading(true)
+    const res = await fetch(
+      ' https://api.cloudinary.com/v1_1/fpt-claudary/image/upload',
+      {
+        method: 'POST',
+        body: data
+      }
+    )
+    const file = await res.json()
+    setImage(file.secure_url)
+    setLoading(false)
+  }
+
+
+  function handleOnchangeSelectedAsset(e, value) {
+    setfieldSelect(e.target.fieldId);
+    setFieldSelectID(value.value);
+  }
+  function getserviceByID(Id) {
+    getWithToken(`/api/v1.0/services/${Id}`, localStorage.getItem("token")).then((res) => {
+      setserviceID(Id);
+      setName(res.data.serviceName);
+      setDescription(res.data.description);
+      setImage(res.data.imageUrl);
+      setPrice(res.data.price);
+      setCompanyID(res.data.companyId);
+      setFieldID(res.data.fieldId);
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+  //delete fc
+  function deleteserviceByID() {
+    del(`/api/v1.0/services/${serviceDelete}`, localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          window.location = "/admin/service";
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
+  }
+  function cancelServiceByID() {
+    setName("");
+    setDescription("");
+    setImage("");
+    setPrice("");
+    setCompanyID("");
+    setFieldID("");
+    setserviceID("");
+    setFieldSelectID(-1);
+    toggleEdit();
+  }
+  //Load service
+
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
-    setUseListserviceShowPage(useListserviceShow.slice(number * 10 - 10, number * 10));
-    setTotalNumberPage(Math.ceil(useListserviceShow.length / 10));
+    setUseListserviceShowPage(useListserviceShow.slice(number * 8 - 8, number * 8));
+    setTotalNumberPage(Math.ceil(useListserviceShow.length / 8));
+  }
+  //sort
+  function sort(field, status, items) {
+    items.sort((a, b) => {
+      if (a[field] < b[field]) {
+        if (status) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+      if (a[field] > b[field]) {
+        if (status) {
+          return 1;
+        } else {
+          return -1;
+        }
+      }
+      return 0;
+    });
   }
 
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#1bd1ff" }}
+      style={{ color: "#B22222" }}
       onClick={x}
     >
       X
@@ -302,10 +433,8 @@ function ManageSevice() {
   // Custom state 
   function displayStateName(type) {
     const stateValue = {
-      1: "Approved",
-      0: "New",
-      2: "Deleted",
-      3: "Updating"
+      1: "Inactive",
+      0: "Active",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -341,55 +470,6 @@ function ManageSevice() {
     
     };
     return stateValue[type] ? stateValue[type] : "";
-  }
-  function onSubmitSearch(e) {
-    e.preventDefault();
-    if (searchName !== "") {
-      getWithToken(
-        `/api/v1.0/services?Name=` + searchName,
-
-        localStorage.getItem("token")
-      ).then((res) => {
-        var temp = res.data;
-        setserviceList(temp);
-        sort(sortedField, ascending, temp);
-        setNumberPage(1);
-        setUseListserviceShow(temp);
-        setUseListserviceShowPage(temp.slice(0, 10));
-        setTotalNumberPage(Math.ceil(temp.length / 10));
-
-      });
-    } else if (searchName == "") {
-      getWithToken("/api/v1.0/services", localStorage.getItem("token")).then(
-        (res) => {
-          if (res && res.status === 200) {
-            var temp2 = res.data;
-            setserviceList(temp2);
-            setUseListserviceShow(temp2);
-            setUseListserviceShowPage(temp2.slice(numberPage * 10 - 10, numberPage * 10));
-            setTotalNumberPage(Math.ceil(temp2.length / 10));
-          }
-        })
-    }
-  }//sort
-  function sort(field, status, items) {
-    items.sort((a, b) => {
-      if (a[field] < b[field]) {
-        if (status) {
-          return -1;
-        } else {
-          return 1;
-        }
-      }
-      if (a[field] > b[field]) {
-        if (status) {
-          return 1;
-        } else {
-          return -1;
-        }
-      }
-      return 0;
-    });
   }
   return (
     <>
@@ -440,11 +520,12 @@ function ManageSevice() {
                       </InputGroup>
                     </Form>
                   </Col>
-                  {/* <Col md={10} align="right">
-                <Button variant="contained" className="add-major-custom" color="primary" onClick={handleClickOpen}>Add service</Button>
-              </Col> */}
+                  <Col md={9} align="right">
+                    <Button variant="contained" className="add-major-custom" color="primary" onClick={() => { setserviceModalCreate(true); }}>Add service</Button>
+                  </Col>
                 </Row>
               </div>
+
               <Card.Body className="table">
                 <Table className="table">
                   <thead>
@@ -465,31 +546,6 @@ function ManageSevice() {
                       >
                         Service Name{" "}
                         {sortedField === "Id" ? (
-                          ascending === true ? (
-                            <FontAwesomeIcon icon={faCaretUp} />
-                          ) : (
-                            <FontAwesomeIcon icon={faCaretDown} />
-                          )
-                        ) : (
-                          <FontAwesomeIcon icon={faCaretDown} />
-                        )}
-                      </th>
-                      <th
-                        className="description"
-                        onClick={() => {
-                          if (sortedField === "FieldId" && ascending) {
-                            setSortedField("FieldId");
-                            setAscending(false);
-                            sort("FieldId", false, useListserviceShowPage);
-                          } else {
-                            setSortedField("FieldId");
-                            setAscending(true);
-                            sort("FieldId", true, useListserviceShowPage);
-                          }
-                        }}
-                      >
-                        Major field{" "}
-                        {sortedField === "FieldId" ? (
                           ascending === true ? (
                             <FontAwesomeIcon icon={faCaretUp} />
                           ) : (
@@ -524,23 +580,22 @@ function ManageSevice() {
                           <FontAwesomeIcon icon={faCaretDown} />
                         )}
                       </th>
-{/*                     
                       <th
                         className="description"
                         onClick={() => {
-                          if (sortedField === "Price" && ascending) {
-                            setSortedField("Price");
+                          if (sortedField === "FieldId" && ascending) {
+                            setSortedField("FieldId");
                             setAscending(false);
-                            sort("Price", false, useListserviceShowPage);
+                            sort("FieldId", false, useListserviceShowPage);
                           } else {
-                            setSortedField("Price");
+                            setSortedField("FieldId");
                             setAscending(true);
-                            sort("Price", true, useListserviceShowPage);
+                            sort("FieldId", true, useListserviceShowPage);
                           }
                         }}
                       >
-                        Price{" "}
-                        {sortedField === "Price" ? (
+                        Major Field{" "}
+                        {sortedField === "FieldId" ? (
                           ascending === true ? (
                             <FontAwesomeIcon icon={faCaretUp} />
                           ) : (
@@ -549,8 +604,32 @@ function ManageSevice() {
                         ) : (
                           <FontAwesomeIcon icon={faCaretDown} />
                         )}
-                      </th> */}
-                      <th className="description">Status</th>
+                      </th>
+                      <th
+                        className="description"
+                        onClick={() => {
+                          if (sortedField === "Status" && ascending) {
+                            setSortedField("Status");
+                            setAscending(false);
+                            sort("Status", false, useListserviceShowPage);
+                          } else {
+                            setSortedField("Status");
+                            setAscending(true);
+                            sort("Status", true, useListserviceShowPage);
+                          }
+                        }}
+                      >
+                        Status{" "}
+                        {sortedField === "Status" ? (
+                          ascending === true ? (
+                            <FontAwesomeIcon icon={faCaretUp} />
+                          ) : (
+                            <FontAwesomeIcon icon={faCaretDown} />
+                          )
+                        ) : (
+                          <FontAwesomeIcon icon={faCaretDown} />
+                        )}
+                      </th>
                       <th className="viewAll">Actions</th>
                     </tr>
                   </thead>
@@ -563,33 +642,24 @@ function ManageSevice() {
                               <Grid item lg={10}>
                                 <Typography className={classes.name}>{e.ServiceName}</Typography>
                                 <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
-                                {/* <Typography color="textSecondary" variant="body2">{e.Id}</Typography> */}
                               </Grid>
                             </Grid>
                           </TableCell>
-                          <td>
-                            {/* {displayCompanyName(e.FieldId)} */}
-                            {displayCompanyName(e.FieldId)}
-                            {/* {e.FieldId} */}
-                          </td>
+
                           <td>
                             {e.Description}
                           </td>
-                          
-                          {/* <td>
-                            <NumberFormat className="input-type-css"
-                              thousandsGroupStyle="thousand"
-                              value={e.Price}
-                              decimalSeparator="."
-                              thousandSeparator={true}
-                              disabled />
-                          </td> */}
+                          <td>
+                            {displayCompanyName(e.FieldId)}
+                          </td>
+
+                        
                           <TableCell>
                             <Typography
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 1 && 'rgb(34, 176, 34)')
+                                  ((e.Status === 1 && 'red')
                                     ||
                                     (e.Status === 0 && 'rgb(50, 102, 100)')
                                     ||
@@ -599,35 +669,12 @@ function ManageSevice() {
                               }}
                             >{displayStateName(e.Status)}</Typography>
                           </TableCell>
-                          <td className="td-actions" >
+                          <td className="td-actions">
                             <OverlayTrigger
                               onClick={(e) => e.preventDefault()}
                               overlay={
                                 <Tooltip id="tooltip-960683717">
-                                  Approved Service..
-                                </Tooltip>
-                              }
-                              placement="right"
-                            >
-                              <Button
-                                onClick={() => {
-                                  setModalApprove(true);
-                                  setCompanyDelete(e.Id);
-                                  // setSelectservice(e);
-                                }}
-                                className="btn-link btn-icon"
-                                type="button"
-                                variant="success"
-                              >
-                                <i className="fas fa-check"></i>
-                              </Button>
-                            </OverlayTrigger>
-
-                            <OverlayTrigger
-                              onClick={(e) => e.preventDefault()}
-                              overlay={
-                                <Tooltip id="tooltip-960683717">
-                                  View Service..
+                                  View Post..
                                 </Tooltip>
                               }
                               placement="right"
@@ -644,6 +691,52 @@ function ManageSevice() {
                                 <i className="far fa-image"></i>
                               </Button>
                             </OverlayTrigger>
+
+                            <OverlayTrigger
+                              overlay={
+                                <Tooltip id="tooltip-436082023">
+                                  Edit Post..
+                                </Tooltip>
+                              }
+                              placement="right"
+                            >
+                              <Button
+                                // onClick={() => handleUpdate(e.data)}
+                                // onGridReady={onGridReady}
+                                onClick={() => {
+                                  // setserviceEdit(e.Id);
+                                  getserviceByID(e.Id);
+                                  setserviceModalEdit(true);
+                                }}
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="success"
+                              >
+                                <i className="fas fa-edit"></i>
+                              </Button>
+                            </OverlayTrigger>
+                            <OverlayTrigger
+                              onClick={(e) => e.preventDefault()}
+                              overlay={
+                                <Tooltip id="tooltip-334669391">
+                                  Remove Post..
+                                </Tooltip>
+                              }
+                              placement="right\"
+                            >
+                              <Button
+                                onClick={() => {
+                                  setserviceDelete(e.Id);
+                                  setserviceModalDelete(true);
+                                }}
+                                className="btn-link btn-icon"
+                                type="button"
+                                variant="danger"
+                              >
+                                <i className="fas fa-times"></i>
+                              </Button>
+                            </OverlayTrigger>
+
                           </td>
                         </tr>
                       );
@@ -661,6 +754,8 @@ function ManageSevice() {
                         <PaginationLink
                           className="page"
                           previous
+                          //disable={numberPage === 1 ? "true" : "false"}
+
                           onClick={() => {
                             if (numberPage - 1 > 0) {
                               onClickPage(numberPage - 1);
@@ -722,6 +817,7 @@ function ManageSevice() {
                         <PaginationLink
                           className="page"
                           next
+                          //disable={numberPage === totalNumberPage ? true : false}
                           onClick={() => {
                             if (numberPage + 1 <= totalNumberPage) {
                               onClickPage(numberPage + 1);
@@ -739,40 +835,15 @@ function ManageSevice() {
           </Col>
         </Row>
       </Container>
-      <Modal isOpen={modalApprove} toggle={toggleApprove}>
-        <ModalHeader
-          style={{ color: "#1bd1ff" }}
-        >
-          Are you sure?
-        </ModalHeader>
-        <ModalBody>Do you want to Appprove this service</ModalBody>
- <ModalFooter style={{ justifyContent: 'space-around'}}>
-        <Button className="Cancel-button" onClick={toggleApprove}>
-            Cancel
-          </Button>
-          <Button
-            color="danger"
-            onClick={() => {
-              // deleteMajorFieldsByID();
-              handleEditSubmit2();
-              setModalApprove(false);
-            }}
-          >
-            Approved
-          </Button>{" "}
-         
-        </ModalFooter>
-      </Modal>
-
       <Modal isOpen={modalserviceDelete} toggle={toggleserviceDelete}>
         <ModalHeader
-          style={{ color: "#1bd1ff" }}
+          style={{ color: "#1d98e0f7" }}
         >
-          Are you sure?
+          <h3>Are you sure?</h3>
         </ModalHeader>
-        <ModalBody>Do you want to delete this service</ModalBody>
- <ModalFooter style={{ justifyContent: 'space-around'}}>
-        <Button className="Cancel-button" onClick={toggleserviceDelete}>
+        <ModalBody> <h4>Do you want to delete this service ?</h4></ModalBody>
+        <ModalFooter  style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={() => { toggleserviceDelete(); }}>
             Cancel
           </Button>
           <Button
@@ -784,121 +855,231 @@ function ManageSevice() {
           >
             Delete
           </Button>{" "}
+         
+        </ModalFooter>
+      </Modal>
+          
+      <Modal isOpen={modalCreate} toggle={toggleCreate} centered size="lg" >
+        <ModalHeader
+          style={{ color: "#1d98e0f7" }}
+        >
+          <ModalTitle><h3>Do you want to create new service ?</h3></ModalTitle>
+        </ModalHeader>
+
+        <ModalBody>
+          <Form>
+            <Grid
+              container
+              rowSpacing={4}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              <Grid item xs={6}>
+
+              
+
+                <FormGroup className="mb-2">
+                  <Form.Label>Service name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Service name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </FormGroup>
+                <Form.Label>Field </Form.Label>
+                <FormGroup className="mb-2">
+                  <Dropdown
+                    fluid
+                    search
+                    selection
+                    value={fieldSelect}
+                    onChange={handleOnchangeSelectedAsset}
+                    options={listField}
+                  />
+                </FormGroup>
+                <FormGroup className="mb-2">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Description"
+                    as="textarea"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                  />
+                </FormGroup>
+              </Grid>
+
+              <Grid item xs={6}>
+                <Form.Group className="mb-2 ml-5">
+                  <Form.Label>Picture</Form.Label>
+                  <Form.Control type="file" onFileChange={picture}
+                    onChange={uploadImage}
+                  />
+                  {loading ? (
+                    <h3>Loading...</h3>
+                  ) : (
+                    <img src={picture} style={{ width: '220px' }} />
+                  )}
+                </Form.Group>
+              </Grid>
+            </Grid>
+          </Form>
+        </ModalBody>
       
+        <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={toggleCreate}>
+            Cancel
+          </Button>
+          <Button
+            color="danger"
+            onClick={() => {
+              // handleServiceDetele();
+              handleSubmitCreate();
+              setserviceModalCreate(false);
+            }}
+          >
+            Save
+          </Button>
+        
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={modalEdit} toggle={toggleEdit} centered>
+      <Modal isOpen={modalEdit} toggle={toggleEdit} centered size="lg" >
         <ModalHeader
-          style={{ color: "#1bd1ff" }}
+          style={{ color: "#1d98e0f7" }}
         >
-          <ModalTitle>Do you want to edit service ?</ModalTitle>
+          <ModalTitle><h3>Do you want to edit service ?</h3></ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Form>
-            <FormGroup className="mb-2">
-              <Form.Label>Company </Form.Label>
-              <Form.Control disabled type="text" placeholder="name" value={companyId}
-                onChange={e => setCompanyID(e.target.value)}
-              />
-            </FormGroup>
-            <Form.Label>Field </Form.Label>
-            <FormGroup className="mb-2">
-              <Dropdown
-                fluid
-                search
-                selection
-                value={fieldSelect}
-                onChange={handleOnchangeSelectedAsset}
-                options={listField} />
-            </FormGroup>
-
-            <FormGroup className="mb-2">
-              <Form.Label>service name</Form.Label>
-              <Form.Control type="text" placeholder="Service name" value={name}
-                onChange={e => setName(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup className="mb-2">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Description"
-                as="textarea"
-                value={description}
-                onChange={e => setDescription(e.target.value)}
-                rows={3}
-              />
-            </FormGroup>
-            <FormGroup className="mb-2">
-              <Form.Label>Price</Form.Label>
-              <Form.Control type="number" placeholder="service name" value={price}
-                onChange={e => setPrice(e.target.value)}
-              />
-            </FormGroup>
-            <FormGroup className="mb-3">
-              <Form.Label>Picture</Form.Label>
-              <Form.Control type="text" value={picture}
-                onChange={e => setImage(e.target.value)}
-              />
-            </FormGroup>
+            <Grid
+              container
+              rowSpacing={4}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            >
+              <Grid item xs={6}>
+              <FormGroup className="mb-2">
+                  <Form.Label>Service name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Service name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </FormGroup>
+                <Form.Label>Field </Form.Label>
+                <FormGroup className="mb-2">
+                  <Dropdown
+                    fluid
+                    search
+                    selection
+                    value={fieldSelect}
+                    
+                    onChange={handleOnchangeSelectedAsset}
+                    options={listField}
+                  />
+                </FormGroup>
+            
+                <FormGroup className="mb-2">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Description"
+                    as="textarea"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    rows={3}
+                  />
+                </FormGroup>
+              </Grid>
+              <Grid item xs={6}>
+                <Form.Group className="mb-2 ml-5">
+                  <Form.Label>Picture</Form.Label>
+                  <Form.Control type="file" onFileChange={picture}
+                    onChange={uploadImage}
+                  />
+                  {loading ? (
+                    <h3>Loading...</h3>
+                  ) : (
+                    <img src={picture} style={{ width: '220px' }} />
+                  )}
+                </Form.Group>
+              </Grid>
+            </Grid>
           </Form>
         </ModalBody>
- <ModalFooter style={{ justifyContent: 'space-around'}}>
-          <Button color="danger" onClick={() => { // handleServiceDetele();
-            handleEditSubmit();
-            setserviceModalEdit(false);
-          }}
-          >
-            Edit
-          </Button>
-          <Button className="Cancel-button" onClick={toggleEdit}>
+        <ModalFooter style={{ justifyContent: 'space-around'}}>
+        <Button className="Cancel-button" onClick={() => { cancelServiceByID(); }}>
             Cancel
           </Button>
+          <Button
+            color="danger"
+            onClick={() => {
+              // handleServiceDetele();
+              handleEditSubmit();
+              setserviceModalEdit(false);
+            }}
+          >
+            Update
+          </Button>
+          
         </ModalFooter>
       </Modal>
+
+
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
           toggle={toggleDetails}
+          style={{ color: "#B22222" }}
+          close={closeBtn(toggleDetails)}
         >
-          <h3>INFORMATION</h3>
+          Detailed service information
         </ModalHeader>
-        <ModalBody className="Modal-body-view-all-service">
+        <ModalBody>
           <Row>
             <Col></Col>
-            <Col className="view-item-size-main" md={3}>Name:</Col>
-            <Col className="view-item-size" md={8}>
+            <Col md={3}>Name</Col>
+            <Col md={8}>
               {selectservice !== undefined ? selectservice.ServiceName : ""}
             </Col>
           </Row>
           <Row>
             <Col></Col>
-            <Col className="view-item-size-main" md={3}>Company:</Col>
-            <Col className="view-item-size" md={8}>
+            <Col md={3}>Company</Col>
+            <Col md={8}>
               {selectservice !== undefined ? displayCompanyName(selectservice.CompanyId) : ""}
             </Col>
           </Row>
           <Row>
             <Col></Col>
-            <Col className="view-item-size-main" md={3}>Description:</Col>
-            <Col className="view-item-size" md={8}>
+            <Col md={3}>Description</Col>
+            <Col md={8}>
               {selectservice !== undefined ? selectservice.Description : ""}
             </Col>
           </Row>
           <Row>
             <Col></Col>
-            <Col className="view-item-size-main" md={3}>Price:</Col>
-            <Col className="view-item-size" md={8}>
+            <Col md={3}>Price</Col>
+            <Col md={8}>
               {selectservice !== undefined ? selectservice.Price : ""}
             </Col>
           </Row>
           <Row>
             <Col></Col>
-            <Col className="view-item-size-main" md={3}>State:</Col>
-            <Col className="view-item-size" md={8}>{selectservice !== undefined ? displayStateName(selectservice.Status) : ""}</Col>
+            <Col md={3}>Picture</Col>
+            <Col md={8}>
+              {selectservice !== undefined ? <img className="text-left-topic" src={selectservice.ImageUrl} /> : ""}
+            </Col>
+          </Row>
+          <Row>
+            <Col></Col>
+            <Col md={3}>State</Col>
+            <Col md={8}>{selectservice !== undefined ? displayStateName(selectservice.Status) : ""}</Col>
           </Row>
         </ModalBody>
       </Modal>
+
 
 
     </>
