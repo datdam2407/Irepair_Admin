@@ -105,7 +105,6 @@ export default function Repairman() {
                 }
             });
     }, []);
-    console.log("aaaaaa", RepairmanListName);
 
     function displayRepairmanName(type) {
         const stateValue = {
@@ -165,7 +164,6 @@ export default function Repairman() {
                 console.log(err);
             });
     }
-    console.log("lisstID", RepairmanList)
     useEffect(() => {
         getWithToken("/api/v1.0/repairmans", localStorage.getItem("token")).then(
             (res) => {

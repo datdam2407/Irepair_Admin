@@ -38,6 +38,7 @@
     "react-firebase-hooks": "^3.0.4",
     "react-icons": "^4.3.1",
     "react-jvectormap": "0.0.16",
+    "react-md": "^3.1.1",
     "react-notification-alert": "0.0.13",
     "react-number-format": "^4.7.3",
     "react-router": "5.2.0",

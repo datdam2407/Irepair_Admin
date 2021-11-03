@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
+import ImageUpload from "./Upload/ImageUpload.js";
 // javascipt plugin for creating charts
 import {
   Badge,
@@ -19,8 +20,17 @@ import {
   Row,
   UncontrolledTooltip,
   Col,
-  Form ,Input,
+  Input,
+   Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
+import {
+  Form ,
+  ModalTitle,
+  Tooltip,
+} from "react-bootstrap";
 import firebase from "firebase";
 import "firebase/storage";
 import 'firebase/firestore';
@@ -38,22 +48,19 @@ import "../assets/css/customSize.css";
 //   chartExample2,
 // } from "variables/charts.js";
 import { getWithToken } from "../service/ReadAPI";
-function Dashboard() {
+export default function Dashboard() {
   const [dataBase , setDataBase] = useState([]);
   const [loadDataBase, setLoadDatabase] = useState(true);
-const ref = firebase.firestore().collection("tips");
 
-  const [dashboard, setDashboard] = useState([]);
-  // const [companyListid, setCompanyList] = useState([]);
-  // const [serviceList, setServiceList] = useState("");
-  // const [RPList, setRepairmanList] = useState("");
-  // const [OrderList, setOrderList] = useState("");
-  // const [OrderCancelList, setOrderCancelList] = useState("");
-  // const [OrderCusCancelList, setOrderCusCancelList] = useState("");
-  // const [OrderCompletedList, setOrderComletedlList] = useState("");
-  // const [Customer, setCustomer] = useState([]);
+const [modalCreate, setTipsModalCreate] = useState(false);
+const toggleCreate = () => setTipsModalCreate(!modalCreate)
+
+
   const [TopCustomer, setTopCustomer] = useState([]);
   const [TopCompany, setTopCompany] = useState([]);
+  const [content , setcontent] = useState("");
+  const [title, settitle] = useState("");
+  const [imageUrl , setimageUrl ] = useState("");
   const [TopService, setTopService] = useState([]);
   const [ShowRoyalName, setShowRoyal] = useState([]);
   const [UseListCustomerShow, setUseListCustomerShow] = useState([]);
@@ -61,25 +68,76 @@ const ref = firebase.firestore().collection("tips");
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
 
-  // const [MajorFields, setMajorFields] = useState("");
-  // const [Major, setMajor] = useState("");
 
+  const ref = firebase.firestore().collection("tips");
+
+const db = firebase.firestore();
+const storge = firebase.storage();
+const [data, setData] = useState({
+  content : "",
+  imageUrl : null,
+  title : ""
+});
+function handleChange(e){
+  e.preventDefault();
+  const {name , value} = e.target;
+  setData((prev) => {
+    return {...prev ,[name]:value}
+  })
+}
+
+ 
+  const createTips = (e) => {
+    // e.preventDefault();
+    // const uploadTask = storge.bucket().file('/path/to/file');
+    const uploadTask = storge.ref("tips/"+ data.imageUrl.name).put(data.imageUrl)
+    uploadTask.on(
+      "stage_change",
+      (snapshot) =>{
+        let progess;
+        progess =(snapshot.bytesTransferred/snapshot.totalBytes)*100;
+        console.log("progess image" ,progess);
+      },
+      (err) =>{
+        console.log(err);
+      },
+      ()=>{
+        storge.ref("tips")
+        .child(data.imageUrl.name)
+        .getDownloadURL()
+        .then((url)=>{
+        db.collection("tips")
+        .doc(data.content)
+        .set({
+          content : content,
+          imageUrl : url,
+          title : title
+        }).then(()=>{
+          setData({
+            content : "",
+            imageUrl : null,
+            title : ""
+          })
+          
+        })
+        })
+      }
+    )
+    // ref.add({
+    //   content : content,
+    //   imageUrl : data.imageUrl.name,
+    //   title : title
+    // }).then((res) => console.log("tips created"))
+  }
+ 
   useEffect(() => {
-
-    // getWithToken("/api/v1.0/all-count" , localStorage.getItem("token")).then(
-    //   (res) => {
-    //       setTopCompany(res.data.topComps);
-    //       setUseListCompanyShow(res.data.topCompany);
-    //       setUseListCompanyShowPage(res.data.topCompany.slice(numberPage2 * 10 - 10, numberPage2 * 10));       
-    //       setTotalNumberPage2(Math.ceil(res.data.topCompany.length / 10));
-    //     });
     getWithToken("/api/v1.0/all-count", localStorage.getItem("token")).then(
       (res) => {
         setTopCustomer(res.data.topCustomer);
         setTopCompany(res.data.topComps);
         setTopService(res.data.topService);
         setUseListCustomerShow(res.data.topCustomer);
-        setShowRoyal(res.data.topCustomer[0].fullName);
+        // setShowRoyal(res.data.topCustomer[0].fullName);
         setUseListCustomerShowPage(res.data.topCustomer.slice(numberPage * 10 - 10, numberPage * 10));
 
         setTotalNumberPage(Math.ceil(res.data.topCustomer.length / 10));
@@ -92,9 +150,9 @@ const ref = firebase.firestore().collection("tips");
     setUseListCustomerShowPage(useListCustomerShow.slice(number * 10 - 10, number * 10));
     setTotalNumberPage(Math.ceil(useListCustomerShow.length / 10));
   }
-  console.log("top 10 cus", TopCustomer)
-  console.log("top 10 company", TopCompany)
-  console.log("top 10 service", TopService)
+  // console.log("top 10 cus", TopCustomer)
+  // console.log("top 10 company", TopCompany)
+  // console.log("top 10 service", TopService)
   const [activeNav, setActiveNav] = React.useState(1);
   // const [chartExample1Data, setChartExample1Data] = React.useState("data1");
   const toggleNavs = (e, index) => {
@@ -639,19 +697,15 @@ function getDataTips(){
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Tips</h3>
+                    <h3 className="mb-0">Favorite Tips</h3>
                   </div>
-                  
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={() => window.location.href = "/admin/Company"}
-                      size="sm"
+                  {/* <div className="col text-right"> */}
+                    {/* <Button
+                      onClick={() =>setTipsModalCreate(true)}
                     >
-                      See all
-                    </Button>
-                  </div>
+                      Create
+                    </Button> */}
+                  
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
@@ -661,7 +715,6 @@ function getDataTips(){
                     <th scope="col">Content</th>
                     <th scope="col">Description</th>
                     <th scope="col">Title</th>
-                    <th scope="col">Rate</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -684,12 +737,63 @@ function getDataTips(){
               </Table>
             </Card>
           </Col>
+          
         </Row>
 
        
       </Container>
+      <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
+        <ModalHeader
+          style={{ color: "#1bd1ff" }}
+
+        >
+          <ModalTitle>Do you want to create new company</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <Form
+          >
+            <Form.Group className="mb-2">
+              <Form.Label>Title</Form.Label>
+              <Form.Control type="text"
+                placeholder="Name"
+                name="title"
+                onChange={e => settitle(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Content</Form.Label>
+              <Form.Control type="text"
+                placeholder="Content"
+                onChange={e => setcontent(e.target.value)}
+              // onChange={name}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Image</Form.Label>
+  
+                  <ImageUpload setData={setData}/>
+                    
+            </Form.Group>
+          </Form>
+        </ModalBody>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleCreate}>
+            Cancel
+          </Button>
+          <Button onClick={(e) =>  // handleCompanyDetele();
+            // handleSubmit()
+            createTips()
+            // e.preventDefault()
+            // setCompanyModalEdit(false);
+          }
+          >
+            Save
+          </Button>
+        </ModalFooter>
+      </Modal>
+
     </>
   );
 }
 
-export default Dashboard;

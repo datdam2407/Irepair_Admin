@@ -432,7 +432,7 @@ export default function Order() {
                   {/* <th className="description">Created Date </th> */}
                   {/* <th className="description">Create Date</th> */}
 
-                  {/* <th className="description">Person</th> */}
+                  <th className="description">Feedbacks</th>
                   <th className="description">Reason</th>
                   <th
                     className="description-price"
@@ -504,6 +504,9 @@ export default function Order() {
                       {/* {e.CancelPerson} */}
                       {/* {displayServiceName(e.CancelPerson)} */}
                       {/* </td> */}
+                       <td className="point-customer">
+                       {e.FeedbackMessage} / {e.FeedbackPoint} <TiStar/>
+                      </td>
                       <TableCell>
                         <Typography
                           className={classes.Status}
@@ -538,9 +541,7 @@ export default function Order() {
                           }}
                         >  {displayStateName(e.Status)}</Typography>
                       </TableCell>
-                      {/* <td className="point-customer">
-                        {e.FeedbackPoint} <TiStar/>
-                      </td> */}
+                     
                       {/* <td className="point-customer">
                         {e.FeedbackMessage}
                       </td> */}

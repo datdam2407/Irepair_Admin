@@ -309,7 +309,6 @@ function MajorFields() {
     setMajorSelect(e.target.MajorID);
     setMajorSelectID(value.value);
   }
-  console.log("aaaa", MajorSelectID)
   useEffect(() => {
     let params = {};
     let currentField = {};
@@ -320,7 +319,6 @@ function MajorFields() {
     ).then((res) => {
       MajorID = res.data.Id
       // MajorNameByFieldID = res.data.name
-      console.log(res.data)
       currentField['text'] = `${res.data.Name}`;
       currentField['value'] = res.data.Id;
       currentField['key'] = res.data.Id;

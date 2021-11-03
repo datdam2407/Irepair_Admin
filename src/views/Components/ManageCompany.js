@@ -200,7 +200,6 @@ export default function ManageCompany() {
         setUseListCompanyShow(temp);
         setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
         setTotalNumberPage(Math.ceil(temp.length / 8));
-        console.log("companyList", temp);
         var totalPrice =0;
         temp.map((e, index) =>{
           totalPrice  +=  temp[index].totalMoney;
@@ -228,7 +227,6 @@ export default function ManageCompany() {
     };
     return stateValue[type] ? stateValue[type] : "";
   }
-  console.log("cpName", name)
   function handleEditSubmit2(e) {
     putWithToken(
       `/api/v1.0/companies?companyid=${CompanyDelete}`,
@@ -394,14 +392,14 @@ export default function ManageCompany() {
                     <th
                       className="description"
                       onClick={() => {
-                        if (sortedField === "CompanyName" && ascending) {
-                          setSortedField("CompanyName");
+                        if (sortedField === "companyName" && ascending) {
+                          setSortedField("companyName");
                           setAscending(false);
-                          sort("CompanyName", false, useListCompanyShowPage);
+                          sort("companyName", false, useListCompanyShowPage);
                         } else {
-                          setSortedField("CompanyName");
+                          setSortedField("companyName");
                           setAscending(true);
-                          sort("CompanyName", true, useListCompanyShowPage);
+                          sort("companyName", true, useListCompanyShowPage);
                         }
                       }}
                     >
@@ -419,19 +417,19 @@ export default function ManageCompany() {
                     <th
                       className="description"
                       onClick={() => {
-                        if (sortedField === "Address" && ascending) {
-                          setSortedField("Address");
+                        if (sortedField === "address" && ascending) {
+                          setSortedField("address");
                           setAscending(false);
-                          sort("Address", false, useListCompanyShowPage);
+                          sort("address", false, useListCompanyShowPage);
                         } else {
-                          setSortedField("Address");
+                          setSortedField("address");
                           setAscending(true);
-                          sort("Address", true, useListCompanyShowPage);
+                          sort("address", true, useListCompanyShowPage);
                         }
                       }}
                     >
                       Address{" "}
-                      {sortedField === "Address" ? (
+                      {sortedField === "address" ? (
                         ascending === true ? (
                           <FontAwesomeIcon icon={faCaretUp} />
                         ) : (
@@ -444,19 +442,19 @@ export default function ManageCompany() {
                     <th
                       className="description"
                       onClick={() => {
-                        if (sortedField === "Description" && ascending) {
-                          setSortedField("Description");
+                        if (sortedField === "description" && ascending) {
+                          setSortedField("description");
                           setAscending(false);
-                          sort("Description", false, useListCompanyShowPage);
+                          sort("description", false, useListCompanyShowPage);
                         } else {
-                          setSortedField("Description");
+                          setSortedField("description");
                           setAscending(true);
-                          sort("Description", true, useListCompanyShowPage);
+                          sort("description", true, useListCompanyShowPage);
                         }
                       }}
                     >
                       Description{" "}
-                      {sortedField === "Description" ? (
+                      {sortedField === "description" ? (
                         ascending === true ? (
                           <FontAwesomeIcon icon={faCaretUp} />
                         ) : (
@@ -470,14 +468,14 @@ export default function ManageCompany() {
                     <th
                       className="description"
                       onClick={() => {
-                        if (sortedField === "Email" && ascending) {
-                          setSortedField("Email");
+                        if (sortedField === "email" && ascending) {
+                          setSortedField("email");
                           setAscending(false);
-                          sort("Email", false, useListCompanyShowPage);
+                          sort("email", false, useListCompanyShowPage);
                         } else {
-                          setSortedField("Email");
+                          setSortedField("email");
                           setAscending(true);
-                          sort("Email", true, useListCompanyShowPage);
+                          sort("email", true, useListCompanyShowPage);
                         }
                       }}
                     >
@@ -497,19 +495,19 @@ export default function ManageCompany() {
                     <th
                       className="description"
                       onClick={() => {
-                        if (sortedField === "Status" && ascending) {
-                          setSortedField("Status");
+                        if (sortedField === "status" && ascending) {
+                          setSortedField("status");
                           setAscending(false);
-                          sort("Status", false, useListCompanyShowPage);
+                          sort("status", false, useListCompanyShowPage);
                         } else {
-                          setSortedField("Status");
+                          setSortedField("status");
                           setAscending(true);
-                          sort("Status", true, useListCompanyShowPage);
+                          sort("status", true, useListCompanyShowPage);
                         }
                       }}
                     >
                       Status{" "}
-                      {sortedField === "Status" ? (
+                      {sortedField === "status" ? (
                         ascending === true ? (
                           <FontAwesomeIcon icon={faCaretUp} />
                         ) : (

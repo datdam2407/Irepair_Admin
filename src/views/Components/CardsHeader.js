@@ -69,12 +69,7 @@ const [ascending, setAscending] = useState(true);
 
       getWithTokenParams("/api/v1.0/companies", params, localStorage.getItem("token")).then((res) => {
         var temp = res.data.filter((x) => x.state !== "Completed");
-        setCompanyList2(temp);
-        setUseListCompanyShow(temp);
-        setUseListCompanyShowPage(temp.slice(numberPage * 8 - 8, numberPage * 8));
-        setTotalNumberPage(Math.ceil(temp.length / 8));
-        console.log("companyList", temp);
-      
+        setCompanyList2(temp);      
       }).catch((err) => {
         console.log(err);
       });

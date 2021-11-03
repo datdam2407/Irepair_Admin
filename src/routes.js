@@ -10,7 +10,7 @@ import MajorFields from "views/MajorFields/MajorFields.js"
 import ManageService from "views/ServiceTable/ManageService.js"
 import GoogleMaps from "views/Maps/GoogleMaps.js";
 import FullScreenMap from "views/Maps/FullScreenMap.js";
-import VectorMap from "views/Maps/VectorMap.js";
+import Tips from "views/Maps/Tips.js";
 import Customer from "views/Customer.js";
 import Calendar from "views/Calendar.js";
 import UserPage from "views/Pages/UserPage.js";
@@ -189,13 +189,13 @@ var routes = [
   //       mini: "FSM",
   //       component: FullScreenMap,
   //     },
-  //     {
-  //       path: "/vector-maps",
-  //       layout: "/admin",
-  //       name: "Vector Map",
-  //       mini: "VM",
-  //       component: VectorMap,
-  //     },
+      {
+        path: "/tip",
+        layout: "/admin",
+        name: "Tips",
+        icon: "nc-icon nc-album-2",
+        component: Tips,
+      },
   //   ],
   // },
   // {
@@ -209,12 +209,12 @@ var routes = [
         layout: "/admin",
         component: UserPage,
       },
-      {
-        name:"test modal",
-        path: "/page-test",
-        layout: "/admin",
-        component: RegisterPage,
-      },
+      // {
+      //   name:"test modal",
+      //   path: "/page-test",
+      //   layout: "/admin",
+      //   component: RegisterPage,
+      // },
     
       // {
       //   path: "/lock-screen-page",
