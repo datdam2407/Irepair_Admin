@@ -328,7 +328,7 @@ function MajorFields() {
     }).then(() => {
     });
 
-    params['Status'] = [1].reduce((f, s) => `${f},${s}`);
+    params['Status'] = [0].reduce((f, s) => `${f},${s}`);
     getWithTokenParams("/api/v1.0/majors", params, localStorage.getItem("token")
     ).then(res => {
       setData1(res.data);

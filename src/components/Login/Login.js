@@ -17,19 +17,22 @@ import {
   Input,
   Spinner,
 } from "reactstrap";
-
+import 'firebase/auth';
+import firebase from "firebase";
+import "firebase/storage";
+import 'firebase/firestore';
 function Login() {
-  
+
+  // var user2 = firebase.auth().currentUser;
   const [user, loading, error] = useAuthState(auth);
   const history = useHistory();
   useEffect(() => {
     if (loading) {
       return;
     }
-    if (user)
-     history.replace("/admin/dashboard");
+    if (user !== null)
+     history.push("/admin/dashboard");
   }, [user, loading]);
-
 
   const [cardClasses, setCardClasses] = React.useState("card-hidden");
   React.useEffect(() => {

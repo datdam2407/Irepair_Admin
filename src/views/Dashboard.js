@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
+import { useHistory } from "react-router-dom";
 import ImageUpload from "./Upload/ImageUpload.js";
 // javascipt plugin for creating charts
 import {
@@ -47,7 +48,7 @@ import "../assets/css/customSize.css";
 //   chartExample1,
 //   chartExample2,
 // } from "variables/charts.js";
-import { getWithToken } from "../service/ReadAPI";
+import { getWithToken ,postWithToken  } from "../service/ReadAPI";
 export default function Dashboard() {
   const [dataBase , setDataBase] = useState([]);
   const [loadDataBase, setLoadDatabase] = useState(true);
@@ -96,8 +97,25 @@ function handleChange(e){
     }).then((res) =>  window.location="/admin/dashboard")
          
   }
- 
+  //  useEffect(() => {
+  //  postWithToken(
+  //     `/api/v1.0/authenticate-admins?token=${localStorage.getItem("token2")}`,
+  //     {
+  //       token: localStorage.getItem("token2")
+  //     },
+      
+  //   )
+  //     .then((res) => {
+  //       if (res.status === 401) {
+  //         window.location = "/";
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
   useEffect(() => {
+  
     getWithToken("/api/v1.0/all-count", localStorage.getItem("token")).then(
       (res) => {
         setTopCustomer(res.data.topCustomer);
@@ -136,6 +154,12 @@ function handleChange(e){
     fetchData()
     },[])
   console.log("database" , ref)
+  let history = useHistory();
+
+  // if(){
+  //   // history.push("/");
+  // }
+  
   return (
     <>
       <CardsHeader name="Default" parentName="Dashboards" />

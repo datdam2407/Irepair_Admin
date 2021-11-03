@@ -111,6 +111,7 @@ function ManageSevice() {
   const [listField, setListField] = useState([]);
   //filter 
   const listStates = [
+    "New",
     "Active",
     "Inative",
   ];
@@ -433,8 +434,9 @@ function ManageSevice() {
   // Custom state 
   function displayStateName(type) {
     const stateValue = {
-      1: "Inactive",
-      0: "Active",
+      2: "Inactive",
+      1: "Active",
+      0: "New",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -659,7 +661,7 @@ function ManageSevice() {
                               className={classes.Status}
                               style={{
                                 backgroundColor:
-                                  ((e.Status === 1 && 'red')
+                                  ((e.Status === 1 && 'green')
                                     ||
                                     (e.Status === 0 && 'rgb(50, 102, 100)')
                                     ||
