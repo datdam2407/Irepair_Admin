@@ -89,46 +89,12 @@ function handleChange(e){
 
  
   const createTips = (e) => {
-    // e.preventDefault();
-    // const uploadTask = storge.bucket().file('/path/to/file');
-    const uploadTask = storge.ref("tips/"+ data.imageUrl.name).put(data.imageUrl)
-    uploadTask.on(
-      "stage_change",
-      (snapshot) =>{
-        let progess;
-        progess =(snapshot.bytesTransferred/snapshot.totalBytes)*100;
-        console.log("progess image" ,progess);
-      },
-      (err) =>{
-        console.log(err);
-      },
-      ()=>{
-        storge.ref("tips")
-        .child(data.imageUrl.name)
-        .getDownloadURL()
-        .then((url)=>{
-        db.collection("tips")
-        .doc(data.content)
-        .set({
-          content : content,
-          imageUrl : url,
-          title : title
-        }).then(()=>{
-          setData({
-            content : "",
-            imageUrl : null,
-            title : ""
-          })
-          
-        })
-        })
-      }
-    )
-    // ref.add({
-    //   content : content,
-    //   imageUrl : data.imageUrl.name,
-    //   title : title
-    // }).then((res) => console.log("tips created"))
+    ref.add({
+      content : content,
+      imageUrl :localStorage.getItem("urlUpload"),
+      title : title
+    }).then((res) =>  window.location="/admin/dashboard")
+         
   }
  
   useEffect(() => {
@@ -151,9 +117,6 @@ function handleChange(e){
     setUseListCustomerShowPage(useListCustomerShow.slice(number * 10 - 10, number * 10));
     setTotalNumberPage(Math.ceil(useListCustomerShow.length / 10));
   }
-  // console.log("top 10 cus", TopCustomer)
-  // console.log("top 10 company", TopCompany)
-  // console.log("top 10 service", TopService)
   const [activeNav, setActiveNav] = React.useState(1);
   // const [chartExample1Data, setChartExample1Data] = React.useState("data1");
   const toggleNavs = (e, index) => {
@@ -161,25 +124,7 @@ function handleChange(e){
     setActiveNav(index);
     setChartExample1Data(chartExample1Data === "data1" ? "data2" : "data1");
   };
-  // if (window.Chart) {
-  //   parseOptions(Chart, chartOptions());
-  // }
 
-// function getDataTips(){
-//     ref.onSnapshot((querySnapshot => {
-//       const items = []
-//       querySnapshot.forEach((doc => {
-//         items.push(doc.data())
-//       }),
-//       setDataBase(items),
-//       setLoadDatabase(false),
-//     )}),
-//     )
-//   }
-//   useEffect(() =>{
-//     getDataTips()
-//     console.log("aaaaData" ,dataBase)
-//   },[])
 
   React.useEffect(() =>{
     const fetchData = async () => {
@@ -201,7 +146,7 @@ function handleChange(e){
               <div className="col">
                 <Card>
                   <CardHeader className="border-0">
-                    <h3 className="title-customer-h3">Customer loyalty</h3>
+                    <h3 className="title-customer-h3">LOYALTY CUSTOMER</h3>
                   </CardHeader>
                   <Table className="align-items-center table-flush" responsive>
 
@@ -398,7 +343,7 @@ function handleChange(e){
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Top 5 Companies</h3>
+                    <h3 className="mb-0">TOP 5 COMPANIES</h3>
                   </div>
                   
                   <div className="col text-right">
@@ -450,7 +395,7 @@ function handleChange(e){
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Best service</h3>
+                    <h3 className="mb-0">BEST SERVICE</h3>
                   </div>
                   <div className="col text-right">
                     <Button
@@ -503,7 +448,7 @@ function handleChange(e){
           <Col xl="5">
             <Card>
               <CardHeader>
-                <h2 className="title-customer-h3">Irepair</h2>
+                <h2 className="title-customer-h3">IREPAIR</h2>
               </CardHeader>
               <CardHeader className="d-flex align-items-center">
                 <div className="d-flex align-items-center">
@@ -708,15 +653,15 @@ function handleChange(e){
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Favorite Tips</h3>
+                    <h3 className="mb-0">FAVORITE TIPS</h3>
                   </div>
-                  {/* <div className="col text-right"> */}
-                    {/* <Button
+                  <div className="col text-right"> 
+                    <Button
                       onClick={() =>setTipsModalCreate(true)}
                     >
                       Create
-                    </Button> */}
-                  
+                    </Button>
+                  </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
@@ -783,7 +728,6 @@ function handleChange(e){
             <Form.Group className="mb-2">
               <Form.Label>Image</Form.Label>
   
-                  <ImageUpload setData={setData}/>
                     
             </Form.Group>
           </Form>
@@ -801,7 +745,10 @@ function handleChange(e){
           >
             Save
           </Button>
+          <ImageUpload setData={setData}/>
+
         </ModalFooter>
+
       </Modal>
 
     </>

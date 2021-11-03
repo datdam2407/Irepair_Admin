@@ -14,7 +14,10 @@ import image1 from "assets/img/full-screen-image-6.jpg";
 import image2 from "assets/img/full-screen-image-2.jpg";
 import image3 from "assets/img/full-screen-image-3.jpg";
 import image4 from "assets/img/full-screen-image-4.jpg";
-
+import firebase from "firebase";
+import "firebase/storage";
+import 'firebase/firestore';
+import 'firebase/auth';
 function Admin() {
 
     // let history = useHistory();
@@ -24,6 +27,13 @@ function Admin() {
 //       history.push("/");
 //     }
 // }, []);
+const [isSignin, setIsSignin]= useState(true);
+firebase.auth().onAuthStateChanged((user)=>{
+  if (user){
+  return setIsSignin(true);}
+  setIsSignin(false);
+})
+if(isSignin === true){
   const [sidebarImage, setSidebarImage] = React.useState(image1);
   const [sidebarBackground, setSidebarBackground] = React.useState("black");
   const getRoutes = (routes) => {
@@ -69,6 +79,10 @@ function Admin() {
        
     </>
   );
+}else{
+  window.location="/"
+}
+
 }
 
 export default Admin;
