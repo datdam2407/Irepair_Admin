@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import 'react-tippy/dist/tippy.css'
 // react-bootstrap components
-import "../../assets/css/customSize.css"
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Card,
@@ -18,9 +17,9 @@ import "firebase/storage";
 import 'firebase/firestore';
 export default function Tips() {
 
-  const db = firebase.firestore();
   const storge = firebase.storage();
   const [dataBase , setDataBase] = useState([]);
+  const [tips , setTips] = useState([]);
   const [loadDataBase, setLoadDatabase] = useState(true);
   const ref = firebase.firestore().collection("tips");
 
@@ -80,21 +79,16 @@ function handleChange(e){
     //   title : title
     // }).then((res) => console.log("tips created"))
   }
-function getDataTips(){
-  ref.onSnapshot((querySnapshot => {
-    const items = []
-    querySnapshot.forEach((doc => {
-      items.push(doc.data())
-    }),
-    setDataBase(items),
-    setLoadDatabase(false),
-  )}),
-  )
+
+React.useEffect(() =>{
+const fetchData = async () => {
+
+const db = firebase.firestore();
+const data = await db.collection("tips").get()
+setTips(data.docs.map(doc => doc.data()))
 }
-useEffect(() =>{
-  getDataTips()
+fetchData()
 },[])
-console.log("database" , ref)
  
   return (
     <>
@@ -122,19 +116,18 @@ console.log("database" , ref)
                     <th scope="col">Content</th>
                     <th scope="col">Description</th>
                     <th scope="col">Title</th>
-                    <th scope="col">Rate</th>
                   </tr>
                 </thead>
                 <tbody>
-                  
-                  {dataBase.map((tips,index) => {
+                
+                  {tips.map((e,index) => {
                     return (
-                      <tr key={index}>
-                        <th scope="row">{index + 1}</th>
-                      <td><img className="avatar-repairman" src={tips.imageUrl} /></td>  
-                        <td>{tips.content} </td>
+                      <tr >
+                        <th scope="row">{index+1}</th>
+                      <td><img className="avatar-repairman" src={e.imageUrl} /></td>  
+                        <td>{e.content} </td>
                         <td>
-                        {tips.title}
+                        {e.title}
                         </td>
                       </tr>
                     );

@@ -55,6 +55,7 @@ export default function Dashboard() {
 const [modalCreate, setTipsModalCreate] = useState(false);
 const toggleCreate = () => setTipsModalCreate(!modalCreate)
 
+const [tips , setTips] = useState([]);
 
   const [TopCustomer, setTopCustomer] = useState([]);
   const [TopCompany, setTopCompany] = useState([]);
@@ -164,21 +165,31 @@ function handleChange(e){
   //   parseOptions(Chart, chartOptions());
   // }
 
-function getDataTips(){
-    ref.onSnapshot((querySnapshot => {
-      const items = []
-      querySnapshot.forEach((doc => {
-        items.push(doc.data())
-      }),
-      setDataBase(items),
-      setLoadDatabase(false),
-    )}),
-    )
-  }
-  useEffect(() =>{
-    getDataTips()
-    console.log("aaaaData" ,dataBase)
-  },[])
+// function getDataTips(){
+//     ref.onSnapshot((querySnapshot => {
+//       const items = []
+//       querySnapshot.forEach((doc => {
+//         items.push(doc.data())
+//       }),
+//       setDataBase(items),
+//       setLoadDatabase(false),
+//     )}),
+//     )
+//   }
+//   useEffect(() =>{
+//     getDataTips()
+//     console.log("aaaaData" ,dataBase)
+//   },[])
+
+  React.useEffect(() =>{
+    const fetchData = async () => {
+    
+    const db = firebase.firestore();
+    const data = await db.collection("tips").get()
+    setTips(data.docs.map(doc => doc.data()))
+    }
+    fetchData()
+    },[])
   console.log("database" , ref)
   return (
     <>
@@ -492,7 +503,7 @@ function getDataTips(){
           <Col xl="5">
             <Card>
               <CardHeader>
-                <h5 className="title-customer-h3"> POTENTIAL CUSTOMER</h5>
+                <h2 className="title-customer-h3">Irepair</h2>
               </CardHeader>
               <CardHeader className="d-flex align-items-center">
                 <div className="d-flex align-items-center">
@@ -500,7 +511,7 @@ function getDataTips(){
                     <img
                       alt="..."
                       className="avatar-repairman"
-                      src={require("../assets/img/thuanne.jpg").default}
+                      src={require("../assets/img/worker-picture.png").default}
                     />
                   </a>
                   <div className="mx-3">
@@ -511,7 +522,7 @@ function getDataTips(){
                     >
                       {ShowRoyalName}
                     </a>
-                    <small className="d-block text-muted">3 days ago</small>
+                    {/* <small className="d-block text-muted">3 days ago</small> */}
                   </div>
                 </div>
               </CardHeader>
@@ -599,13 +610,13 @@ function getDataTips(){
                         </UncontrolledTooltip>
                       </div>
                       <small className="pl-2 font-weight-bold">
-                        and 30+ more
+                        and 3+ more
                       </small>
                     </div>
                   </Col>
                 </Row>
 
-                <div className="mb-1">
+                {/* <div className="mb-1">
                   <Media className="media-comment">
                     <img
                       alt="..."
@@ -686,7 +697,7 @@ function getDataTips(){
                       </Form>
                     </Media>
                   </Media>
-                </div>
+                </div> */}
               </CardBody>
             </Card>
           </Col>
@@ -719,7 +730,7 @@ function getDataTips(){
                 </thead>
                 <tbody>
                   
-                  {dataBase.map((tips,index) => {
+                  {tips.map((tips,index) => {
                     return (
                       <tr key={index}>
                         <th scope="row">{index + 1}</th>

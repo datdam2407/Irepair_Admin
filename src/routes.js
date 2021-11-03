@@ -3,23 +3,17 @@ import Dashboard from "views/Dashboard.js";
 import ManageCompany from "views/Components/ManageCompany";
 // import SweetAlert from "views/Components/SweetAlertPage.js";
 import MajorTables from "views/Forms/MajorTables.js";
-import ValidationForms from "views/Forms/ValidationForms.js";
 
 import Repairman from "views/Repairman.js";
 import MajorFields from "views/MajorFields/MajorFields.js"
 import ManageService from "views/ServiceTable/ManageService.js"
-import GoogleMaps from "views/Maps/GoogleMaps.js";
-import FullScreenMap from "views/Maps/FullScreenMap.js";
-import Tips from "views/Maps/Tips.js";
+
+import Tips from "views/Tips.js";
 import Customer from "views/Customer.js";
-import Calendar from "views/Calendar.js";
 import UserPage from "views/Pages/UserPage.js";
 // import Sidebar from "views/Sidebar.js";
 import RegisterPage from "views/Pages/RegisterPage.js";
-// import LockScreenPage from "views/Pages/LockScreenPage.js";
-import img1 from "../src/assets/img/company.png"
 import Order from "views/Order";
-import { Modal } from "react-bootstrap";
 var routes = [
   
 
