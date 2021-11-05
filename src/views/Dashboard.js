@@ -222,33 +222,28 @@ function handleChange(e){
                             <td></td>
                             <td className="text-end">
                               <UncontrolledDropdown>
-                                <DropdownToggle
+                                {/* <DropdownToggle
                                   color=""
                                   size="sm"
                                   className="btn-icon-only text-light"
                                 >
                                   <i className="fas fa-ellipsis-v" />
-                                </DropdownToggle>
-                                <DropdownMenu className="dropdown-menu-arrow" right>
+                                </DropdownToggle> */}
+                                {/* <DropdownMenu className="dropdown-menu-arrow" right>
                                   <DropdownItem
                                     href="#pablo"
                                     onClick={(e) => e.preventDefault()}
                                   >
                                     View details
                                   </DropdownItem>
+                         
                                   <DropdownItem
                                     href="#pablo"
                                     onClick={(e) => e.preventDefault()}
                                   >
 
                                   </DropdownItem>
-                                  <DropdownItem
-                                    href="#pablo"
-                                    onClick={(e) => e.preventDefault()}
-                                  >
-
-                                  </DropdownItem>
-                                </DropdownMenu>
+                                </DropdownMenu> */}
                               </UncontrolledDropdown>
                             </td>
                           </tr>
@@ -458,13 +453,13 @@ function handleChange(e){
               </CardHeader>
               <CardHeader className="d-flex align-items-center">
                 <div className="d-flex align-items-center">
-                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                  {/* <a href="#pablo" onClick={(e) => e.preventDefault()}>
                     <img
                       alt="..."
                       className="avatar-repairman"
                       src={require("../assets/img/worker-picture.png").default}
                     />
-                  </a>
+                  </a> */}
                   <div className="mx-3">
                     <a
                       className="text-dark font-weight-600 text-sm"
@@ -513,17 +508,11 @@ function handleChange(e){
                         <a
                           className="avatar avatar-xs rounded-circle"
                           href="#pablo"
-                          id="tooltip36177092"
                           onClick={(e) => e.preventDefault()}
                         >
-                          {/* <img
-                            alt="..."
-                            src={require("../assets/img/thuanne.jpg").default}
-                          /> */}
+          
                         </a>
-                        <UncontrolledTooltip delay={0} target="tooltip36177092">
-                          Jessica Rowland
-                        </UncontrolledTooltip>
+            
                         <a
                           href="#pablo"
                           id="tooltip857639221"
@@ -535,12 +524,7 @@ function handleChange(e){
                             src={require("../assets/img/thuanne.jpg").default}
                           />
                         </a>
-                        <UncontrolledTooltip
-                          delay={0}
-                          target="tooltip857639221"
-                        >
-                          Audrey Love
-                        </UncontrolledTooltip>
+        
                         <a
                           // className="avatar avatar-xs rounded-circle"
                           href="#pablo"

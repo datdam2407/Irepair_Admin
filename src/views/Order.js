@@ -439,7 +439,7 @@ export default function Order() {
                   {/* <th className="description">Create Date</th> */}
 
                   <th className="description">Feedbacks</th>
-                  <th className="description">Reason</th>
+                  <th className="description">Cancel Reason</th>
                   <th
                     className="description-price"
                     onClick={() => {
@@ -512,7 +512,7 @@ export default function Order() {
                       {/* </td> */}
                       {checkDisableImage(e.FeedbackMessage) ?
                         <td className="point-customer">
-                          {e.FeedbackMessage}  {e.FeedbackPoint} <TiStar />
+                          {e.FeedbackPoint}  <TiStar /> - {e.FeedbackMessage} 
                         </td> : (
                          
                          <td>
