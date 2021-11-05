@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IconName ,TiStar } from "react-icons/ti";
+import { IconName, TiStar } from "react-icons/ti";
 // react-bootstrap components
 import {
   Button,
@@ -138,13 +138,13 @@ export default function Order() {
       fontWeight: 'bold',
       color: '#1d98e0f7',
       width: '164px',
-      paddingRight:'20px'
+      paddingRight: '20px'
     },
     nameService: {
       fontWeight: 'bold',
       color: 'black',
       width: '194px',
-      paddingRight:'5px'
+      paddingRight: '5px'
     },
     repairman: {
       fontWeight: 'bold',
@@ -222,8 +222,9 @@ export default function Order() {
       });
   }
   function checkDisableImage(state) {
-    if (state == null) return true;
-    else return false;
+    if (state == null)
+      return false;
+    else return true;
   }
   // custom state
   function displayStateName(type) {
@@ -330,8 +331,8 @@ export default function Order() {
             <Table className="table-hover table-striped">
               <thead>
                 <tr>
-                  
-                <th
+
+                  <th
                     className="description"
                     onClick={() => {
                       if (sortedField === "ServiceId" && ascending) {
@@ -466,7 +467,7 @@ export default function Order() {
                   </th>
                   <th className="description">Status</th>
 
-               
+
 
                   {/* <th className="description">Point</th> */}
                   {/* <th className="description">Feedback</th> */}
@@ -509,16 +510,17 @@ export default function Order() {
                       {/* {e.CancelPerson} */}
                       {/* {displayServiceName(e.CancelPerson)} */}
                       {/* </td> */}
-                     {checkDisableImage(e.FeedbackMessage) !== null ?
-                      <td className="point-customer">
-                     {e.FeedbackMessage}  {e.FeedbackPoint} <TiStar/>
-                </td>  : (
-                  <td> 
-                  </td>
-                    )}
+                      {checkDisableImage(e.FeedbackMessage) ?
+                        <td className="point-customer">
+                          {e.FeedbackMessage}  {e.FeedbackPoint} <TiStar />
+                        </td> : (
+                         
+                         <td>
+                          </td>
+                        )}
 
 
-                {/* <td className="point-customer">
+                      {/* <td className="point-customer">
                        {e.FeedbackMessage} / {e.FeedbackPoint} <TiStar/>
                       </td> */}
                       <TableCell>
@@ -538,25 +540,25 @@ export default function Order() {
                       <td>
                         <NumberFormat className="input-type-css-order"
                           thousandsGroupStyle="thousand"
-                          value={e.Total} 
+                          value={e.Total}
                           decimalSeparator="."
                           thousandSeparator={true}
                           disabled />
                       </td>
-                      
+
                       <TableCell>
                         <Typography
                           className={classes.StatusOrder}
                           style={{
                             backgroundColor:
                               ((e.Status === 0 && '#1d98e0f7') ||
-                              (e.Status === 1 && 'gray') ||
+                                (e.Status === 1 && 'gray') ||
                                 (e.Status === 3 && 'rgb(34, 176, 34)') ||
                                 (e.Status === 2 && 'red'))
                           }}
                         >  {displayStateName(e.Status)}</Typography>
                       </TableCell>
-                     
+
                       {/* <td className="point-customer">
                         {e.FeedbackMessage}
                       </td> */}
