@@ -87,7 +87,7 @@ export default function Customer() {
         }
       });
   }, []);
- 
+
 
 
   const useStyles = makeStyles((theme) => ({
@@ -126,15 +126,15 @@ export default function Customer() {
     },
     name: {
       fontWeight: 'bold',
-   color: '#1d98e0f7',
+      color: '#1d98e0f7',
 
     },
     Status: {
       fontWeight: '700',
-      width: '71px',
-      fontSize: '0.76rem',
-      color: 'white',
-      backgroundColor: 'green',
+      width: '91px',
+      fontSize: '1rem',
+      color: 'red',
+      backgroundColor: 'none',
       borderRadius: 8,
       padding: '3px 10px',
       display: 'inline-block'
@@ -152,8 +152,15 @@ export default function Customer() {
   // custom state
   function displayStateName(type) {
     const stateValue = {
-      1: "Active",
-      0: "Not Alaviable",
+      "9NZn9OaLVRSpiF4EOdUw1NU2KPp2": "Vip",
+      "jBBMgcvfObe8V3s6kFuSU9QOWWQ2": "Member",
+      "RAQiRgj8fyRoS5aOC1n7iFbRNGg1": "Member",
+      "8NZXhR4XBfVnoa2i40JM3RclEUT2": "Member",
+      "c0txAmaaMMShMXfJFBhpx61Gitl2": "Member",
+      "32eA81DJUSgBtdLe228WiwWi7Yc2": "Vip",
+      "8VR9h3r7sdMjKD9KPcwPJt1dRC62": "Vip",
+      "wudNTNHt4KWeEWcks34jxW9Lp6g2": "Vip", 
+      "GsqKYecXwlYg5tH7G7SHNQgPI9u1": "Loyalty customer",
     };
     return stateValue[type] ? stateValue[type] : "";
   }
@@ -161,7 +168,7 @@ export default function Customer() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" , backgroundColor:"white"}}
+      style={{ color: "#B22222", backgroundColor: "white" }}
       onClick={x}
     >
       X
@@ -193,74 +200,92 @@ export default function Customer() {
                 {useListCustomerShowPage.map((e, index) => {
                   return (
                     <tr key={index}>
-                      
-                      <td >
-                        <img className="avatar-repairman" src={e.Avatar}/>
-                      </td>
-                     <TableCell>
-                            <Grid container>
-                              <Tooltip html={(
-                                <div style={{ width: 700, height: 300 }}>
-                                  <strong>
-                                    <ModalHeader
-                                      style={{ color: "yellow" }}
-                                    >
-                                      Detailed User Information
-                                    </ModalHeader>
-                                    <ModalBody>
-                                      <Row>
-                                        <Col md={2}> Full Name:</Col>
-                                        <Col className="view-item-size" md={3}> {e.FullName}</Col>
-                                      </Row>
-                                      <Row>
-                                        <Col md={2}>Create Date:</Col>
-                                        <Col className="view-item-size" md={3}>
-                                          {e.CreateDate}
-                                        </Col>
-                                      </Row>
-                                      <Row>
-                                        <Col md={2}>Email:</Col>
-                                        <Col className="view-item-size" md={3}>
-                                          {e.Email}
-                                        </Col>
-                                      </Row>
-                                      <Row>
-                                        <Col md={3} ><img className="text-left-topic-toolpi" src={e.Avatar} /></Col>
-                                      </Row>
 
-                                    </ModalBody>
-                                  </strong>
-                                </div>
-                              )}
-                              >
-                                <Grid item lg={2}>
-                                  <Avatar src={e.Avatar} className={classes.avatar}>
-                                  </Avatar>
-                                </Grid>
-                              </Tooltip>
-                              <Grid item lg={10}>
-                                <Typography className={classes.name}>{e.FullName}</Typography>
-                                <Typography color="textSecondary" variant="body2">{e.Id}
-                                </Typography>
-                              </Grid>
+                      <td >
+                        <img className="avatar-repairman" src={e.Avatar} />
+                      </td>
+                      <TableCell>
+                        <Grid container>
+                          <Tooltip html={(
+                            <div style={{ width: 700, height: 300 }}>
+                              <strong>
+                                <ModalHeader
+                                  style={{ color: "yellow" }}
+                                >
+                                  Detailed User Information
+                                </ModalHeader>
+                                <ModalBody>
+                                  <Row>
+                                    <Col md={2}> Full Name:</Col>
+                                    <Col className="view-item-size" md={3}> {e.FullName}</Col>
+                                  </Row>
+                                  <Row>
+                                    <Col md={2}>Create Date:</Col>
+                                    <Col className="view-item-size" md={3}>
+                                      {e.CreateDate}
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col md={2}>Email:</Col>
+                                    <Col className="view-item-size" md={3}>
+                                      {e.Email}
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col md={3} ><img className="text-left-topic-toolpi" src={e.Avatar} /></Col>
+                                  </Row>
+
+                                </ModalBody>
+                              </strong>
+                            </div>
+                          )}
+                          >
+                            <Grid item lg={2}>
+                              <Avatar src={e.Avatar} className={classes.avatar}>
+                              </Avatar>
                             </Grid>
-                          </TableCell>
-              
-              
+                          </Tooltip>
+                          <Grid item lg={10}>
+                            <Typography className={classes.name}>{e.FullName}</Typography>
+                            <Typography color="textSecondary" variant="body2">{e.Id}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </TableCell>
+
+
                       <td>
                         {e.PhoneNumber}
                       </td>
                       <td>
                         {e.Email}
                       </td>
-                  
+
                       <td >{moment(e.CreateDate).format("MM-DD-YYYY")}
                       </td>
                       <td>
                         {e.FullName}
                       </td>
+                      <TableCell>
+                        <Typography
+                          className={classes.Status}
+                          style={{
+                            color:
+                              ((e.Uid === "9NZn9OaLVRSpiF4EOdUw1NU2KPp2" && 'rgb(145 105 11)')
+                                ||
+                                (e.Uid === "32eA81DJUSgBtdLe228WiwWi7Yc2" && 'rgb(145 105 11)') ||
+                                (e.Uid === "8VR9h3r7sdMjKD9KPcwPJt1dRC62" && 'rgb(145 105 11)') ||
+                                (e.Uid === "wudNTNHt4KWeEWcks34jxW9Lp6g2" && 'rgb(145 105 11)') ||
+                                (e.Uid ===   "jBBMgcvfObe8V3s6kFuSU9QOWWQ2"&& 'green')||
+                                (e.Uid === "RAQiRgj8fyRoS5aOC1n7iFbRNGg1"&& 'green')||
+                                (e.Uid ==="8NZXhR4XBfVnoa2i40JM3RclEUT2"&& 'green')||
+                                (e.Uid ==="c0txAmaaMMShMXfJFBhpx61Gitl2" && 'green')||
+                                (e.Uid === "GsqKYecXwlYg5tH7G7SHNQgPI9u1" && 'rgb(214 153 8)'))
+
+                          }}
+                        >{displayStateName(e.Uid)}</Typography>
+                      </TableCell>
                       <td>
-                        {e.Uid}
                       </td>
 
                       <td>
@@ -480,10 +505,10 @@ export default function Customer() {
           style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDetails)}
         >
-         <h3> Detailed Field Information </h3>
+          <h3> Detailed Field Information </h3>
         </ModalHeader>
         <ModalBody>
-       
+
           <Row>
             <Col></Col>
             <Col className="view-item-size-main" md={3}>  FullName</Col>
@@ -506,7 +531,7 @@ export default function Customer() {
               {Selectservice !== undefined ? Selectservice.CreateDate : ""}
             </Col>
           </Row>
-          
+
           <Row>
             <Col></Col>
             <Col className="view-item-size-main" md={3}> Phone</Col>

@@ -73,7 +73,9 @@ var routes = [
   //   ],
   // },
   //aaaa
-  
+  {
+    mini: "Manage",
+},
   {
     path: "/dashboard",
     layout: "/admin",
@@ -115,6 +117,9 @@ var routes = [
     component: Repairman,
   },
   
+  {
+      mini: "Manage Component",
+  },
   {
     path: "/service",
     layout: "/admin",

@@ -425,7 +425,7 @@ function ManageSevice() {
   const closeBtn = (x) => (
     <button
       className="btn border border-danger"
-      style={{ color: "#B22222" }}
+      style={{ color: "#B22222" , backgroundColor:"white", border:"1px solid white" }}
       onClick={x}
     >
       X
@@ -1030,56 +1030,32 @@ function ManageSevice() {
       </Modal>
 
 
+
       <Modal isOpen={modalStatus} toggle={toggleDetails}>
         <ModalHeader
-          toggle={toggleDetails}
-          style={{ color: "#B22222" }}
+          style={{ color: "#1bd1ff" }}
           close={closeBtn(toggleDetails)}
-        >
-          Detailed service information
+          toggle={toggleDetails}>
+          <h3>INFORMATION</h3>
         </ModalHeader>
         <ModalBody>
-          <Row>
-            <Col></Col>
-            <Col md={3}>Name</Col>
-            <Col md={8}>
-              {selectservice !== undefined ? selectservice.ServiceName : ""}
-            </Col>
-          </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>Company</Col>
-            <Col md={8}>
-              {selectservice !== undefined ? displayCompanyName(selectservice.CompanyId) : ""}
-            </Col>
-          </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>Description</Col>
-            <Col md={8}>
-              {selectservice !== undefined ? selectservice.Description : ""}
-            </Col>
-          </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>Price</Col>
-            <Col md={8}>
-              {selectservice !== undefined ? selectservice.Price : ""}
-            </Col>
-          </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>Picture</Col>
-            <Col md={8}>
-              {selectservice !== undefined ? <img className="text-left-topic" src={selectservice.ImageUrl} /> : ""}
-            </Col>
-          </Row>
-          <Row>
-            <Col></Col>
-            <Col md={3}>State</Col>
-            <Col md={8}>{selectservice !== undefined ? displayStateName(selectservice.Status) : ""}</Col>
-          </Row>
+          <div className="img-container">
+            {selectservice !== undefined ? <img className="text-left-topic" src={selectservice.ImageUrl} /> : ""}
+          </div>
         </ModalBody>
+        <ModalBody>
+        <a className="name" style={{color:"#1d98e0f7"}}>Name:</a> <a className="name"> {selectservice !== undefined ? selectservice.ServiceName : ""}</a>
+          <br />
+          <a className="name" style={{color:"#1d98e0f7"}}>Description:</a>  <a className="name">{selectservice !== undefined ? selectservice.Description : ""}</a>
+
+          <br />
+          <a className="name" style={{color:"#1d98e0f7"}}>MajorField:</a>  <a className="name">{selectservice !== undefined ? displayCompanyName(selectservice.FieldId) : ""}</a>
+
+          <br />
+          <a className="name" style={{color:"#1d98e0f7"}}>Status</a><a className="name"> {selectservice !== undefined ? displayStateName(selectservice.Status) : ""}</a>
+          <br />
+        </ModalBody>
+
       </Modal>
 
 

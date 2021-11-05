@@ -10,7 +10,7 @@ import AdminFooter from "components/Footers/AdminFooter.js";
 // dinamically create dashboard routes
 import routes from "routes.js";
 
-import image1 from "assets/img/full-screen-image-6.jpg";
+import image1 from "assets/img/full-screen-image-7.jpg";
 import image2 from "assets/img/full-screen-image-2.jpg";
 import image3 from "assets/img/full-screen-image-3.jpg";
 import image4 from "assets/img/full-screen-image-4.jpg";

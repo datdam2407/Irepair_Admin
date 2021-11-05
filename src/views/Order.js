@@ -37,6 +37,10 @@ import {
   faCaretDown,
   faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
+import {
+  Tooltip,
+} from 'react-tippy';
+import 'react-tippy/dist/tippy.css'
 export default function Order() {
 
   const [modalDelete, setCustomerModalDelete] = useState(false);
@@ -433,13 +437,13 @@ export default function Order() {
                     )}
                   </th>
 
-                  {/* <th className="description">Username</th> */}
+                  <th className="description">Company</th>
 
                   {/* <th className="description">Created Date </th> */}
                   {/* <th className="description">Create Date</th> */}
 
                   <th className="description">Feedbacks</th>
-                  <th className="description">Cancel Reason</th>
+                  {/* <th className="description">Cancel Reason</th> */}
                   <th
                     className="description-price"
                     onClick={() => {
@@ -503,9 +507,9 @@ export default function Order() {
                         </Grid>
                       </TableCell>
 
-                      {/* <td>
+                      <td>
                         {moment(e.CreateTime).format("MM-DD-YYYY")}
-                      </td> */}
+                      </td>
                       {/* <td> */}
                       {/* {e.CancelPerson} */}
                       {/* {displayServiceName(e.CancelPerson)} */}
@@ -523,7 +527,7 @@ export default function Order() {
                       {/* <td className="point-customer">
                        {e.FeedbackMessage} / {e.FeedbackPoint} <TiStar/>
                       </td> */}
-                      <TableCell>
+                      {/* <TableCell>
                         <Typography
                           className={classes.Status}
                           style={{
@@ -534,7 +538,7 @@ export default function Order() {
                                 (e.CancelReason === "Thời gian chờ thợ đến quá lâu" && 'red'))
                           }}
                         >{e.CancelReason}</Typography>
-                      </TableCell>
+                      </TableCell> */}
 
 
                       <td>
@@ -546,8 +550,19 @@ export default function Order() {
                           disabled />
                       </td>
 
-                      <TableCell>
-                        <Typography
+                      <TableCell >
+                      <Grid container>
+                              <Tooltip html={(
+                                <div style={{color:'yellow'}}>
+                                  <strong>
+                                    <ModalBody >
+                                      {e.CancelReason}
+                                    </ModalBody>
+                                  </strong>
+                                </div>
+                              )}
+                              >
+<Typography
                           className={classes.StatusOrder}
                           style={{
                             backgroundColor:
@@ -557,6 +572,9 @@ export default function Order() {
                                 (e.Status === 2 && 'red'))
                           }}
                         >  {displayStateName(e.Status)}</Typography>
+                              </Tooltip>
+                            </Grid>
+                        
                       </TableCell>
 
                       {/* <td className="point-customer">

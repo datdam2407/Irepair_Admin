@@ -72,7 +72,7 @@
 // export default ImageUpload;
 import React, { useState } from "react";
 import { Button } from "react-bootstrap"
-import { MdSearch } from "react-icons/md";
+import { MdArrowCircleUp } from "react-icons/md";
 
 import firebase from "firebase";
 import "firebase/storage";
@@ -117,19 +117,13 @@ const ImageUpload = () => {
     localStorage.setItem("urlUpload", url)
     return (
         <div>
-            <progress value={progress} max="100" />
-            <br />
-            <br />
             <input type="file" onChange={handleChange}
             />
-
-
             <Button className="image-upload-button" type="button"
                 onClick={handleUpload}>
-                <MdSearch className="icon" ></MdSearch>
-
+                <MdArrowCircleUp className="icon" ></MdArrowCircleUp>
             </Button>
-            <img style={{ width: "300px" }} src={url || "http://via.placeholder.com/300"} alt="firebase-image" />
+            <img style={{ width: "300px" }} />
 
         </div>
     );

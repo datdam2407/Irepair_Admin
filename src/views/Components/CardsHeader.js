@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 // nodejs library to set properties for components
 import PropTypes from "prop-types";
 // reactstrap components
+import NumberFormat from 'react-number-format';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -37,7 +39,7 @@ const [Customer, setCustomer] = useState([]);
 const [TopCustomer, setTopCustomer] = useState([]);
 const [MajorFields, setMajorFields] = useState("");
 const [Major, setMajor] = useState("");
-
+ 
 const [sortedField, setSortedField] = useState("Id");
 const [ascending, setAscending] = useState(true);
 
@@ -46,6 +48,7 @@ const [ascending, setAscending] = useState(true);
     getCompanyList2();
     getCompanyList();
   }, []);
+  localStorage.setItem("Customer" , Customer)
   async function getCompanyList2 (){
     return await   getWithToken("/api/v1.0/all-count" , localStorage.getItem("token")).then(
       (res) => {
@@ -86,13 +89,13 @@ const [ascending, setAscending] = useState(true);
         <Container fluid>
           <div className="header-body-header">
             <Row>
-              <Col md="3" xl="2">
+              <Col md="4" xl="3">
                 <Card className="card-stats">
-                  <CardBody>
+                  <CardBody style={{backgroundColor:'#91ccff'}} >
                     <Row>
                       <div className="col">
                         <CardTitle
-                          tag="h5"
+                          tag="h3"
                           className="text-uppercase text-muted mb-0"
                         >
                           Company
@@ -109,20 +112,20 @@ const [ascending, setAscending] = useState(true);
                     </Row>
                     <p className="mt-3 mb-0 text-sm">
                       <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> 
+                        <i className="fa fa-arrow-up" style={{color:'#447DF7'}} /> 
                       </span>{" "}
-                      <span className="text-nowrap">Updating</span>
+                      <span className="text-nowrap">Total Companies</span>
                     </p>
                   </CardBody>
                 </Card>
               </Col>
-              <Col md="3" xl="2">
+              <Col md="4" xl="3">
                 <Card className="card-stats">
-                  <CardBody>
+                  <CardBody style={{backgroundColor:'#91ccff'}}>
                     <Row>
                       <div className="col">
                         <CardTitle
-                          tag="h5"
+                          tag="h3"
                           className="text-uppercase text-muted mb-0"
                         >
                             Users
@@ -131,26 +134,26 @@ const [ascending, setAscending] = useState(true);
                       </div>
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-gradient-orange text-white rounded-circle shadow">
-                          <i className="ni ni-chart-pie-35" />
+                          <i className="ni ni-chart-pie-35"/>
                         </div>
                       </Col>
                     </Row>
                     <p className="mt-3 mb-0 text-sm">
                       <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> 
+                        <i className="fa fa-user-circle" style={{color:'#447DF7'}}/> 
                       </span>{" "}
-                      <span className="text-nowrap">Updating</span>
+                      <span className="text-nowrap">Total Users</span>
                     </p>
                   </CardBody>
                 </Card>
               </Col>
-              <Col md="3" xl="2">
+              <Col md="4" xl="3">
                 <Card className="card-stats">
-                  <CardBody>
+                  <CardBody style={{backgroundColor:'#91ccff'}}>
                     <Row>
                       <div className="col">
                         <CardTitle
-                          tag="h5"
+                          tag="h3"
                           className="text-uppercase text-muted mb-0"
                         >
                           Order
@@ -165,97 +168,48 @@ const [ascending, setAscending] = useState(true);
                     </Row>
                     <p className="mt-3 mb-0 text-sm">
                       <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> 
+                        <i className="fa fa-truck" style={{color:'#447DF7'}}/> 
                       </span>{" "}
-                      <span className="text-nowrap">Updating</span>
+                      <span className="text-nowrap">Total orders</span>
                     </p>
                   </CardBody>
                 </Card>
               </Col>
-              <Col md="3" xl="2">
+              <Col md="4" xl="3">
                 <Card className="card-stats">
-                  <CardBody>
+                  <CardBody style={{backgroundColor:'#91ccff'}}>
                     <Row>
                       <div className="col">
                         <CardTitle
-                          tag="h5"
+                          tag="h3"
                           className="text-uppercase text-muted mb-0"
                         >
-                          Major field
+                          Revenue
                         </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{MajorFields}</span>
-                      </div>
+                        <span className="h2 font-weight-bold mb-0"> 
+                        <NumberFormat className="input-type-css-order"
+                          thousandsGroupStyle="thousand"
+                          value={localStorage.getItem("revenus")}
+                          decimalSeparator="."
+                          thousandSeparator={true}
+                          disabled 
+                          style={{textAlign:'left', color:'black',fontWeight:'700',paddingBottom:'10px'}}/></span>
+                        </div>
+                        
                       <Col className="col-auto">
                         <div className="icon icon-shape bg-gradient-primary text-white rounded-circle shadow">
                           <i className="ni ni-chart-bar-32" />
                         </div>
                       </Col>
                     </Row>
-                    <p className="mt-3 mb-0 text-sm">
                       <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> 
-                      </span>{" "}
-                      <span className="text-nowrap">Updating</span>
-                    </p>
+                        <i className="fa fa-address-card" style={{color:'#447DF7'}}/> 
+                      </span>{" "}   
+                      <span className="text-nowrap">Last 24 Hours</span>               
                   </CardBody>
                 </Card>
               </Col>
-              <Col md="3" xl="2">
-                <Card className="card-stats">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Major
-                        </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{Major}</span>
-                      </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-gradient-primary text-white rounded-circle shadow">
-                          <i className="ni ni-chart-bar-32" />
-                        </div>
-                      </Col>
-                    </Row>
-                    <p className="mt-3 mb-0 text-sm">
-                      <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> 
-                      </span>{" "}
-                      <span className="text-nowrap">Updating</span>
-                    </p>
-                  </CardBody>
-                </Card>
-              </Col>
-              <Col md="3" xl="2">
-                <Card className="card-stats">
-                  <CardBody>
-                    <Row>
-                      <div className="col">
-                        <CardTitle
-                          tag="h5"
-                          className="text-uppercase text-muted mb-0"
-                        >
-                          Service
-                        </CardTitle>
-                        <span className="h2 font-weight-bold mb-0">{serviceList}</span>
-                      </div>
-                      <Col className="col-auto">
-                        <div className="icon icon-shape bg-gradient-primary text-white rounded-circle shadow">
-                          <i className="ni ni-chart-bar-32" />
-                        </div>
-                      </Col>
-                    </Row>
-                    <p className="mt-3 mb-0 text-sm">
-                      <span className="text-success mr-2">
-                        <i className="fa fa-arrow-up" /> 
-                      </span>{" "}
-                      <span className="text-nowrap">Updating</span>
-                    </p>
-                  </CardBody>
-                </Card>
-              </Col>
+             
             </Row>
           </div>
         </Container>

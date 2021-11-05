@@ -39,7 +39,6 @@ import {
   Avatar,
 } from '@material-ui/core';
 // core components
-import NumberFormat from 'react-number-format';
 import CardsHeader from "../views/Components/CardsHeader.js";
 import "../assets/css/customSize.css";
 // import {
@@ -60,8 +59,7 @@ const [tips , setTips] = useState([]);
 
   const [TopCustomer, setTopCustomer] = useState([]);
   const [TopCompany, setTopCompany] = useState([]);
-  const [content , setcontent] = useState("");
-  const [title, settitle] = useState("");
+ 
   const [imageUrl , setimageUrl ] = useState("");
   const [TopService, setTopService] = useState([]);
   const [ShowRoyalName, setShowRoyal] = useState([]);
@@ -146,6 +144,115 @@ function handleChange(e){
     <>
       <CardsHeader name="Default" parentName="Dashboards" />
       <Container className="mt--6" fluid>
+       
+        <Row style ={{paddingTop:'10px'}}>
+          <Col xl="8">
+            <Card>
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">TOP 5 COMPANIES</h3>
+                  </div>
+                  
+                  <div className="col text-right">
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={() => window.location.href = "/admin/Company"}
+                      size="sm"
+                    >
+                      View All
+                    </Button>
+                  </div>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light-css-dash">
+                  <tr>
+                    <th style={{color:'black',fontWeight:'700'}}>#</th>
+                    <th style={{color:'black',fontWeight:'700'}}>Company name</th>
+                    <th style={{color:'black',fontWeight:'700'}}>Address</th>
+                    <th style={{color:'black',fontWeight:'700'}}></th>
+                    <th style={{color:'black',fontWeight:'700'}}>order rate</th>
+
+                    {/* <th style={{color:'black',fontWeight:'700'}}>Unique users</th> */}
+                  </tr>
+                </thead>
+                <tbody style ={{paddingTop:'10px' , backgroundColor:'#c8e3fa',border:'1px solid #c8e3fa'} }>
+                  {TopCompany.map((e, index) => {
+                    return (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{e.companyName}</td>
+
+                        <td scope="row">{e.address}</td>
+                        <td></td>
+                        <td>
+                          <i className="fas fa-arrow-up text-success mr-3" />
+                          {e.orders} orders
+                        </td>
+                        {/* <i className="fas fa-arrow-down text-warning mr-3" /> */}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+          <Col xl="4">
+            <Card>
+              <CardHeader className="border-0">
+                <Row className="align-items-center">
+                  <div className="col">
+                    <h3 className="mb-0">BEST SERVICE</h3>
+                  </div>
+                  <div className="col text-right">
+                    <Button
+                      color="primary"
+                      href="#pablo"
+                      onClick={(e) => window.location.href = "/admin/service"}
+                      size="sm"
+                    >
+                      View All
+                    </Button>
+                  </div>
+                </Row>
+              </CardHeader>
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light-css-dash">
+                  <tr>
+                    <th style={{color:'black',fontWeight:'700'}}>#</th>
+                    <th style={{color:'black',fontWeight:'700'}}>Service Name</th>
+                    <th style={{color:'black',fontWeight:'700'}}>Orders</th>
+                  </tr>
+                </thead>
+                <tbody style ={{paddingTop:'10px' , backgroundColor:'#c8e3fa',border:'1px solid #c8e3fa'}}>
+                  {TopService.map((e, index) => {
+                    return (
+                      <tr key={index}>
+                        <th scope="row">{index + 1}</th>
+                        {/* <td>{e.id}</td> */}
+                        <td>{e.serviceName}</td>
+                        <td>
+                          <div className="d-flex align-items-center">
+                            <span className="mr-2">{e.orders}</span>
+                            <div>
+                              <Progress
+                                max="100"
+                                value="30"
+                                color="gradient-warning"
+                              />
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Card>
+          </Col>
+        </Row>
         <Row>
           <Col xl="8">
             <Row>
@@ -156,23 +263,23 @@ function handleChange(e){
                   </CardHeader>
                   <Table className="align-items-center table-flush" responsive>
 
-                    <thead className="thead-light">
+                    <thead className="thead-light-css-dash">
                       <tr>
-                        <th className="sort" data-sort="name" scope="col">
+                        <th className="sort" data-sort="name" style={{color:'black',fontWeight:'700'}}>
                           #
                         </th>
-                        <th className="sort" data-sort="name" scope="col">
+                        <th className="sort" data-sort="name" style={{color:'black',fontWeight:'700'}}>
                           Customer
                         </th>
-                        <th className="sort" data-sort="budget" scope="col">
+                        <th className="sort" data-sort="budget" style={{color:'black',fontWeight:'700'}}>
                           Address
                         </th>
-                        {/* <th className="sort" data-sort="status" scope="col">
+                        {/* <th className="sort" data-sort="status" style={{color:'black',fontWeight:'700'}}>
                           Status
                         </th> */}
-                        <th scope="col">Orders</th>
+                        <th style={{color:'black',fontWeight:'700'}}>Orders</th>
 
-                        <th scope="col"></th>
+                        <th style={{color:'black',fontWeight:'700'}}></th>
                         <th scope="row" ></th>
                         <th scope="row">
                           <Media className="align-items-center">
@@ -183,15 +290,15 @@ function handleChange(e){
                             >
                             </a>
                             <Media>
-                              <span className="name mb-0 text-sm">
+                              {/* <span className="name mb-0 text-sm">
                                 System
-                              </span>
+                              </span> */}
                             </Media>
                           </Media>
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="list">
+                    <tbody className="list" style ={{paddingTop:'10px' , backgroundColor:'#c8e3fa',border:'1px solid #c8e3fa'}}>
                       {UseListCustomerShowPage.map((e, index) => {
                         return (
                           <tr key={index}>
@@ -211,10 +318,9 @@ function handleChange(e){
                               </Badge>
                             </td>
                             <td>{e.address}</td>
-
                             <td>
                               <div className="d-flex align-items-center">
-                                <span className="completion mr-2">{e.orders}</span>
+                                <span className="completion mr-2">{e.orders} ordered</span>
 
                               </div>
                             </td>
@@ -305,151 +411,26 @@ function handleChange(e){
           </Col> */}
 
           <Col xl="4">
-            <Card>
+            {/* <Card>
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
                   <div className="col">
                     <h6 className="text-uppercase text-muted ls-1 mb-1">
                       Performance
                     </h6>
-                    <h5 className="h3 mb-0">Revenus:  
-                    <NumberFormat className="input-type-css-order"
-                          thousandsGroupStyle="thousand"
-                          value={localStorage.getItem("revenus")}
-                          decimalSeparator="."
-                          locale="vn"
-                          thousandSeparator={true}
-                          disabled />VND</h5> 
                   </div>
                 </Row>
               </CardHeader>
-              <CardBody>
-                {/* <div className="chart">
-                  <Bar
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                    className="chart-canvas"
-                    id="chart-bars"
-                  />
-                </div> */}
-              </CardBody>
-            </Card>
+            </Card> */}
           </Col>
         </Row>
 
 
-        <Row>
-          <Col xl="8">
-            <Card>
-              <CardHeader className="border-0">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h3 className="mb-0">TOP 5 COMPANIES</h3>
-                  </div>
-                  
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={() => window.location.href = "/admin/Company"}
-                      size="sm"
-                    >
-                      See all
-                    </Button>
-                  </div>
-                </Row>
-              </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Company name</th>
-                    <th scope="col">Visitors</th>
-                    <th scope="col">Unique users</th>
-                    <th scope="col">Bounce rate</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {TopCompany.map((e, index) => {
-                    return (
-                      <tr key={index}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{e.companyName}</td>
-
-                        <td scope="row">{e.address}</td>
-                        <td></td>
-                        <td>
-                          <i className="fas fa-arrow-up text-success mr-3" />
-                          {e.orders}
-
-                        </td>
-                        {/* <i className="fas fa-arrow-down text-warning mr-3" /> */}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </Card>
-          </Col>
-          <Col xl="4">
-            <Card>
-              <CardHeader className="border-0">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h3 className="mb-0">BEST SERVICE</h3>
-                  </div>
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => window.location.href = "/admin/service"}
-                      size="sm"
-                    >
-                      See all
-                    </Button>
-                  </div>
-                </Row>
-              </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Service Name</th>
-                    <th scope="col">Orders</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {TopService.map((e, index) => {
-                    return (
-                      <tr key={index}>
-                        <th scope="row">{index + 1}</th>
-                        {/* <td>{e.id}</td> */}
-                        <td>{e.serviceName}</td>
-                        <td>
-                          <div className="d-flex align-items-center">
-                            <span className="mr-2">{e.orders}</span>
-                            <div>
-                              <Progress
-                                max="100"
-                                value="30"
-                                color="gradient-warning"
-                              />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            </Card>
-          </Col>
-        </Row>
         <Row>
           <Col xl="5">
             <Card>
               <CardHeader>
-                <h2 className="title-customer-h3">IREPAIR</h2>
+                <h2 className="title-customer-h3">iREPAIR</h2>
               </CardHeader>
               <CardHeader className="d-flex align-items-center">
                 <div className="d-flex align-items-center">
@@ -472,7 +453,7 @@ function handleChange(e){
                   </div>
                 </div>
               </CardHeader>
-              <CardBody>
+              <CardBody style={{backgroundColor:'#c8e3fa', border:'1px solid  #c8e3fa'}}>
                 <p className="mb-4">
                   App is calling repairman weakly! Very useful
                 </p>
@@ -490,15 +471,7 @@ function handleChange(e){
                         onClick={(e) => e.preventDefault()}
                       >
                         <i className="ni ni-like-2" />
-                        <span className="text-muted">150</span>
-                      </a>
-                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                        <i className="ni ni-chat-round" />
-                        <span className="text-muted">36</span>
-                      </a>
-                      <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                        <i className="ni ni-curved-next" />
-                        <span className="text-muted">12</span>
+                        <span className="text-muted">© 2021 Azai Group</span>
                       </a>
                     </div>
                   </Col>
@@ -537,15 +510,9 @@ function handleChange(e){
                             src={require("../assets/img/dangne2.jpg").default}
                           />
                         </a>
-                        <UncontrolledTooltip
-                          delay={0}
-                          target="tooltip260223080"
-                        >
-                          Nguyen Khanh
-                        </UncontrolledTooltip>
                       </div>
                       <small className="pl-2 font-weight-bold">
-                        and 3+ more
+                        and {localStorage.getItem("Customer")}+ more
                       </small>
                     </div>
                   </Col>
@@ -649,15 +616,15 @@ function handleChange(e){
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
+                <thead className="thead-light-css-dash">
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Content</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Title</th>
+                    <th style={{color:'black',fontWeight:'700'}}>#</th>
+                    <th style={{color:'black',fontWeight:'700'}}>Content</th>
+                    <th style={{color:'black',fontWeight:'700'}}>Description</th>
+                    <th style={{color:'black',fontWeight:'700'}}>Title</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody style ={{paddingTop:'10px' , backgroundColor:'#c8e3fa',border:'1px solid #c8e3fa'}}>
                   
                   {tips.map((tips,index) => {
                     return (
@@ -682,7 +649,7 @@ function handleChange(e){
 
        
       </Container>
-      <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
+      {/* <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
         <ModalHeader
           style={{ color: "#1bd1ff" }}
 
@@ -733,7 +700,7 @@ function handleChange(e){
 
         </ModalFooter>
 
-      </Modal>
+      </Modal> */}
 
     </>
   );

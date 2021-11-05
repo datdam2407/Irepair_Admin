@@ -1099,15 +1099,15 @@ function MajorFields() {
           </div>
         </ModalBody>
         <ModalBody>
-          <b>Major:</b> <a className="name">{selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
+          <a className="name" style={{color:"#1d98e0f7"}}>Major:</a> <a className="name">{selectMajor !== undefined ? displayMajorName(selectMajor.MajorId) : ""}
           </a>
           <br />
-          <b>Field:</b>  <a className="name">  {selectMajor !== undefined ? selectMajor.Name : ""}</a>
+          <a className="name" style={{color:"#1d98e0f7"}}> Field:</a>  <a className="name">  {selectMajor !== undefined ? selectMajor.Name : ""}</a>
           <br />
-          <b>Description:</b>  <a className="name">    {selectMajor !== undefined ? selectMajor.Description : ""}
+          <a className="name" style={{color:"#1d98e0f7"}}>Description:</a>  <a className="name">    {selectMajor !== undefined ? selectMajor.Description : ""}
           </a>
           <br />
-          <b>Status</b><a className="name"> {selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}
+          <a className="name" style={{color:"#1d98e0f7"}}>Status</a><a className="name"> {selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}
           </a>
           <br />
         </ModalBody>

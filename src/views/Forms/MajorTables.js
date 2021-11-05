@@ -918,12 +918,12 @@ function MajorTables() {
           </div>
         </ModalBody>
         <ModalBody>
-          <b>Name:</b> <a className="name"> {selectMajor !== undefined ? selectMajor.Name : ""}</a>
+        <a className="name" style={{color:"#1d98e0f7"}}>Name:</a> <a className="name"> {selectMajor !== undefined ? selectMajor.Name : ""}</a>
           <br />
-          <b>Description:</b>  <a className="name">{selectMajor !== undefined ? selectMajor.Description : ""}</a>
+          <a className="name" style={{color:"#1d98e0f7"}}>Description:</a>  <a className="name">{selectMajor !== undefined ? selectMajor.Description : ""}</a>
 
           <br />
-          <b>Status</b><a className="name"> {selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</a>
+          <a className="name" style={{color:"#1d98e0f7"}}>Status</a><a className="name"> {selectMajor !== undefined ? displayStateName(selectMajor.Status) : ""}</a>
           <br />
         </ModalBody>
 

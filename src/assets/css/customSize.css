@@ -137,20 +137,24 @@ font-size: larger;}
     padding-top: 9px;
     border-radius: 4px;
 }
+.thead-light-css-dash{
+    background-color: rgb(145, 204, 255);
+}
+.color-name{
+    font-weight: 700;
+    color: #000;
+}
+
 .info-customer{
     margin-top: 13px;
     padding: 3px;
     margin-left: 10px;
 }
 .sidebar-mini-css{
-    padding-left: 35px;
-    font-weight: 700 ;
+    padding-left: 5px;
+    color: rgb(2, 39, 97);
 }
-.sidebar-mini-css{
-    padding-left: 42px;
-    font-size: 12px;
 
-}
 .mr-2-css{
     font-size: x-large;
     font-weight: 700;
@@ -207,6 +211,7 @@ font-size: larger;}
     .input-type-css-order{
         border:solid #ffffff00;
         text-align: center;       
+        background:border-box;
     }
     b{
         font-weight: 900;
@@ -253,11 +258,12 @@ font-size: larger;}
 }
 .card-stats{
     background-color: honeydew;
-    padding-bottom: 2px;
+    height: 140px;
+    border-radius: 7px;
 }
 .header-body-header{
-    background-color: white;
-    border: 1px solid white;
+    background-color: rgb(212 238 255);
+    border: 1px solid rgb(212 238 255);
     padding-bottom: 2px;
 }
 .media-comment-avatar {

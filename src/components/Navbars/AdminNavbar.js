@@ -162,6 +162,9 @@ function AdminNavbar() {
           <h5>Do you want to log out?</h5>
         </ModalBody>
         <ModalFooter>
+        <Button className="Cancel-button" onClick={toggleLogOut}>
+            Cancel
+          </Button>
           <Button
             color="danger"
             onClick={() => {
@@ -172,9 +175,7 @@ function AdminNavbar() {
           >
             Log out
           </Button>{" "}
-          <Button className="Cancel-button" onClick={toggleLogOut}>
-            Cancel
-          </Button>
+          
         </ModalFooter>
       </Modal>
     </>

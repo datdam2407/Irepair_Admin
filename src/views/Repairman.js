@@ -45,7 +45,7 @@ import {
     faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { Avatar } from "material-ui-core";
-import { IconName ,TiStar ,TiLockClosed } from "react-icons/ti";
+import { IconName, TiStar, TiLockClosed } from "react-icons/ti";
 
 export default function Repairman() {
 
@@ -105,7 +105,11 @@ export default function Repairman() {
                 }
             });
     }, []);
-
+    function checkDisableImage(state) {
+        if (state == null)
+            return false;
+        else return true;
+    }
     function displayRepairmanName(type) {
         const stateValue = {
             "7e179e62-21da-45c1-afe4-114a580f0a12": "Công ty điện lạnh Long Châu",
@@ -248,7 +252,7 @@ export default function Repairman() {
             fontWeight: 'bold',
             color: '#e86a10f7',
             width: '194px',
-          },
+        },
         Status: {
             fontWeight: '700',
             width: '71px',
@@ -310,7 +314,7 @@ export default function Repairman() {
     const closeBtn = (x) => (
         <button
             className="btn border border-danger"
-            style={{ color: "#B22222" , backgroundColor:"white"}}
+            style={{ color: "#B22222", backgroundColor: "white" }}
             onClick={x}
         >
             X
@@ -394,19 +398,19 @@ export default function Repairman() {
                                             <th
                                                 className="description"
                                                 onClick={() => {
-                                                    if (sortedField === "Username" && ascending) {
-                                                        setSortedField("Username");
+                                                    if (sortedField === "username" && ascending) {
+                                                        setSortedField("username");
                                                         setAscending(false);
-                                                        sort("Username", false, useListRepairmanShowPage);
+                                                        sort("username", false, useListRepairmanShowPage);
                                                     } else {
-                                                        setSortedField("Username");
+                                                        setSortedField("username");
                                                         setAscending(true);
-                                                        sort("Username", true, useListRepairmanShowPage);
+                                                        sort("username", true, useListRepairmanShowPage);
                                                     }
                                                 }}
                                             >
                                                 Image{" "}
-                                                {sortedField === "Username" ? (
+                                                {sortedField === "username" ? (
                                                     ascending === true ? (
                                                         <FontAwesomeIcon icon={faCaretUp} />
                                                     ) : (
@@ -419,19 +423,19 @@ export default function Repairman() {
                                             <th
                                                 className="description"
                                                 onClick={() => {
-                                                    if (sortedField === "Id" && ascending) {
-                                                        setSortedField("Id");
+                                                    if (sortedField === "id" && ascending) {
+                                                        setSortedField("id");
                                                         setAscending(false);
-                                                        sort("Id", false, useListRepairmanShowPage);
+                                                        sort("id", false, useListRepairmanShowPage);
                                                     } else {
-                                                        setSortedField("Id");
+                                                        setSortedField("id");
                                                         setAscending(true);
-                                                        sort("Id", true, useListRepairmanShowPage);
+                                                        sort("id", true, useListRepairmanShowPage);
                                                     }
                                                 }}
                                             >
                                                 Repairman{" "}
-                                                {sortedField === "Id" ? (
+                                                {sortedField === "id" ? (
                                                     ascending === true ? (
                                                         <FontAwesomeIcon icon={faCaretUp} />
                                                     ) : (
@@ -444,19 +448,19 @@ export default function Repairman() {
                                             <th
                                                 className="description"
                                                 onClick={() => {
-                                                    if (sortedField === "Name" && ascending) {
-                                                        setSortedField("Username");
+                                                    if (sortedField === "name" && ascending) {
+                                                        setSortedField("name");
                                                         setAscending(false);
-                                                        sort("Username", false, useListRepairmanShowPage);
+                                                        sort("name", false, useListRepairmanShowPage);
                                                     } else {
-                                                        setSortedField("Username");
+                                                        setSortedField("name");
                                                         setAscending(true);
-                                                        sort("Username", true, useListRepairmanShowPage);
+                                                        sort("name", true, useListRepairmanShowPage);
                                                     }
                                                 }}
                                             >
                                                 User Name{" "}
-                                                {sortedField === "Username" ? (
+                                                {sortedField === "name" ? (
                                                     ascending === true ? (
                                                         <FontAwesomeIcon icon={faCaretUp} />
                                                     ) : (
@@ -470,19 +474,19 @@ export default function Repairman() {
                                             <th
                                                 className="description"
                                                 onClick={() => {
-                                                    if (sortedField === "Email" && ascending) {
-                                                        setSortedField("Email");
+                                                    if (sortedField === "email" && ascending) {
+                                                        setSortedField("email");
                                                         setAscending(false);
-                                                        sort("Email", false, useListRepairmanShowPage);
+                                                        sort("email", false, useListRepairmanShowPage);
                                                     } else {
-                                                        setSortedField("Email");
+                                                        setSortedField("email");
                                                         setAscending(true);
-                                                        sort("Email", true, useListRepairmanShowPage);
+                                                        sort("email", true, useListRepairmanShowPage);
                                                     }
                                                 }}
                                             >
-                                                Email{" "}
-                                                {sortedField === "Email" ? (
+                                                email{" "}
+                                                {sortedField === "email" ? (
                                                     ascending === true ? (
                                                         <FontAwesomeIcon icon={faCaretUp} />
                                                     ) : (
@@ -493,9 +497,10 @@ export default function Repairman() {
                                                 )}
                                             </th>
 
-                                            {/* <th className="description">Username</th> */}
+                                            {/* <th className="description">username</th> */}
                                             <th className="description">Create Date</th>
                                             <th className="description">Company</th>
+                                            <th className="description">Stars</th>
                                             <th className="description">Status</th>
                                             <th className="viewAll">Actions</th>
                                         </tr>
@@ -504,20 +509,20 @@ export default function Repairman() {
                                         {useListRepairmanShowPage.map((e, index) => {
                                             return (
                                                 <tr key={index}>
-                                                   
+
                                                     <td onClick={() => {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);
                                                     }}>
-                                                        
-                                                        <Avatar style={{width:'90px' , height:'90px'}} className="avatar-repairman" src={e.Avatar} />
+
+                                                        <Avatar style={{ width: '90px', height: '90px' }} className="avatar-repairman" src={e.avatar} />
                                                     </td>
                                                     <TableCell>
                                                         <Grid container>
 
                                                             <Grid item lg={10}>
-                                                                <Typography className={classes.name}>{e.Name}</Typography>
-                                                                <Typography color="textSecondary" variant="body2">{e.Id}
+                                                                <Typography className={classes.name}>{e.name}</Typography>
+                                                                <Typography color="textSecondary" variant="body2">{e.id}
                                                                 </Typography>
                                                             </Grid>
                                                         </Grid>
@@ -526,46 +531,53 @@ export default function Repairman() {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);
                                                     }}>
-                                                        {e.Username}
+                                                        {e.username}
                                                     </td>
                                                     <td onClick={() => {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);
                                                     }}>
-                                                        {e.PhoneNumber}
+                                                        {e.phoneNumber}
                                                     </td>
                                                     <td onClick={() => {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);
                                                     }}>
-                                                        {e.Email}
+                                                        {e.email}
                                                     </td>
                                                     <td onClick={() => {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);
                                                     }}>{moment(e.CreateDate).format("MM-DD-YYYY")}
                                                     </td>
-                                                  
+
                                                     <td onClick={() => {
                                                         setModalStatus(true);
                                                         setSelectRepairman(e);
                                                     }}>
-                                                        {displayRepairmanName(e.CompanyId)}
+                                                        {displayRepairmanName(e.companyId)}
                                                     </td>
+                                                    {checkDisableImage(e.rating) ?
+                                                        <td className="point-customer">
+                                                            {e.rating}  <TiStar />
+                                                        </td> : (
 
+                                                            <td>
+                                                            </td>
+                                                        )}
                                                     <TableCell>
                                                         <Typography
                                                             className={classes.Status}
                                                             style={{
                                                                 backgroundColor:
-                                                                    ((e.Status === 1 && 'rgb(34, 176, 34)')
+                                                                    ((e.status === 1 && 'rgb(34, 176, 34)')
                                                                         ||
-                                                                        (e.Status === 3 && 'red') ||
-                                                                        (e.Status === 2 && '#0b0808') ||
-                                                                        (e.Status === 0 && 'rgb(50, 102, 100)'))
+                                                                        (e.status === 3 && 'red') ||
+                                                                        (e.status === 2 && '#0b0808') ||
+                                                                        (e.status === 0 && 'rgb(50, 102, 100)'))
 
                                                             }}
-                                                        >{displayStateName(e.Status)}</Typography>
+                                                        >{displayStateName(e.status)}</Typography>
                                                     </TableCell>
                                                     <td>
                                                         <td className="td-actions">
@@ -581,7 +593,7 @@ export default function Repairman() {
                                                                 <Button
                                                                     onClick={() => {
                                                                         setModalApprove(true);
-                                                                        setRepairmanApprove(e.Id);
+                                                                        setRepairmanApprove(e.id);
                                                                         // setSelectRepairman(e);
                                                                     }}
                                                                     className="btn-link btn-icon"
@@ -602,16 +614,16 @@ export default function Repairman() {
                                                             >
                                                                 <Button
                                                                     onClick={() => {
-                                                                        setRepairmanDelete(e.Id);
+                                                                        setRepairmanDelete(e.id);
                                                                         setRepairmanModalDelete(true);
                                                                         // setSelectRepairman(e);
                                                                     }}
                                                                     className="btn-link btn-icon"
                                                                     type="button"
                                                                     variant="danger"
-                                                                    style={{fontSize:'x-large'}}
+                                                                    style={{ fontSize: 'x-large' }}
                                                                 >
-                                                                    <TiLockClosed/>
+                                                                    <TiLockClosed />
                                                                 </Button>
                                                             </OverlayTrigger>
                                                         </td>
@@ -721,8 +733,8 @@ export default function Repairman() {
                     Are you sure?
                 </ModalHeader>
                 <ModalBody><h4>Do you want to Appprove this repairman ? </h4></ModalBody>
-         <ModalFooter style={{ justifyContent: 'space-around'}}>
-         <Button className="Cancel-button" onClick={toggleApprove}>
+                <ModalFooter style={{ justifyContent: 'space-around' }}>
+                    <Button className="Cancel-button" onClick={toggleApprove}>
                         Cancel
                     </Button>
                     <Button
@@ -735,7 +747,7 @@ export default function Repairman() {
                     >
                         Approved
                     </Button>{" "}
-                 
+
                 </ModalFooter>
             </Modal>
 
@@ -747,8 +759,8 @@ export default function Repairman() {
                     Are you sure?
                 </ModalHeader>
                 <ModalBody><h4>Do you want to delete this repairman? </h4></ModalBody>
-         <ModalFooter style={{ justifyContent: 'space-around'}}>
-         <Button className="Cancel-button" onClick={toggleDelete}>
+                <ModalFooter style={{ justifyContent: 'space-around' }}>
+                    <Button className="Cancel-button" onClick={toggleDelete}>
                         Cancel
                     </Button>
                     <Button
@@ -760,7 +772,7 @@ export default function Repairman() {
                     >
                         Delete
                     </Button>{" "}
-                   
+
                 </ModalFooter>
             </Modal>
 
@@ -774,37 +786,54 @@ export default function Repairman() {
                     <h3> INFORMATION </h3>
                 </ModalHeader>
                 <ModalBody>
-
                     <Row>
                         <Col></Col>
                         <Col className="view-item-size-main" md={3}>  FullName:</Col>
                         <Col className="view-item-size" md={8}>
-                            {SelectRepairman !== undefined ? SelectRepairman.Name : ""}
+                            {SelectRepairman !== undefined ? SelectRepairman.name : ""}
                             {/* {setSelectRepairman !== undefined ? displayMajorName(SelectRepairman.MajorId) : ""} */}
                         </Col>
                     </Row>
                     <Row>
                         <Col></Col>
-                        <Col className="view-item-size-main" md={3}> Email:</Col>
+                        <Col className="view-item-size-main" md={3}>  Company:</Col>
                         <Col className="view-item-size" md={8}>
-                            {SelectRepairman !== undefined ? SelectRepairman.Email : ""}
+                            {SelectRepairman !== undefined ? displayRepairmanName(SelectRepairman.companyId) : ""}
                         </Col>
                     </Row>
                     <Row>
                         <Col></Col>
-                        <Col className="view-item-size-main" md={4}> Created Date:</Col>
-                        <Col className="view-item-size" md={7}>
-                            {SelectRepairman !== undefined ? SelectRepairman.CreateDate : ""}
-
-
-
+                        <Col className="view-item-size-main" md={3}>Email:</Col>
+                        <Col className="view-item-size" md={8}>
+                            {SelectRepairman !== undefined ? SelectRepairman.email : ""}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col></Col>
+                        <Col className="view-item-size-main" md={3}>Username:</Col>
+                        <Col className="view-item-size" md={8}>
+                            {SelectRepairman !== undefined ? SelectRepairman.username : ""}
                         </Col>
                     </Row>
 
                     <Row>
                         <Col></Col>
                         <Col className="view-item-size-main" md={3}> Phone:</Col>
-                        <Col className="view-item-size" md={8}>{SelectRepairman !== undefined ? SelectRepairman.PhoneNumber : ""}</Col>
+                        <Col className="view-item-size" md={8}>{SelectRepairman !== undefined ? SelectRepairman.phoneNumber : ""}</Col>
+                    </Row>
+                    <Row>
+                        <Col></Col>
+                        <Col className="view-item-size-main" md={3}>Rating:</Col>
+                        <Col className="view-item-size" md={8}>
+                            {SelectRepairman !== undefined ? SelectRepairman.rating : ""}<TiStar/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col></Col>
+                        <Col className="view-item-size-main" md={3}>Status:</Col>
+                        <Col className="view-item-size" md={8}>
+                        {SelectRepairman !== undefined ? displayStateName(SelectRepairman.status) : ""}
+                        </Col>
                     </Row>
                 </ModalBody>
             </Modal>

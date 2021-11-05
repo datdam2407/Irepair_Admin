@@ -273,7 +273,17 @@ export default function ManageCompany() {
         console.log(err)
       });
   }
-  
+  function checkDisableImage(state) {
+    if (state === "Inactive")
+      return false;
+    else 
+    return false;
+  }
+  function checkDisableUpdate(state) {
+    if (state === "Inactive")
+      return false;
+    else return false;
+  }
   // function handleCompanyDetele(){
   //   const [NewStatus, setNewStatus] = useState(3);
   //   const [OldStatus, setOldStatus] = useState({
@@ -359,9 +369,9 @@ export default function ManageCompany() {
                           isOpen={dropdownOpen}
                           toggle={toggleDropDown}
                         >
-                          <DropdownToggle className="dropdown-filter-css" caret> Filter&nbsp;</DropdownToggle>
+                          {/* <DropdownToggle className="dropdown-filter-css" caret> Filter&nbsp;</DropdownToggle> */}
                           <DropdownMenu>
-                            <div className="fixed">
+                            {/* <div className="fixed">
                               <FilterState
                                 list={filterState}
                                 onChangeCheckBox={(e, id) => {
@@ -369,7 +379,7 @@ export default function ManageCompany() {
                                 }}
                                 key={filterState}
                               />
-                            </div>
+                            </div> */}
                           </DropdownMenu>
                         </InputGroupButtonDropdown>
                       </InputGroup>
@@ -377,7 +387,7 @@ export default function ManageCompany() {
                   </Col>
 
                 </div>
-                <Col md={2}>
+                {/* <Col md={2}>
                   <Form
                     onClick={(e) => {
                       onSubmitSearch(e);
@@ -390,7 +400,7 @@ export default function ManageCompany() {
                       </Button>
                     </InputGroup>
                   </Form>
-                </Col>
+                </Col> */}
                 <Col>
                   <Col align="right">
                     <Button
@@ -457,31 +467,7 @@ export default function ManageCompany() {
                         <FontAwesomeIcon icon={faCaretDown} />
                       )}
                     </th>
-                    <th
-                      className="description"
-                      onClick={() => {
-                        if (sortedField === "description" && ascending) {
-                          setSortedField("description");
-                          setAscending(false);
-                          sort("description", false, useListCompanyShowPage);
-                        } else {
-                          setSortedField("description");
-                          setAscending(true);
-                          sort("description", true, useListCompanyShowPage);
-                        }
-                      }}
-                    >
-                      Description{" "}
-                      {sortedField === "description" ? (
-                        ascending === true ? (
-                          <FontAwesomeIcon icon={faCaretUp} />
-                        ) : (
-                          <FontAwesomeIcon icon={faCaretDown} />
-                        )
-                      ) : (
-                        <FontAwesomeIcon icon={faCaretDown} />
-                      )}
-                    </th>
+                 
                     <th className="description">Human resources</th>
                     <th
                       className="description"
@@ -508,7 +494,7 @@ export default function ManageCompany() {
                         <FontAwesomeIcon icon={faCaretDown} />
                       )}
                     </th>
-                    <th className="description">Revenus (Vnd)</th>
+                    <th className="description">Revenue (Vnd)</th>
                     <th className="description">Hotline</th>
                     <th
                       className="description"
@@ -557,9 +543,7 @@ export default function ManageCompany() {
                         <td>
                           {e.address}
                         </td>
-                        <td className="descriptionSize">
-                          {e.description}
-                        </td>
+                   
                         <td className="descriptionSize">
                           {e.totalWorker} members
                         </td>
@@ -579,7 +563,7 @@ export default function ManageCompany() {
                         <td>
                           {e.hotline}
                         </td>
-
+                        
                         <TableCell onClick={() => {
                           setCompanyDelete(e.id);
                           setCompanyModalApprove(true)
@@ -596,10 +580,8 @@ export default function ManageCompany() {
                         </TableCell>
 
                         <td>
-
-                          <OverlayTrigger
+                        <OverlayTrigger
                             onClick={(e) => e.preventDefault()}
-
                             overlay={
                               <Tooltip id="tooltip-334669391">
                                 Approved Company..
@@ -619,8 +601,9 @@ export default function ManageCompany() {
                             >
                               <i className="fas fa-check"></i>
                             </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
+                          </OverlayTrigger> 
+                        
+                           <OverlayTrigger
                             onClick={(e) => e.preventDefault()}
 
                             overlay={
@@ -644,6 +627,11 @@ export default function ManageCompany() {
                               <TiLockClosed/>
                             </Button>
                           </OverlayTrigger>
+                        
+                        
+                           
+                        
+                        
 
                         </td>
 
