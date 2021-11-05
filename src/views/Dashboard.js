@@ -97,38 +97,21 @@ function handleChange(e){
     }).then((res) =>  window.location="/admin/dashboard")
          
   }
-  //  useEffect(() => {
-  //  postWithToken(
-  //     `/api/v1.0/authenticate-admins?token=${localStorage.getItem("token2")}`,
-  //     {
-  //       token: localStorage.getItem("token2")
-  //     },
-      
-  //   )
-  //     .then((res) => {
-  //       if (res.status === 401) {
-  //         window.location = "/";
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
-  useEffect(() => {
-  
-    getWithToken("/api/v1.0/all-count", localStorage.getItem("token")).then(
-      (res) => {
-        setTopCustomer(res.data.topCustomer);
-        setTopCompany(res.data.topComps);
-        setTopService(res.data.topService);
-        setUseListCustomerShow(res.data.topCustomer);
-        // setShowRoyal(res.data.topCustomer[0].fullName);
-        setUseListCustomerShowPage(res.data.topCustomer.slice(numberPage * 10 - 10, numberPage * 10));
-
-        setTotalNumberPage(Math.ceil(res.data.topCustomer.length / 10));
-      });
+   useEffect(() => {
+    getDataAll();
   }, []);
-
+    async function getDataAll(){
+      return await   getWithToken("/api/v1.0/all-count", localStorage.getItem("token")).then(
+        (res) => {
+          setTopCustomer(res.data.topCustomer);
+          setTopCompany(res.data.topComps);
+          setTopService(res.data.topService);
+          setUseListCustomerShow(res.data.topCustomer);
+          // setShowRoyal(res.data.topCustomer[0].fullName);
+          setUseListCustomerShowPage(res.data.topCustomer.slice(numberPage * 10 - 10, numberPage * 10));
+          setTotalNumberPage(Math.ceil(res.data.topCustomer.length / 10));
+        });
+    }
   //Paging
   function onClickPage(number) {
     setNumberPage(number);
@@ -146,14 +129,13 @@ function handleChange(e){
 
   React.useEffect(() =>{
     const fetchData = async () => {
-    
     const db = firebase.firestore();
     const data = await db.collection("tips").get()
     setTips(data.docs.map(doc => doc.data()))
     }
     fetchData()
     },[])
-  console.log("database" , ref)
+  // console.log("database" , ref)
   let history = useHistory();
 
   // if(){
@@ -679,13 +661,7 @@ function handleChange(e){
                   <div className="col">
                     <h3 className="mb-0">FAVORITE TIPS</h3>
                   </div>
-                  <div className="col text-right"> 
-                    <Button
-                      onClick={() =>setTipsModalCreate(true)}
-                    >
-                      Create
-                    </Button>
-                  </div>
+                
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>

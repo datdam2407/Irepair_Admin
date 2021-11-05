@@ -154,6 +154,7 @@ export default function Order() {
     Status: {
       fontWeight: '700',
       width: '121px',
+      color: 'red',
     },
     StatusOrder: {
       fontWeight: '700',
@@ -221,8 +222,7 @@ export default function Order() {
       });
   }
   function checkDisableImage(state) {
-    const list = ["null"];
-    if (list.includes(state)) return true;
+    if (state == null) return true;
     else return false;
   }
   // custom state
@@ -509,12 +509,11 @@ export default function Order() {
                       {/* {e.CancelPerson} */}
                       {/* {displayServiceName(e.CancelPerson)} */}
                       {/* </td> */}
-                      {checkDisableImage(e.FeedbackMessage) !== null ?
+                     {checkDisableImage(e.FeedbackMessage) !== null ?
                       <td className="point-customer">
-                     {e.FeedbackMessage}  {e.FeedbackPoint}<TiStar/>
-                  
+                     {e.FeedbackMessage}  {e.FeedbackPoint} <TiStar/>
                 </td>  : (
-                  <td> null
+                  <td> 
                   </td>
                     )}
 
@@ -528,7 +527,8 @@ export default function Order() {
                           style={{
                             color:
                               ((e.CancelReason === "Không liên hệ được thợ" && 'red') ||
-                                (e.CancelReason === "Tôi không thể liên lạc được với khách" && 'red') ||
+                                (e.CancelReason === "Tôi không thể liên lạc được với khách" && '#e86a10f7') ||
+                                (e.CancelReason === "Tôi không thể nhận đơn vào lúc này" && '#e86a10f7') ||
                                 (e.CancelReason === "Thời gian chờ thợ đến quá lâu" && 'red'))
                           }}
                         >{e.CancelReason}</Typography>

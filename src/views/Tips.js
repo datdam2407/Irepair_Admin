@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ImageUpload from "./Upload/ImageUpload.js";
 
 import 'react-tippy/dist/tippy.css'
 // react-bootstrap components
@@ -10,8 +11,17 @@ import {
   Container,
   Row,
   Col,
-
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
+import {
+  Form ,
+  ModalTitle,
+  Tooltip,
+} from "react-bootstrap";
 import firebase from "firebase";
 import "firebase/storage";
 import 'firebase/firestore';
@@ -23,6 +33,8 @@ export default function Tips() {
   const [loadDataBase, setLoadDatabase] = useState(true);
   const ref = firebase.firestore().collection("tips");
 
+  const [modalCreate, setTipsModalCreate] = useState(false);
+  const toggleCreate = () => setTipsModalCreate(!modalCreate)
 const [data, setData] = useState({
   content : "",
   imageUrl : null,
@@ -36,49 +48,21 @@ function handleChange(e){
   })
 }
 
- 
-  const createTips = (e) => {
-    // e.preventDefault();
-    // const uploadTask = storge.bucket().file('/path/to/file');
-    const uploadTask = storge.ref("tips/"+ data.imageUrl.name).put(data.imageUrl)
-    uploadTask.on(
-      "stage_change",
-      (snapshot) =>{
-        let progess;
-        progess =(snapshot.bytesTransferred/snapshot.totalBytes)*100;
-        console.log("progess image" ,progess);
-      },
-      (err) =>{
-        console.log(err);
-      },
-      ()=>{
-        storge.ref("tips")
-        .child(data.imageUrl.name)
-        .getDownloadURL()
-        .then((url)=>{
-        db.collection("tips")
-        .doc(data.content)
-        .set({
-          content : content,
-          imageUrl : url,
-          title : title
-        }).then(()=>{
-          setData({
-            content : "",
-            imageUrl : null,
-            title : ""
-          })
-          
-        })
-        })
-      }
-    )
+const createTips = (e) => {
+  ref.add({
+    content : content,
+    imageUrl :localStorage.getItem("urlUpload"),
+    title : title
+  }).then((res) =>  window.location="/admin/dashboard")
+       
+}
+
     // ref.add({
     //   content : content,
     //   imageUrl : data.imageUrl.name,
     //   title : title
     // }).then((res) => console.log("tips created"))
-  }
+  
 
 React.useEffect(() =>{
 const fetchData = async () => {
@@ -98,15 +82,18 @@ fetchData()
             <Card>
               <CardHeader className="border-0">
                 <Row className="align-items-center">
-                  <div className="col">
+                  <div className="col md 1">
                   </div>
-                  {/* <div className="col text-right"> */}
-                    {/* <Button
+                  <div  style={{marginRight:'30px'}}> 
+                    <Button
+                       color="primary"
+                       href="#pablo"
+                      
                       onClick={() =>setTipsModalCreate(true)}
                     >
-                      Create
-                    </Button> */}
-                  
+                      Create new tips
+                    </Button>
+                  </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
@@ -139,7 +126,58 @@ fetchData()
 
         </Row>
       </Container>
+      <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
+        <ModalHeader
+          style={{ color: "#1bd1ff" }}
 
+        >
+          <ModalTitle>Do you want to create new company</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <Form
+          >
+            <Form.Group className="mb-2">
+              <Form.Label>Title</Form.Label>
+              <Form.Control type="text"
+                placeholder="Name"
+                name="title"
+                onChange={e => settitle(e.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label>Content</Form.Label>
+              <Form.Control type="text"
+                placeholder="Content"
+                onChange={e => setcontent(e.target.value)}
+              // onChange={name}
+              />
+            </Form.Group>
+            <Form.Group className="mb-2">
+              <Form.Label>Image</Form.Label>
+  
+                    
+            </Form.Group>
+          </Form>
+        </ModalBody>
+        <ModalFooter style={{ justifyContent: 'space-around' }}>
+          <Button className="Cancel-button" onClick={toggleCreate}>
+            Cancel
+          </Button>
+          <Button onClick={(e) =>  // handleCompanyDetele();
+            // handleSubmit()
+            createTips()
+            // e.preventDefault()
+            // setCompanyModalEdit(false);
+          }
+          >
+            Save
+          </Button>
+          <ImageUpload setData={setData}/>
+
+        </ModalFooter>
+
+      </Modal>
      
     </>
   );

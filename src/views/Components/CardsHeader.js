@@ -43,7 +43,11 @@ const [ascending, setAscending] = useState(true);
 
   useEffect(() => {
 
-    getWithToken("/api/v1.0/all-count" , localStorage.getItem("token")).then(
+    getCompanyList2();
+    getCompanyList();
+  }, []);
+  async function getCompanyList2 (){
+    return await   getWithToken("/api/v1.0/all-count" , localStorage.getItem("token")).then(
       (res) => {
           var temp = res.data[0];
           setDashboard(res.data[0]);
@@ -59,8 +63,8 @@ const [ascending, setAscending] = useState(true);
           setServiceList(res.data.services);
           setTopCustomer(res.data.topCustomer);
       });
-      getCompanyList();
-  }, []);
+  }
+
   function getCompanyList(stateList) {
     let params = {};
     if (stateList && stateList.length > 0)

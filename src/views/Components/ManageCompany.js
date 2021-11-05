@@ -156,16 +156,15 @@ export default function ManageCompany() {
   const [ascending, setAscending] = useState(true);
   // const totalPrice = useRef(0);
   useEffect(() => {
-    getCompanyList();
     getWithToken("/api/v1.0/companies", localStorage.getItem("token")).then(
       (res) => {
         if (res && res.status === 200) {
           setCompanyList(res.data);
           setPrice2(res.data);
-
-
         }
       });
+      getCompanyList();
+
   }, []);
   //sort
   function sort(field, status, items) {
