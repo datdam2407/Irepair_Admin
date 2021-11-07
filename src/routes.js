@@ -74,7 +74,7 @@ var routes = [
   // },
   //aaaa
   {
-    mini: "Managerment By Ojectives",
+    mini: "Management By Objective",
 },
   {
     path: "/dashboard",

@@ -571,8 +571,8 @@ export default function Repairman() {
                                                         <td className="point-customer">
                                                             {e.rating}  <TiStar />
                                                         </td> : (
-
-                                                            <td>
+                                                            <td style={{color:'rgb(145 105 11)',fontWeight:'700'}}>
+                                                                Not rated
                                                             </td>
                                                         )}
                                                     <TableCell>
