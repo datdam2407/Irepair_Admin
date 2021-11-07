@@ -25,7 +25,8 @@ import {
   FormGroup,
 } from "reactstrap";
 import "../../assets/css/customSize.css"
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // react-bootstrap components
 import {
   Button,
@@ -113,7 +114,7 @@ function ManageSevice() {
   const listStates = [
     "New",
     "Active",
-    "Inative",
+    "Inactive",
   ];
   const [filterState, setListFilterState] = useState(listStates);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -267,7 +268,11 @@ function ManageSevice() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/service";
+          toast.success("Update service successfully!!")
+          setTimeout(
+            function(){
+              window.location = "/admin/service";
+            } , 1500);
         }
 
       })
@@ -293,14 +298,33 @@ function ManageSevice() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/service";
+          toast.success("Create service successfully!!")
+          setTimeout(
+            function(){
+              window.location = "/admin/service";
+            } , 1500);
         }
       })
       .catch((err) => {
         console.log(err);
       });
   }
-
+  //delete fc
+  function deleteserviceByID() {
+    del(`/api/v1.0/services/${serviceDelete}`, localStorage.getItem("token")
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success("Delete service successfully!!")
+          setTimeout(
+            function(){
+              window.location = "/admin/service";
+            } , 1500);
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
+  }
   function onSubmitSearch(e) {
     e.preventDefault();
     if (searchName !== "") {
@@ -352,7 +376,6 @@ function ManageSevice() {
     setLoading(false)
   }
 
-
   function handleOnchangeSelectedAsset(e, value) {
     setfieldSelect(e.target.fieldId);
     setFieldSelectID(value.value);
@@ -370,18 +393,7 @@ function ManageSevice() {
       console.log(err);
     });
   }
-  //delete fc
-  function deleteserviceByID() {
-    del(`/api/v1.0/services/${serviceDelete}`, localStorage.getItem("token")
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/service";
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
-  }
+
   function cancelServiceByID() {
     setName("");
     setDescription("");
@@ -461,20 +473,32 @@ function ManageSevice() {
       "c2dc1cf0-24c1-4e52-9504-f1dad032f6e9": "Sửa xe Đinh Nguyễn 77",
 
 
-
-
-      "86083895-18dc-4fba-a721-a5acce6a26a8": "Xe số",
-      "6eaa4097-e5e5-465e-8f15-f15f81f0e36e": "Xe tay ga",
+      "6cf49d92-03f7-4b27-852c-09255e380fcc": "Két sắt",
       "813a4c08-fa29-48bb-9d76-0beaa4d133f8": "Xe đạp điện",
+      "8d55b787-eb63-4bf6-b60c-0c1de5595f37": "Tủ đông",
       "458dcfdd-d1e1-43cf-9276-176574447f61": "Xe ô tô máy xăng",
       "b65f8d53-c476-4474-9b45-268ea039ecbf": "Xe ô tô máy điện",
+      "82ab0ec7-8341-4faa-a342-2b5b407f5ee4": "Máy lạnh",
+      "0f3bdcd5-ac67-4c34-bd70-51fe26b9b2af": "Máy giặt",
+      "1131798a-749c-438d-bb1e-558d7fb0ede8": "Chìa khóa",
+      "c171847e-eb56-4e6a-addb-6bc63c1f863f": "Bếp gas",
+      "42a74baa-1337-42b9-b5c0-7aec32a92507": "Hệ thống âm thanh",
+      "c1fb004d-bb77-4454-956e-8873542e3a3d": "Máy tính bàn(PC)",
+      "fe8a38e9-6b79-4935-a9ba-99fb55f8e8de": "Máy tính sách tay(Laptop)",
+      "276ea82f-75e3-4b73-9c39-a3382fe1805c": "Ổ khóa",
+      "f69508b8-2469-41ba-8fdc-a4273de368d1": "Bếp điện",
+      "86083895-18dc-4fba-a721-a5acce6a26a8": "Xe số",
       "2e316c2d-153e-42cb-8ef8-bb828d8f1d4c": "Xe ô tô máy dầu",
+      "df626dc1-115c-441c-b044-bc85cae87a29": "Máy lọc nước",
+      "1c22d4c1-a19d-498b-b583-d9858330959b": "Tủ lạnh",
+      "6eaa4097-e5e5-465e-8f15-f15f81f0e36e": "Xe tay ga",
     
     };
     return stateValue[type] ? stateValue[type] : "";
   }
   return (
     <>
+    <ToastContainer/>
       <Container fluid>
         <Row>
           <Col md="12">

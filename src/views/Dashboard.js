@@ -22,13 +22,13 @@ import {
   UncontrolledTooltip,
   Col,
   Input,
-   Modal,
+  Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
 } from "reactstrap";
 import {
-  Form ,
+  Form,
   ModalTitle,
   Tooltip,
 } from "react-bootstrap";
@@ -47,113 +47,87 @@ import "../assets/css/customSize.css";
 //   chartExample1,
 //   chartExample2,
 // } from "variables/charts.js";
-import { getWithToken ,postWithToken  } from "../service/ReadAPI";
+import { getWithToken, postWithToken } from "../service/ReadAPI";
 export default function Dashboard() {
-  const [dataBase , setDataBase] = useState([]);
-  const [loadDataBase, setLoadDatabase] = useState(true);
 
-const [modalCreate, setTipsModalCreate] = useState(false);
-const toggleCreate = () => setTipsModalCreate(!modalCreate)
 
-const [tips , setTips] = useState([]);
+  const [modalCreate, setTipsModalCreate] = useState(false);
+  const toggleCreate = () => setTipsModalCreate(!modalCreate)
+
+  const [tips, setTips] = useState([]);
 
   const [TopCustomer, setTopCustomer] = useState([]);
   const [TopCompany, setTopCompany] = useState([]);
- 
-  const [imageUrl , setimageUrl ] = useState("");
+
+  const [imageUrl, setimageUrl] = useState("");
   const [TopService, setTopService] = useState([]);
+  const [TotalService, setTotalService] = useState([]);
   const [ShowRoyalName, setShowRoyal] = useState([]);
   const [UseListCustomerShow, setUseListCustomerShow] = useState([]);
   const [UseListCustomerShowPage, setUseListCustomerShowPage] = useState([]);
   const [numberPage, setNumberPage] = useState(1);
   const [totalNumberPage, setTotalNumberPage] = useState(1);
 
-
+  const [customersUsesCompanyService, setcustomersUsesCompanyService] = useState("");
+  const [completedOrders, setCompletedOrders] = useState("");
+  const [totalOrders, setTotalOrders] = useState("");
+  const [TotalMoneyCompany, setTotalMoneyCompany] = useState("");
+  const [canceledOrders, setCanceledOrders] = useState("");
   const ref = firebase.firestore().collection("tips");
 
-const db = firebase.firestore();
-const storge = firebase.storage();
-const [data, setData] = useState({
-  content : "",
-  imageUrl : null,
-  title : ""
-});
-function handleChange(e){
-  e.preventDefault();
-  const {name , value} = e.target;
-  setData((prev) => {
-    return {...prev ,[name]:value}
-  })
-}
-
- 
-  const createTips = (e) => {
-    ref.add({
-      content : content,
-      imageUrl :localStorage.getItem("urlUpload"),
-      title : title
-    }).then((res) =>  window.location="/admin/dashboard")
-         
-  }
-   useEffect(() => {
+  const db = firebase.firestore();
+  const storge = firebase.storage();
+  const [data, setData] = useState({
+    content: "",
+    imageUrl: null,
+    title: ""
+  });
+  useEffect(() => {
     getDataAll();
   }, []);
-    async function getDataAll(){
-      return await   getWithToken("/api/v1.0/all-count", localStorage.getItem("token")).then(
-        (res) => {
-          setTopCustomer(res.data.topCustomer);
-          setTopCompany(res.data.topComps);
-          setTopService(res.data.topService);
-          setUseListCustomerShow(res.data.topCustomer);
-          // setShowRoyal(res.data.topCustomer[0].fullName);
-          setUseListCustomerShowPage(res.data.topCustomer.slice(numberPage * 10 - 10, numberPage * 10));
-          setTotalNumberPage(Math.ceil(res.data.topCustomer.length / 10));
-        });
-    }
-  //Paging
-  function onClickPage(number) {
-    setNumberPage(number);
-    setUseListCustomerShowPage(useListCustomerShow.slice(number * 10 - 10, number * 10));
-    setTotalNumberPage(Math.ceil(useListCustomerShow.length / 10));
+  async function getDataAll() {
+    return await getWithToken("/api/v1.0/all-count", localStorage.getItem("token")).then(
+      (res) => {
+        setTopCustomer(res.data.topCustomer);
+        setTopCompany(res.data.topComps);
+        setTopService(res.data.topService);
+        setTotalService(res.data.services);
+        setUseListCustomerShow(res.data.topCustomer);
+        setcustomersUsesCompanyService(res.data.customerCancelOrder);
+        setCompletedOrders(res.data.completedOrders);
+        setTotalOrders(res.data.orders);
+        setTotalMoneyCompany(res.data.totalMoneyOfCompletedOrder);
+        setCanceledOrders(res.data.canceledOrders);
+        setUseListCustomerShowPage(res.data.topCustomer.slice(numberPage * 10 - 10, numberPage * 10));
+        setTotalNumberPage(Math.ceil(res.data.topCustomer.length / 10));
+      });
   }
-  const [activeNav, setActiveNav] = React.useState(1);
-  // const [chartExample1Data, setChartExample1Data] = React.useState("data1");
-  const toggleNavs = (e, index) => {
-    e.preventDefault();
-    setActiveNav(index);
-    setChartExample1Data(chartExample1Data === "data1" ? "data2" : "data1");
-  };
-
-
-  React.useEffect(() =>{
+  console.log("object",TotalMoneyCompany)
+  
+  React.useEffect(() => {
     const fetchData = async () => {
-    const db = firebase.firestore();
-    const data = await db.collection("tips").get()
-    setTips(data.docs.map(doc => doc.data()))
+      const db = firebase.firestore();
+      const data = await db.collection("tips").get()
+      setTips(data.docs.map(doc => doc.data()))
     }
     fetchData()
-    },[])
-  // console.log("database" , ref)
-  let history = useHistory();
+  }, [])
 
-  // if(){
-  //   // history.push("/");
-  // }
-  
   return (
     <>
       <CardsHeader name="Default" parentName="Dashboards" />
       <Container className="mt--6" fluid>
-       
-        <Row style ={{paddingTop:'10px'}}>
+
+        <Row style={{ paddingTop: '10px' }}>
           <Col xl="8">
             <Card>
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">TOP 5 COMPANIES</h3>
+                    <h3 className="mb-0">TOP 5 COMPANIES <i style={{paddingLeft:'7px'}} class="fa fa-building" aria-hidden="true"></i>
+</h3>
                   </div>
-                  
+
                   <div className="col text-right">
                     <Button
                       color="primary"
@@ -169,16 +143,14 @@ function handleChange(e){
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light-css-dash">
                   <tr>
-                    <th style={{color:'black',fontWeight:'700'}}>#</th>
-                    <th style={{color:'black',fontWeight:'700'}}>Company name</th>
-                    <th style={{color:'black',fontWeight:'700'}}>Address</th>
-                    <th style={{color:'black',fontWeight:'700'}}></th>
-                    <th style={{color:'black',fontWeight:'700'}}>order rate</th>
-
-                    {/* <th style={{color:'black',fontWeight:'700'}}>Unique users</th> */}
+                    <th style={{ color: 'black', fontWeight: '700' }}>#</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>Company name</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>Address</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}></th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>order rate</th>
                   </tr>
                 </thead>
-                <tbody style ={{paddingTop:'10px' , backgroundColor:'#c8e3fa',border:'1px solid #c8e3fa'} }>
+                <tbody style={{ paddingTop: '10px', backgroundColor: '#c8e3fa', border: '1px solid #c8e3fa' }}>
                   {TopCompany.map((e, index) => {
                     return (
                       <tr key={index}>
@@ -186,6 +158,7 @@ function handleChange(e){
                         <td>{e.companyName}</td>
 
                         <td scope="row">{e.address}</td>
+
                         <td></td>
                         <td>
                           <i className="fas fa-arrow-up text-success mr-3" />
@@ -204,7 +177,8 @@ function handleChange(e){
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">BEST SERVICE</h3>
+                    <h3 className="mb-0">BEST SERVICE <i style={{paddingLeft:'7px'}} class="fa fa-newspaper" aria-hidden="true"></i>
+</h3>
                   </div>
                   <div className="col text-right">
                     <Button
@@ -221,12 +195,12 @@ function handleChange(e){
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light-css-dash">
                   <tr>
-                    <th style={{color:'black',fontWeight:'700'}}>#</th>
-                    <th style={{color:'black',fontWeight:'700'}}>Service Name</th>
-                    <th style={{color:'black',fontWeight:'700'}}>Orders</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>#</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>Service Name</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>Orders</th>
                   </tr>
                 </thead>
-                <tbody style ={{paddingTop:'10px' , backgroundColor:'#c8e3fa',border:'1px solid #c8e3fa'}}>
+                <tbody style={{ paddingTop: '10px', backgroundColor: '#c8e3fa', border: '1px solid #c8e3fa' }}>
                   {TopService.map((e, index) => {
                     return (
                       <tr key={index}>
@@ -235,14 +209,9 @@ function handleChange(e){
                         <td>{e.serviceName}</td>
                         <td>
                           <div className="d-flex align-items-center">
-                            <span className="mr-2">{e.orders}</span>
-                            <div>
-                              <Progress
-                                max="100"
-                                value="30"
-                                color="gradient-warning"
-                              />
-                            </div>
+                            <span className="mr-2" style={{ paddingLeft: '10px', color: 'green', fontWeight: '700' }}>{e.orders}</span>
+                            <i className="fa fa-truck" style={{ color: '#447DF7' }} />
+
                           </div>
                         </td>
                       </tr>
@@ -254,32 +223,33 @@ function handleChange(e){
           </Col>
         </Row>
         <Row>
-          <Col xl="8">
+          <Col xl="6">
             <Row>
               <div className="col">
                 <Card>
                   <CardHeader className="border-0">
-                    <h3 className="title-customer-h3">LOYALTY CUSTOMER</h3>
+                    <h3 className="title-customer-h3">LOYALTY CUSTOMER <i style={{paddingLeft:'7px'}} class="fa fa-users" aria-hidden="true"></i>
+</h3>
                   </CardHeader>
                   <Table className="align-items-center table-flush" responsive>
 
                     <thead className="thead-light-css-dash">
                       <tr>
-                        <th className="sort" data-sort="name" style={{color:'black',fontWeight:'700'}}>
+                        <th className="sort" data-sort="name" style={{ color: 'black', fontWeight: '700' }}>
                           #
                         </th>
-                        <th className="sort" data-sort="name" style={{color:'black',fontWeight:'700'}}>
+                        <th className="sort" data-sort="name" style={{ color: 'black', fontWeight: '700' }}>
                           Customer
                         </th>
-                        <th className="sort" data-sort="budget" style={{color:'black',fontWeight:'700'}}>
+                        <th className="sort" data-sort="budget" style={{ color: 'black', fontWeight: '700' }}>
                           Address
                         </th>
                         {/* <th className="sort" data-sort="status" style={{color:'black',fontWeight:'700'}}>
                           Status
                         </th> */}
-                        <th style={{color:'black',fontWeight:'700'}}>Orders</th>
+                        <th style={{ color: 'black', fontWeight: '700' }}>Orders</th>
 
-                        <th style={{color:'black',fontWeight:'700'}}></th>
+                        <th style={{ color: 'black', fontWeight: '700' }}></th>
                         <th scope="row" ></th>
                         <th scope="row">
                           <Media className="align-items-center">
@@ -290,15 +260,13 @@ function handleChange(e){
                             >
                             </a>
                             <Media>
-                              {/* <span className="name mb-0 text-sm">
-                                System
-                              </span> */}
+
                             </Media>
                           </Media>
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="list" style ={{paddingTop:'10px' , backgroundColor:'#c8e3fa',border:'1px solid #c8e3fa'}}>
+                    <tbody className="list" style={{ paddingTop: '10px', backgroundColor: '#c8e3fa', border: '1px solid #c8e3fa' }}>
                       {UseListCustomerShowPage.map((e, index) => {
                         return (
                           <tr key={index}>
@@ -320,37 +288,14 @@ function handleChange(e){
                             <td>{e.address}</td>
                             <td>
                               <div className="d-flex align-items-center">
-                                <span className="completion mr-2">{e.orders} ordered</span>
+                                <span className="completion mr-2" style={{ color: 'green', fontWeight: '700' }}>{e.orders}</span>
+                                <i className="fa fa-shopping-basket" aria-hidden="true" style={{ color: '#447DF7' }} />
 
                               </div>
                             </td>
                             <td></td>
                             <td></td>
                             <td className="text-end">
-                              <UncontrolledDropdown>
-                                {/* <DropdownToggle
-                                  color=""
-                                  size="sm"
-                                  className="btn-icon-only text-light"
-                                >
-                                  <i className="fas fa-ellipsis-v" />
-                                </DropdownToggle> */}
-                                {/* <DropdownMenu className="dropdown-menu-arrow" right>
-                                  <DropdownItem
-                                    href="#pablo"
-                                    onClick={(e) => e.preventDefault()}
-                                  >
-                                    View details
-                                  </DropdownItem>
-                         
-                                  <DropdownItem
-                                    href="#pablo"
-                                    onClick={(e) => e.preventDefault()}
-                                  >
-
-                                  </DropdownItem>
-                                </DropdownMenu> */}
-                              </UncontrolledDropdown>
                             </td>
                           </tr>
                         );
@@ -359,69 +304,54 @@ function handleChange(e){
                   </Table>
                 </Card>
               </div>
+
             </Row>
           </Col>
-          {/* <Col xl="8">
-            <Card className="bg-default">
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-light text-uppercase ls-1 mb-1">
-                      Overview
-                    </h6>
-                    <h5 className="h3 text-white mb-0">Sales value</h5>
-                  </div>
-                  <div className="col">
-                    <Nav className="justify-content-end" pills>
-                      <NavItem className="mr-2 mr-md-0">
-                        <NavLink
-                          className={classnames("py-2 px-3", {
-                            active: activeNav === 1,
-                          })}
-                          href="#pablo"
-                          onClick={(e) => toggleNavs(e, 1)}
-                        >
-                          <span className="d-none d-md-block">Month</span>
-                          <span className="d-md-none">M</span>
-                        </NavLink>
-                      </NavItem>
-                      <NavItem>
-                        <NavLink
-                          className={classnames("py-2 px-3", {
-                            active: activeNav === 2,
-                          })}
-                          data-toggle="tab"
-                          href="#pablo"
-                          onClick={(e) => toggleNavs(e, 2)}
-                        >
-                          <span className="d-none d-md-block">Week</span>
-                          <span className="d-md-none">W</span>
-                        </NavLink>
-                      </NavItem>
-                    </Nav>
-                  </div>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                <div className="chart">
-                
-                </div>
-              </CardBody>
-            </Card>
-          </Col> */}
+          <Col xl="6">
+            <Card>
 
-          <Col xl="4">
-            {/* <Card>
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-uppercase text-muted ls-1 mb-1">
-                      Performance
-                    </h6>
-                  </div>
-                </Row>
+
+              <CardHeader className="border-0">
+                <h3 className="title-customer-h3">STATISTIC <i style={{paddingLeft:'7px'}} class="fa fa-th-list" aria-hidden="true"></i> </h3>
+
               </CardHeader>
-            </Card> */}
+              <Table className="align-items-center table-flush" responsive>
+                <thead className="thead-light-css-dash">
+                  <tr>
+                    <th className="sort" data-sort="name" style={{ color: 'black', fontWeight: '700',paddingLeft:'10px' }}>Customer cancel orders</th>
+                    <th className="sort" data-sort="name" style={{ color: 'black', fontWeight: '700',paddingLeft:'10px' }} >Repairman cancel orders</th>
+                    <th className="sort" data-sort="name" style={{ color: 'black', fontWeight: '700',paddingLeft:'10px' }} >Total order canceled</th>
+                    <th className="sort" data-sort="name" style={{ color: 'black', fontWeight: '700',paddingLeft:'10px' }}>Total completed</th>
+                    <th className="sort" data-sort="name" style={{ color: 'black', fontWeight: '700',paddingLeft:'10px' }}>Total orders</th>
+                    <th className="sort" data-sort="name" style={{ color: 'black', fontWeight: '700',paddingLeft:'10px' }} >Total services</th>
+                  </tr>
+                </thead>
+                <tbody className="list" style={{ paddingTop: '10px', backgroundColor: '#c8e3fa', border: '1px solid #c8e3fa' }}>
+                  <tr>
+                    <td style={{ color: 'red', fontWeight: '700' ,textAlign:'left'}}>{customersUsesCompanyService} canceled</td>
+                    <td style={{ color: 'red', fontWeight: '700',textAlign:'left' }}>
+                    {canceledOrders - customersUsesCompanyService} canceled
+                    </td>
+                    <td style={{ color: 'red', fontWeight: '700',textAlign:'left' }}>
+                      {canceledOrders} canceled
+                    </td>
+                    <td style={{ color: 'green', fontWeight: '700',textAlign:'center' }}>
+                      {completedOrders} completed
+                    </td>
+                    <td style={{ color: 'green', fontWeight: '700' ,textAlign:'center',paddingLeft:'10px' }}>
+                      {totalOrders} orders
+                    </td>
+
+                
+                    <td style={{ color: 'green', fontWeight: '700',textAlign:'center' }}>
+                      {TotalService} 
+                      <i style={{paddingLeft:'5px'}}  class="fa fa-tasks" aria-hidden="true"></i>
+                    </td>
+                   
+                  </tr>
+                </tbody>
+              </Table>
+            </Card>
           </Col>
         </Row>
 
@@ -453,9 +383,12 @@ function handleChange(e){
                   </div>
                 </div>
               </CardHeader>
-              <CardBody style={{backgroundColor:'#c8e3fa', border:'1px solid  #c8e3fa'}}>
-                <p className="mb-4">
-                  App is calling repairman weakly! Very useful
+              <CardBody style={{ backgroundColor: '#c8e3fa', border: '1px solid  #c8e3fa' }}>
+                <p style={{color: '#058ede',fontWeight:'700'}} className="mb-4">
+                  Customers will easily find repairmans who meet their criteria and requirements at a reasonable price without spending much time.
+                </p>
+                <p style={{color: '#058ede',fontWeight:'700'}}>
+                  While repair units easily reach more potential customers, at a cheaper cost.
                 </p>
                 <img
                   alt="..."
@@ -483,9 +416,9 @@ function handleChange(e){
                           href="#pablo"
                           onClick={(e) => e.preventDefault()}
                         >
-          
+
                         </a>
-            
+
                         <a
                           href="#pablo"
                           id="tooltip857639221"
@@ -497,7 +430,7 @@ function handleChange(e){
                             src={require("../assets/img/thuanne.jpg").default}
                           />
                         </a>
-        
+
                         <a
                           // className="avatar avatar-xs rounded-circle"
                           href="#pablo"
@@ -512,7 +445,7 @@ function handleChange(e){
                         </a>
                       </div>
                       <small className="pl-2 font-weight-bold">
-                        and {localStorage.getItem("Customer")}+ more
+                        and {localStorage.getItem("Customer") - 2}+ more
                       </small>
                     </div>
                   </Col>
@@ -603,38 +536,38 @@ function handleChange(e){
               </CardBody>
             </Card>
           </Col>
-           
-            
-            <Col xl="7">
+
+
+          <Col xl="7">
             <Card>
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
                     <h3 className="mb-0">FAVORITE TIPS</h3>
                   </div>
-                
+
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light-css-dash">
                   <tr>
-                    <th style={{color:'black',fontWeight:'700'}}>#</th>
-                    <th style={{color:'black',fontWeight:'700'}}>Content</th>
-                    <th style={{color:'black',fontWeight:'700'}}>Description</th>
-                    <th style={{color:'black',fontWeight:'700'}}>Title</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>#</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>Content</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>Description</th>
+                    <th style={{ color: 'black', fontWeight: '700' }}>Title</th>
                   </tr>
                 </thead>
-                <tbody style ={{paddingTop:'10px' , backgroundColor:'#c8e3fa',border:'1px solid #c8e3fa'}}>
-                  
-                  {tips.map((tips,index) => {
+                <tbody style={{ paddingTop: '10px', backgroundColor: '#c8e3fa', border: '1px solid #c8e3fa' }}>
+
+                  {tips.map((tips, index) => {
                     return (
                       <tr key={index}>
                         <th scope="row">{index + 1}</th>
-                      <td><img className="avatar-repairman" src={tips.imageUrl} /></td>  
-                     
+                        <td><img className="avatar-repairman" src={tips.imageUrl} /></td>
+
                         <td>{tips.content} </td>
                         <td>
-                        {tips.title}
+                          {tips.title}
 
                         </td>
                       </tr>
@@ -644,17 +577,17 @@ function handleChange(e){
               </Table>
             </Card>
           </Col>
-          
+
         </Row>
 
-       
+
       </Container>
       {/* <Modal isOpen={modalCreate} toggle={toggleCreate} centered>
         <ModalHeader
           style={{ color: "#1bd1ff" }}
 
         >
-          <ModalTitle>Do you want to create new company</ModalTitle>
+          <ModalTitle>Do you want to create new f</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <Form

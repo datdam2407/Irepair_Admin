@@ -139,7 +139,7 @@ function Sidebar({ routes, image, background }) {
             >
               <div className="logo-img">
                 <img
-                  src={require("assets/img/logoazai.png").default}
+                  src={require("assets/img/worker-picture.png").default}
                   alt="react-logo"
                 />
               </div>

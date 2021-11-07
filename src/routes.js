@@ -74,7 +74,7 @@ var routes = [
   // },
   //aaaa
   {
-    mini: "Manage",
+    mini: "Managerment By Ojectives",
 },
   {
     path: "/dashboard",
@@ -118,7 +118,7 @@ var routes = [
   },
   
   {
-      mini: "Manage Component",
+      mini: "Services management",
   },
   {
     path: "/service",

@@ -37,7 +37,8 @@ import {
 import { del, putWithToken, getWithToken, getWithTokenParams } from "../../src/service/ReadAPI";
 import { makeStyles } from '@material-ui/core/styles';
 import FilterState from "./MajorFields/FilterState"
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faSearch,
@@ -138,7 +139,11 @@ export default function Repairman() {
         )
             .then((res) => {
                 if (res.status === 200) {
-                    window.location = "/admin/repairman";
+                    toast.success("Delete repairman successfully!!")
+                    setTimeout(
+                        function () {
+                            window.location = "/admin/repairman";
+                        }, 1500);
                 }
             })
     }
@@ -157,7 +162,11 @@ export default function Repairman() {
         )
             .then((res) => {
                 if (res.status === 200) {
-                    window.location = "/admin/repairman";
+                    toast.success("Approve repairman successfully!!")
+                    setTimeout(
+                        function () {
+                            window.location = "/admin/repairman";
+                        }, 1500);
                 }
             })
             .catch((err) => {
@@ -342,6 +351,7 @@ export default function Repairman() {
     }
     return (
         <>
+            <ToastContainer />
             <Container fluid>
                 <Row>
                     <Col md="12">
@@ -825,14 +835,14 @@ export default function Repairman() {
                         <Col></Col>
                         <Col className="view-item-size-main" md={3}>Rating:</Col>
                         <Col className="view-item-size" md={8}>
-                            {SelectRepairman !== undefined ? SelectRepairman.rating : ""}<TiStar/>
+                            {SelectRepairman !== undefined ? SelectRepairman.rating : ""}<TiStar />
                         </Col>
                     </Row>
                     <Row>
                         <Col></Col>
                         <Col className="view-item-size-main" md={3}>Status:</Col>
                         <Col className="view-item-size" md={8}>
-                        {SelectRepairman !== undefined ? displayStateName(SelectRepairman.status) : ""}
+                            {SelectRepairman !== undefined ? displayStateName(SelectRepairman.status) : ""}
                         </Col>
                     </Row>
                 </ModalBody>

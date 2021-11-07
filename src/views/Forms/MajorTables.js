@@ -50,6 +50,8 @@ import {
   faCaretDown,
   faCaretUp,
 } from "@fortawesome/free-solid-svg-icons";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function MajorTables() {
   //delete modal  
   const [modalDelete, setServiceModalDelete] = useState(false);
@@ -92,9 +94,12 @@ function MajorTables() {
   const [ascending, setAscending] = useState(true);
   //filterState
   const listStates = [
-    "Inactive",
     "Actice",
+    "Inactive",
   ];
+  //toast
+  const notify = () => toast("Wow so easy!");
+
   const [filterState, setListFilterState] = useState(listStates);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownOpen1, setDropdownOpen1] = useState(false);
@@ -184,8 +189,11 @@ function MajorTables() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/major";
-
+          toast.success("Approved major successfully!!")
+         setTimeout(
+           function(){
+            window.location = "/admin/major";
+           } , 1500);
         }
       })
       .catch((err) => {
@@ -206,7 +214,12 @@ function MajorTables() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/major";
+          toast.success("Create major successfully!!")
+          setTimeout(
+            function(){
+             window.location = "/admin/major";
+            } , 1500);
+
         }
       })
       .catch((err) => {
@@ -227,8 +240,11 @@ function MajorTables() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/major";
-
+          toast.success("Updated major successfully!!")
+          setTimeout(
+            function(){
+             window.location = "/admin/major";
+            } , 1500);
         }
       })
       .catch((err) => {
@@ -277,9 +293,13 @@ function MajorTables() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/major";
-
+        toast.success("Delete major successfully!!")
+        setTimeout(
+          function(){
+           window.location = "/admin/major";
+          } , 1500);
         }
+
       }).catch((err) => {
         console.log(err);
       });
@@ -387,6 +407,7 @@ function MajorTables() {
 }
   return (
     <>
+    <ToastContainer/>
       <Container fluid>
         <Row>
           <Col md="12">
@@ -539,7 +560,7 @@ function MajorTables() {
 
                                 <Grid item lg={10}>
                                   <Typography className={classes.name}>{e.Name}</Typography>
-                                  <Typography color="textSecondary" variant="body2">{e.Id}</Typography>
+                                  <Typography variant="body2">{e.Id}</Typography>
                                 </Grid>
                               </Grid>
                             </TableCell>

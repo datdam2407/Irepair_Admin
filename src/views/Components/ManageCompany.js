@@ -42,7 +42,8 @@ import {
 import { del, post, get, put, getWithToken, putWithToken, getWithTokenParams, postWithToken } from "../../service/ReadAPI";
 import "../../assets/css/customSize.css";
 import NumberFormat from 'react-number-format';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   TableBody,
   TableCell,
@@ -208,6 +209,7 @@ export default function ManageCompany() {
       });
     }
   }
+  //aprove company
   function handleSubmit(){
     postWithToken(
       `/api/v1.0/companies`,
@@ -225,7 +227,11 @@ export default function ManageCompany() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/Company";
+          toast.success("Create company successfully!!")
+          setTimeout(
+            function(){
+              window.location = "/admin/Company";
+            } , 1500);     
         }
       })
       .catch((err) => {
@@ -265,46 +271,27 @@ export default function ManageCompany() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/Company";
-          // alert("Approved Successfully")
+          toast.success("Approved company successfully!!")
+          setTimeout(
+            function(){
+              window.location = "/admin/Company";
+            } , 1500);   
         }
       })
       .catch((err) => {
         console.log(err)
       });
   }
-  function checkDisableImage(state) {
-    if (state === "Inactive")
-      return false;
-    else 
-    return false;
-  }
-  function checkDisableUpdate(state) {
-    if (state === "Inactive")
-      return false;
-    else return false;
-  }
-  // function handleCompanyDetele(){
-  //   const [NewStatus, setNewStatus] = useState(3);
-  //   const [OldStatus, setOldStatus] = useState({
-  //     Status : 1
-  //   });
-  //   useEffect(() => {
-  //     del(`/api/v1.0/companies/${CompanyDelete}`, localStorage.getItem("token"))
-  //     const { Status } = OldStatus;
-  
-  //     setNewStatus(Status === 1 ? "1" : "3");
-  //   },
-  //   [dimension, dimension.height, dimension.width]);
-  
-  //   return [NewStatus, setOldStatus];
-  // }
-
+ //delete company
   function handleCompanyDetele() {
     del(`/api/v1.0/companies/${CompanyDelete}`, localStorage.getItem("token")
     ).then((res) => {
       if (res.status === 200) {
-        window.location = "/admin/Company";
+        toast.success("Delete company successfully!!")
+        setTimeout(
+          function(){
+            window.location = "/admin/Company";
+          } , 1500);   
       }
     })
       .catch((err) => {
@@ -353,6 +340,7 @@ export default function ManageCompany() {
 
   return (
     <>
+    <ToastContainer/>
       <Container fluid>
         <Col md="12">
           <Card className="strpied-tabled-with-hover">

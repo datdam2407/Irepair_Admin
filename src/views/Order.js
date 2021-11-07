@@ -437,7 +437,7 @@ export default function Order() {
                     )}
                   </th>
 
-                  <th className="description">Company</th>
+                  {/* <th className="description">Company</th> */}
 
                   {/* <th className="description">Created Date </th> */}
                   {/* <th className="description">Create Date</th> */}
@@ -507,9 +507,9 @@ export default function Order() {
                         </Grid>
                       </TableCell>
 
-                      <td>
+                      {/* <td>
                         {moment(e.CreateTime).format("MM-DD-YYYY")}
-                      </td>
+                      </td> */}
                       {/* <td> */}
                       {/* {e.CancelPerson} */}
                       {/* {displayServiceName(e.CancelPerson)} */}

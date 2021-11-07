@@ -47,6 +47,8 @@ import {
   Tooltip,
 } from 'react-tippy';
 import 'react-tippy/dist/tippy.css'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function MajorFields() {
   //delete modal  
   const [ServiceDelete, setServiceDelete] = useState(null);
@@ -220,7 +222,7 @@ function MajorFields() {
     setstateListFilter(newListState);
     getMajorFieldsList(newListState);
   }
-  // update
+  //approved major field
   async function handleEditSubmit2(e) {
     await putWithToken(
       `/api/v1.0/major-fields`,
@@ -236,13 +238,18 @@ function MajorFields() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/fields";
+          toast.success("Approved major field successfully!!")
+          setTimeout(
+            function(){
+              window.location = "/admin/fields";
+            } , 1500);
         }
       })
       .catch((err) => {
         console.log(err);
       });
   }
+  //create major field
   async function handleCreateSubmit(e) {
     await postWithToken(
       `/api/v1.0/major-fields`,
@@ -258,13 +265,17 @@ function MajorFields() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/fields";
-        }
+          toast.success("Created major field successfully!!")
+          setTimeout(
+            function(){
+              window.location = "/admin/fields";
+            } , 1500);        }
       })
       .catch((err) => {
         console.log(err);
       });
   }
+  //update major field
   async function handleEditSubmit(e) {
     await putWithToken(
       `/api/v1.0/major-fields`,
@@ -280,14 +291,33 @@ function MajorFields() {
     )
       .then((res) => {
         if (res.status === 200) {
-          window.location = "/admin/fields";
+          toast.success("Updated major field successfully!!")
+          setTimeout(
+            function(){
+              window.location = "/admin/fields";
+            } , 1500);
         }
       })
       .catch((err) => {
         console.log(err);
       });
   }
-
+ //delete major field
+ function deleteMajorFieldsByID() {
+  del(`/api/v1.0/major-fields/${MajorDelete}`, localStorage.getItem("token")
+  )
+    .then((res) => {
+      if (res.status === 200) {
+        toast.success("Delete major field successfully!!")
+        setTimeout(
+          function(){
+            window.location = "/admin/fields";
+          } , 1500);
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
+}
   function displayMajorName(type) {
     const nameMajor = {
       "a037b04c-51b3-4650-b369-0ea7ee869821": "Điện Tử",
@@ -357,20 +387,7 @@ function MajorFields() {
       console.log(err);
     });
   }
-  // /api/v1.0/major/{id}
-  //delete fc is updating error 
-  //BE is fixing 
-  function deleteMajorFieldsByID() {
-    del(`/api/v1.0/major-fields/${MajorDelete}`, localStorage.getItem("token")
-    )
-      .then((res) => {
-        if (res.status === 200) {
-          window.location = "/admin/fields";
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
-  }
+ 
   //Load major
   useEffect(() => {
     getMajorFieldsList();
@@ -480,6 +497,7 @@ function MajorFields() {
 
   return (
     <>
+    <ToastContainer/>
       <Container fluid>
         <Row>
           <Col md="12">

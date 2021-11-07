@@ -192,7 +192,7 @@ export default function Customer() {
                   {/* <th className="description">Username</th> */}
                   <th className="description">Created Date</th>
                   <th className="description">FullName</th>
-                  <th className="description">Uid</th>
+                  <th className="description">Privilege</th>
                   {/* <th className="description">Views</th> */}
                 </tr>
               </thead>
